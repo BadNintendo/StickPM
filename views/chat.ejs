@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+	* StickPM Project
+	* © 2024 BadNintendo
+	* All rights reserved.
+	* Unauthorized copying of this file, via any medium is strictly prohibited.
+	* 
+	* USAGE:
+	* This software is provided 'as-is', without any express or implied
+	* warranty. In no event will the authors be held liable for any damages
+	* arising from the use of this software.
+	* 
+	* You are permitted to use this software for personal and commercial
+	* applications, provided the following conditions are met:
+	* 1. The origin of this software must not be misrepresented; you must
+	*	not claim that you wrote the original software.
+	* 2. Altered source versions must be plainly marked as such, and must
+	*	not be misrepresented as being the original software.
+	* 3. This notice may not be removed or altered from any source
+	*	distribution.
+	* 4. Redistribution of this software, modified or unmodified, must
+	*	retain this notice.
+	* 5. The name of the authors may not be used to endorse or promote
+	*	products derived from this software without specific prior
+	*	written permission.
+	*
+	* Need To-Do:
+	* 1. Add toggle controls for moderations on audio speakers maybe further displaying who is speakng at the time.
+	* 2. Correct UI/Design of popup moderation controls exceeding width may redesign so controls are around avatar logo.
+	* 3. Add Emojis in the validation and how theyre used in a manner that would be unique and custom to stickpm
+	* 4. Finish Profile Avatar upload validations with developer approval & flash new avatar to old avatar until rejected or approved
+	* 5. Add if logged in in settings allow customizable PTT button in settings
+	* 6. Add 2FA in settings from the const profile and notifications alert options add sounds to most notications
+	* 7. Update all settings and popup UI moderation/interaction to be more icon user friendly with titles.
+	* 8. Optional Idea: Capture button for avatar on broadcast preview window clearly for avatar with additonal popup approval to submit changes against 2FA if used
+	* 9. Second time broadcasting button is disabled via javascript or before event 
+	* 10. Skip all media device fails if no media devices do not add to peer
+	* 11. Correct the settings style and elements from overlapping without scrolling when screensize is smaller
+	* 12. When hide menu move buttons to right side of screen and allow chat to flex more to top by editing or adding css class to header.hidemenu & streamers-container.hidemenu
+	-->
+	<meta charset="<%= headData.charset %>">
+  	<meta name="viewport" content="<%= headData.viewport %>">
+	<meta name="description" content="<%= headData.description %>">
+	<meta name="keywords" content="<%= headData.keywords %>">
+	<meta property="og:title" content="<%= headData.title %>">
+	<meta property="og:description" content="<%= headData.usersCount %> <%= headData.description %> <%= headData.currentDate %>">
+	<meta property="og:image" content="<%= headData.image %>">
+	<meta property="og:url" content="<%= headData.url %>">
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="<%= headData.title %>">
+	<meta name="twitter:description" content="<%= headData.usersCount %> <%= headData.description %> <%= headData.currentDate %>">
+	<meta name="twitter:image" content="<%= headData.image %>">
+	<meta name="twitter:url" content="<%= headData.url %>">
+	<meta name="twitter:site" content="<%= headData.twitterSite %>">
+	<title>
+		StickPM - <%= room.name.charAt(0).toUpperCase() + room.name.slice(1) %>
+	</title>
+	<link rel="stylesheet" href="/css/room.css">
+	<link rel="shortcut icon" href="..<%= headData.favicon %>">
+  	<link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+  	<link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+</head>
+<body>
+	<div class="container">
+		<div class="credit-tab credit-tab--style-1 text-center hidden">
+			<div class="credit-tab__thumbnail">
+				<div id="close-credits">×</div>
+				<% const creditsFound =  user?.credits?.amount || 0; %>
+				<div class="credit-tab__content credit-tab__content--middle">
+					<span id="validCredits" class="credit-tab__subtitle">Credits: <%= creditsFound %></span>
+					<button id="creditRoomButton" class="button innerOutterShadowsButton">Credit Room</button>
+					<div class="credit-tab__option-content">
+						<div class="credit-tab__option-label">Quantity</div>
+						<div class="quantity-control">
+							<button id="creditDecrease" class="quantity-control__minus">&nbsp;</button> 
+							<input id="creditRoom" type="number" step="1" value="1" size="4" max="<%= creditsFound %>" min="0"> 
+							<button id="creditIncrease" class="quantity-control__plus">&nbsp;</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<header>
+			<div class="top-bar">
+				<div class="main-box">
+					<button id="main-credits" class="StickPMsvg moneybag innerOutterShadowsButton <%- (creditsFound >= 1) ? '' : 'hidden'; %>" title="Credit Room - Main Room VIP Contribute"></button>
+					<button id="start-broadcast" class="button innerOutterShadowsButton">Start Broadcast</button>
+					<button id="main-volume" class="StickPMsvg nospeaker innerOutterShadowsButton" title="Muted - Main Room Volume Control"></button>
+				</div>
+				<div class="user-info innerOutterShadowsUser">
+					<span id="username"><%= user.username %></span>
+					<img id="user-avatar" src="<%= user.profilePhoto || '/images/user-avatar.png' %>" alt="User Avatar">
+				</div>
+			</div>
+		</header>
+		<div class="main-content">
+			<div class="button-container menuButton inneroutter">
+				<div class="circle" title="Display Menu">
+					<span class="arrow" title="Display Menu"></span>
+				</div>
+			</div>
+			<div class="left-sidebar inneroutter">
+				<div id="local-video" class="local-video hidden">
+					<video id="local-video-element" autoplay muted></video>
+					<img id="local-video-poster" src="/images/poster.png" alt="Poster Image" class="hidden">
+					<div class="video-controls">
+						<button class="StickPMsvgBroadcast streaming control-button view"></button>
+						<!--<button class="StickPMsvgBroadcast nospeaker control-button mute"></button>-->
+						<button class="StickPMsvgBroadcast control-button settings"></button>
+						<button class="StickPMsvgBroadcast control-button exit"></button>
+					</div>
+				</div>
+				<div id="push-to-talk" class="push-to-talk hidden" title="PTT - Shortcut Caps Lock or Alt Key is Pressed">Push to Talk</div>
+				<div class="search <%- (room.users.length > 0) ? '' : 'hidden'; %>">
+					<input type="text" placeholder="Search" id="searchUsers">
+				</div>
+				<div class="user-list">
+					<!-- username elements will be added here -->
+				</div>
+			</div>
+			<div class="chat-container topright">
+				<div class="chat-header">
+					<h2><%= room.name %></h2>
+					<span id="settings-icon" class="StickPMsvg gear settings-icon"></span>
+				</div>
+				<div class="chat-messages">
+					<% 
+						const sortedMessages = messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+						const displayMessages = sortedMessages.slice(-25);
+						displayMessages.forEach(message => {
+					%>
+						<div class="chat-message" data-id="<%= message.uuid || 'StickPM' %>" data-username="<%= message.user %> data-timestamp="<%= new Date(message.timestamp).toLocaleString() %>">
+							<span class="nick" data-id="<%= message.uuid || 'StickPM' %>" data-username="<%= message.user %>" title="<%= message.user %>"><%= message.user %>: </span><%= message.text %>
+							<span class="timestamp"><%= new Date(message.timestamp).toLocaleString() %></span>
+						</div>
+					<% }); %>
+				</div>
+				<div class="chat-input-container inneroutter">
+					<div class="chat-input-icons">
+						<div class="icon chat-icon">💯</div>
+					</div>
+					<div class="chat-input">
+						<div class="input-wrapper">
+							<!--<div contenteditable="true" maxlength="500" class="fake-input innerBox">Type a message...</div>-->
+							<div contenteditable="true" maxlength="500" class="fake-input innerBox" spellcheck="true" autocorrect="on" autocapitalize="on" role="textbox" data-placeholder="Type a message...">
+								Type a message...
+							</div>
+							<div class="emoji-picker hidden">
+								<div class="emoji-category">Smileys & People</div>
+								<div class="emoji emoji-button" title="Face with Tears of Joy">😂</div>
+								<div class="emoji emoji-button" title="Smiling Face with Heart-Eyes">😍</div>
+								<div class="emoji emoji-button" title="Rolling on the Floor Laughing">🤣</div>
+								<div class="emoji emoji-button" title="Face Blowing a Kiss">😘</div>
+								<div class="emoji emoji-button" title="Smiling Face with Smiling Eyes">😊</div>
+								<div class="emoji emoji-button" title="Smiling Face with Sunglasses">😎</div>
+								<div class="emoji emoji-button" title="Grinning Face with Sweat">😅</div>
+								<div class="emoji emoji-button" title="Zany Face">🤪</div>
+								<div class="emoji emoji-button" title="Winking Face with Tongue">😜</div>
+								<div class="emoji emoji-button" title="Face Savoring Food">😋</div>
+								<div class="emoji emoji-button" title="Smiling Face with Halo">😇</div>
+								<div class="emoji emoji-button" title="Slightly Smiling Face">🙂</div>
+								<div class="emoji emoji-button" title="Face with Medical Mask">😷</div>
+								<div class="emoji emoji-button" title="Face with Thermometer">🤒</div>
+								<div class="emoji emoji-button" title="Hot Face">🥵</div>
+								<div class="emoji emoji-button" title="Cold Face">🥶</div>
+								<div class="emoji emoji-button" title="Face Vomiting">🤮</div>
+								<div class="emoji emoji-button" title="Nauseated Face">🤢</div>
+								<div class="emoji emoji-button" title="Clown Face">🤡</div>
+								<div class="emoji emoji-button" title="Pile of Poo">💩</div>
+								<div class="emoji emoji-button" title="Ghost">👻</div>
+								<div class="emoji emoji-button" title="Alien">👽</div>
+								<div class="emoji emoji-button" title="Robot Face">🤖</div>
+								<div class="emoji emoji-button" title="Grinning Cat Face">😺</div>
+								<div class="emoji emoji-button" title="Grinning Cat Face with Smiling Eyes">😸</div>
+								<div class="emoji emoji-button" title="Smiling Face with Horns">😈</div>
+								<div class="emoji emoji-button" title="Angry Face with Horns">👿</div>
+								<div class="emoji emoji-button" title="Jack-O-Lantern">🎃</div>
+								<div class="emoji emoji-button" title="See-No-Evil Monkey">🙈</div>
+								<div class="emoji emoji-button" title="Hear-No-Evil Monkey">🙉</div>
+								<div class="emoji emoji-button" title="Speak-No-Evil Monkey">🙊</div>
+								<div class="emoji emoji-button" title="Baby">👶</div>
+								<div class="emoji emoji-button" title="Boy">👦</div>
+								<div class="emoji emoji-button" title="Girl">👧</div>
+								<div class="emoji emoji-button" title="Child">🧒</div>
+								<div class="emoji emoji-button" title="Man">👨</div>
+								<div class="emoji emoji-button" title="Woman">👩</div>
+								<div class="emoji emoji-button" title="Person">🧑</div>
+								<div class="emoji emoji-button" title="Old Man">👴</div>
+								<div class="emoji emoji-button" title="Old Woman">👵</div>
+								<div class="emoji emoji-button" title="Man Police Officer">👮‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Construction Worker">👷‍♀️</div>
+								<div class="emoji emoji-button" title="Man Guard">💂‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Detective">🕵️‍♀️</div>
+								<div class="emoji emoji-button" title="Woman Health Worker">👩‍⚕️</div>
+								<div class="emoji emoji-button" title="Man Cook">👨‍🍳</div>
+								<div class="emoji emoji-button" title="Woman Student">👩‍🎓</div>
+								<div class="emoji emoji-button" title="Man Teacher">👨‍🏫</div>
+								<div class="emoji emoji-button" title="Woman Technologist">👩‍💻</div>
+								<div class="emoji emoji-button" title="Man Mechanic">👨‍🔧</div>
+								<div class="emoji emoji-button" title="Woman Firefighter">👩‍🚒</div>
+								<div class="emoji emoji-button" title="Man Pilot">👨‍✈️</div>
+								<div class="emoji emoji-button" title="Bride with Veil">👰</div>
+								<div class="emoji emoji-button" title="Man in Tuxedo">🤵</div>
+								<div class="emoji emoji-button" title="Pregnant Woman">🤰</div>
+								<div class="emoji emoji-button" title="Breast-Feeding">🤱</div>
+								<div class="emoji emoji-button" title="Person in Lotus Position">🧘</div>
+								<div class="emoji emoji-button" title="Man Frowning">🙍‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Bowing">🙇‍♀️</div>
+								<div class="emoji emoji-button" title="Man Tipping Hand">💁‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Gesturing No">🙅‍♀️</div>
+								<div class="emoji emoji-button" title="Man Gesturing OK">🙆‍♂️</div>
+								<div class="emoji emoji-button" title="Man Shrugging">🤷‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Facepalming">🤦‍♀️</div>
+								<div class="emoji emoji-button" title="Man Getting Haircut">💇‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Getting Massage">💆‍♀️</div>
+								<div class="emoji emoji-button" title="Man in Steamy Room">🧖‍♂️</div>
+								<div class="emoji emoji-button" title="Nail Polish">💅</div>
+								<div class="emoji emoji-button" title="Selfie">🤳</div>
+								<div class="emoji emoji-button" title="Woman Dancing">💃</div>
+								<div class="emoji emoji-button" title="Man Dancing">🕺</div>
+								<div class="emoji emoji-button" title="Men with Bunny Ears">👯‍♂️</div>
+								<div class="emoji emoji-button" title="Person in Suit Levitating">🕴️</div>
+								<div class="emoji emoji-button" title="Man Walking">🚶‍♂️</div>
+								<div class="emoji emoji-button" title="Woman Running">🏃‍♀️</div>
+								<div class="emoji emoji-button" title="Man and Woman Holding Hands">👫</div>
+								<div class="emoji emoji-button" title="Women Holding Hands">👭</div>
+								<div class="emoji emoji-button" title="Men Holding Hands">👬</div>
+								<div class="emoji emoji-button" title="Kiss">💏</div>
+								<div class="emoji emoji-button" title="Couple with Heart">💑</div>
+								<div class="emoji emoji-button" title="Family">👪</div>
+								<div class="emoji emoji-button" title="Family: Man, Woman, Girl">👨‍👩‍👧</div>
+								<div class="emoji emoji-button" title="Family: Man, Woman, Girl, Boy">👨‍👩‍👧‍👦</div>
+								<div class="emoji emoji-button" title="Family: Woman, Woman, Girl, Boy">👩‍👩‍👧‍👦</div>
+								<div class="emoji emoji-button" title="Family: Man, Man, Boy">👨‍👨‍👦</div>
+								<div class="emoji emoji-button" title="Speaking Head">🗣️</div>
+								<div class="emoji emoji-button" title="Bust in Silhouette">👤</div>
+								<div class="emoji emoji-button" title="Busts in Silhouette">👥</div>
+								<div class="emoji emoji-button" title="Billed Cap">🧢</div>
+								<div class="emoji emoji-button" title="Top Hat">🎩</div>
+								<div class="emoji emoji-button" title="Graduation Cap">🎓</div>
+								<div class="emoji emoji-button" title="Crown">👑</div>
+								<div class="emoji emoji-button" title="Lipstick">💄</div>
+								<div class="emoji emoji-button" title="Ring">💍</div>
+								<div class="emoji emoji-button" title="Handbag">👜</div>
+								<div class="emoji-category">Animals & Nature</div>
+								<div class="emoji emoji-button" title="Dog Face">🐶</div>
+								<div class="emoji emoji-button" title="Cat Face">🐱</div>
+								<div class="emoji emoji-button" title="Mouse Face">🐭</div>
+								<div class="emoji emoji-button" title="Hamster Face">🐹</div>
+								<div class="emoji emoji-button" title="Rabbit Face">🐰</div>
+								<div class="emoji emoji-button" title="Fox Face">🦊</div>
+								<div class="emoji emoji-button" title="Bear Face">🐻</div>
+								<div class="emoji emoji-button" title="Panda Face">🐼</div>
+								<div class="emoji emoji-button" title="Koala">🐨</div>
+								<div class="emoji emoji-button" title="Tiger Face">🐯</div>
+								<div class="emoji emoji-button" title="Lion Face">🦁</div>
+								<div class="emoji emoji-button" title="Cow Face">🐮</div>
+								<div class="emoji emoji-button" title="Pig Face">🐷</div>
+								<div class="emoji emoji-button" title="Frog Face">🐸</div>
+								<div class="emoji emoji-button" title="Octopus">🐙</div>
+								<div class="emoji emoji-button" title="Monkey Face">🐵</div>
+								<div class="emoji emoji-button" title="Unicorn Face">🦄</div>
+								<div class="emoji emoji-button" title="Chicken">🐔</div>
+								<div class="emoji emoji-button" title="Penguin">🐧</div>
+								<div class="emoji emoji-button" title="Bird">🐦</div>
+								<div class="emoji emoji-button" title="Baby Chick">🐤</div>
+								<div class="emoji emoji-button" title="Hatching Chick">🐣</div>
+								<div class="emoji emoji-button" title="Duck">🦆</div>
+								<div class="emoji emoji-button" title="Eagle">🦅</div>
+								<div class="emoji emoji-button" title="Owl">🦉</div>
+								<div class="emoji emoji-button" title="Bat">🦇</div>
+								<div class="emoji emoji-button" title="Kangaroo">🦘</div>
+								<div class="emoji emoji-button" title="Elephant">🐘</div>
+								<div class="emoji emoji-button" title="Snake">🐍</div>
+								<div class="emoji emoji-button" title="Crocodile">🐊</div>
+								<div class="emoji emoji-button" title="Whale">🐳</div>
+								<div class="emoji emoji-button" title="Dolphin">🐬</div>
+								<div class="emoji emoji-button" title="Fish">🐟</div>
+								<div class="emoji emoji-button" title="Tropical Fish">🐠</div>
+								<div class="emoji emoji-button" title="Blowfish">🐡</div>
+								<div class="emoji emoji-button" title="Shark">🦈</div>
+								<div class="emoji emoji-button" title="Butterfly">🦋</div>
+								<div class="emoji emoji-button" title="Snail">🐌</div>
+								<div class="emoji emoji-button" title="Lady Beetle">🐞</div>
+								<div class="emoji emoji-button" title="Ant">🐜</div>
+								<div class="emoji emoji-button" title="Honeybee">🐝</div>
+								<div class="emoji emoji-button" title="Flower">🌸</div>
+								<div class="emoji emoji-button" title="Rose">🌹</div>
+								<div class="emoji emoji-button" title="Sunflower">🌻</div>
+								<div class="emoji emoji-button" title="Tulip">🌷</div>
+								<div class="emoji emoji-button" title="Hibiscus">🌺</div>
+								<div class="emoji emoji-button" title="Maple Leaf">🍁</div>
+								<div class="emoji emoji-button" title="Evergreen Tree">🌲</div>
+								<div class="emoji emoji-button" title="Palm Tree">🌴</div>
+								<div class="emoji emoji-button" title="Cactus">🌵</div>
+								<div class="emoji emoji-button" title="Fire">🔥</div>
+								<div class="emoji-category">Food & Drink</div>
+								<div class="emoji emoji-button" title="Birthday Cake">🎂</div>
+								<div class="emoji emoji-button" title="Shortcake">🍰</div>
+								<div class="emoji emoji-button" title="Chocolate Bar">🍫</div>
+								<div class="emoji emoji-button" title="Cookie">🍪</div>
+								<div class="emoji emoji-button" title="Candy">🍬</div>
+								<div class="emoji emoji-button" title="Ice Cream">🍨</div>
+								<div class="emoji emoji-button" title="Cupcake">🧁</div>
+								<div class="emoji emoji-button" title="Pizza">🍕</div>
+								<div class="emoji emoji-button" title="Hamburger">🍔</div>
+								<div class="emoji emoji-button" title="French Fries">🍟</div>
+								<div class="emoji emoji-button" title="Hot Beverage">☕</div>
+								<div class="emoji emoji-button" title="Clinking Beer Mugs">🍻</div>
+								<div class="emoji emoji-button" title="Red Apple">🍎</div>
+								<div class="emoji emoji-button" title="Green Apple">🍏</div>
+								<div class="emoji emoji-button" title="Banana">🍌</div>
+								<div class="emoji emoji-button" title="Watermelon">🍉</div>
+								<div class="emoji emoji-button" title="Grapes">🍇</div>
+								<div class="emoji emoji-button" title="Strawberry">🍓</div>
+								<div class="emoji emoji-button" title="Cherries">🍒</div>
+								<div class="emoji emoji-button" title="Peach">🍑</div>
+								<div class="emoji emoji-button" title="Pineapple">🍍</div>
+								<div class="emoji emoji-button" title="Mango">🥭</div>
+								<div class="emoji emoji-button" title="Hot Dog">🌭</div>
+								<div class="emoji emoji-button" title="Taco">🌮</div>
+								<div class="emoji emoji-button" title="Burrito">🌯</div>
+								<div class="emoji emoji-button" title="Cooking">🍳</div>
+								<div class="emoji emoji-button" title="Spaghetti">🍝</div>
+								<div class="emoji emoji-button" title="Bread">🍞</div>
+								<div class="emoji emoji-button" title="Croissant">🥐</div>
+								<div class="emoji emoji-button" title="Beverage Box">🧃</div>
+								<div class="emoji emoji-button" title="Cup with Straw">🥤</div>
+								<div class="emoji emoji-button" title="Tropical Drink">🍹</div>
+								<div class="emoji emoji-button" title="Beer Mug">🍺</div>
+								<div class="emoji-category">Activities</div>
+								<div class="emoji emoji-button" title="Soccer Ball">⚽</div>
+								<div class="emoji emoji-button" title="Basketball">🏀</div>
+								<div class="emoji emoji-button" title="Baseball">⚾</div>
+								<div class="emoji emoji-button" title="Trophy">🏆</div>
+								<div class="emoji emoji-button" title="Party Popper">🎉</div>
+								<div class="emoji emoji-button" title="Wrapped Gift">🎁</div>
+								<div class="emoji emoji-button" title="Musical Notes">🎶</div>
+								<div class="emoji emoji-button" title="Artist Palette">🎨</div>
+								<div class="emoji emoji-button" title="Tennis">🎾</div>
+								<div class="emoji emoji-button" title="American Football">🏈</div>
+								<div class="emoji emoji-button" title="Rugby Football">🏉</div>
+								<div class="emoji emoji-button" title="Pool 8 Ball">🎱</div>
+								<div class="emoji emoji-button" title="Direct Hit">🎯</div>
+								<div class="emoji emoji-button" title="Video Game">🎮</div>
+								<div class="emoji emoji-button" title="Slot Machine">🎰</div>
+								<div class="emoji emoji-button" title="Guitar">🎸</div>
+								<div class="emoji emoji-button" title="Drum">🥁</div>
+								<div class="emoji-category">Travel & Places</div>
+								<div class="emoji emoji-button" title="Automobile">🚗</div>
+								<div class="emoji emoji-button" title="Taxi">🚕</div>
+								<div class="emoji emoji-button" title="Bus">🚌</div>
+								<div class="emoji emoji-button" title="Police Car">🚓</div>
+								<div class="emoji emoji-button" title="Fire Engine">🚒</div>
+								<div class="emoji emoji-button" title="Ambulance">🚑</div>
+								<div class="emoji emoji-button" title="Airplane">✈️</div>
+								<div class="emoji emoji-button" title="Rocket">🚀</div>
+								<div class="emoji emoji-button" title="Ship">🚢</div>
+								<div class="emoji emoji-button" title="Bicycle">🚲</div>
+								<div class="emoji emoji-button" title="Globe Showing Americas">🌎</div>
+								<div class="emoji emoji-button" title="Sunrise">🌅</div>
+								<div class="emoji emoji-button" title="Sunset">🌇</div>
+								<div class="emoji emoji-button" title="Cityscape at Dusk">🌆</div>
+								<div class="emoji emoji-button" title="Statue of Liberty">🗽</div>
+								<div class="emoji emoji-button" title="Hot Springs">♨️</div>
+								<div class="emoji-category">Objects</div>
+								<div class="emoji emoji-button" title="Mobile Phone">📱</div>
+								<div class="emoji emoji-button" title="Laptop Computer">💻</div>
+								<div class="emoji emoji-button" title="Camera">📷</div>
+								<div class="emoji emoji-button" title="Wrapped Present">🎁</div>
+								<div class="emoji emoji-button" title="Gem Stone">💎</div>
+								<div class="emoji emoji-button" title="Clapper Board">🎬</div>
+								<div class="emoji emoji-button" title="Microphone">🎤</div>
+								<div class="emoji emoji-button" title="Headphone">🎧</div>
+								<div class="emoji emoji-button" title="Mobile Phone">📱</div>
+								<div class="emoji emoji-button" title="Video Camera">📹</div>
+								<div class="emoji emoji-button" title="Television">📺</div>
+								<div class="emoji emoji-button" title="Light Bulb">💡</div>
+								<div class="emoji emoji-button" title="Money Bag">💰</div>
+								<div class="emoji emoji-button" title="Credit Card">💳</div>
+								<div class="emoji emoji-button" title="Birthday Cake">🎂</div>
+								<div class="emoji emoji-button" title="Fireworks">🎆</div>
+								<div class="emoji emoji-button" title="Bomb">💣</div>
+								<div class="emoji emoji-button" title="Pistol">🔫</div>
+								<div class="emoji-category">Symbols</div>
+								<div class="emoji emoji-button" title="Red Heart">❤️</div>
+								<div class="emoji emoji-button" title="Fire">🔥</div>
+								<div class="emoji emoji-button" title="Thumbs Up">👍</div>
+								<div class="emoji emoji-button" title="Clapping Hands">👏</div>
+								<div class="emoji emoji-button" title="Star">⭐</div>
+								<div class="emoji emoji-button" title="Sparkles">✨</div>
+								<div class="emoji emoji-button" title="Check Mark">✔️</div>
+								<div class="emoji emoji-button" title="Cross Mark">❌</div>
+								<div class="emoji emoji-button" title="Exclamation Mark">❗</div>
+								<div class="emoji emoji-button" title="Question Mark">❓</div>
+								<div class="emoji emoji-button" title="Warning">⚠️</div>
+								<div class="emoji emoji-button" title="No Entry">⛔</div>
+								<div class="emoji-category">Flags</div>
+								<div class="emoji emoji-button" title="Chequered Flag">🏁</div>
+								<div class="emoji emoji-button" title="Triangular Flag">🚩</div>
+								<div class="emoji emoji-button" title="Rainbow Flag">🏳️‍🌈</div>
+								<div class="emoji emoji-button" title="Pirate Flag">🏴‍☠️</div>
+								<div class="emoji emoji-button" title="Flag of United States">🇺🇸</div>
+								<div class="emoji emoji-button" title="Flag of United Kingdom">🇬🇧</div>
+								<div class="emoji emoji-button" title="Flag of Canada">🇨🇦</div>
+								<div class="emoji emoji-button" title="Flag of Australia">🇦🇺</div>
+								<div class="emoji emoji-button" title="Flag of France">🇫🇷</div>
+								<div class="emoji emoji-button" title="Flag of Germany">🇩🇪</div>
+								<div class="emoji emoji-button" title="Flag of Japan">🇯🇵</div>
+								<div class="emoji-category">Additional Symbols</div>
+								<div class="emoji emoji-button" title="Information">ℹ️</div>
+								<div class="emoji emoji-button" title="Sparkle">❇️</div>
+								<div class="emoji emoji-button" title="Musical Note">🎵</div>
+								<div class="emoji emoji-button" title="Musical Notes">🎶</div>
+								<div class="emoji emoji-button" title="Heart Decoration">💟</div>
+								<div class="emoji emoji-button" title="Diamond Shape with a Dot Inside">💠</div>
+								<div class="emoji emoji-button" title="Recycling Symbol">♻️</div>
+								<div class="emoji emoji-button" title="Peace Symbol">☮️</div>
+								<div class="emoji emoji-button" title="Heart Exclamation">❣️</div>
+							</div>					
+						</div>
+						<div class="send-arrow">
+							<span class="arrow-icon">➔</span>
+							<button class="send-button">Send</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="streamers-container hidden">
+				<div class="streamers-header">View Streamers</div>
+				<div class="streamers-list">
+					<!-- streamers video elements will be added here -->
+				</div>
+			</div>
+			<div id="nickname-menu" class="nickname-menu">
+				<span class="nickname-toggle">&#x25C4;</span>
+			</div>
+		</div>
+		<div id="settings-panel" class="settings-panel outterSettings bottomleft">
+			<div class="button-container close-settings">
+				<div class="circle" title="Close Settings">
+					<div class="arrow" title="Close Settings"></div>
+				</div>
+			</div>
+			<h3>Settings</h3>
+			<div class="settings-option">
+				<div class="theme-switch">
+					<div class="switch">
+						<label>Theme:</label>
+						<input type="checkbox" id="theme-toggle" class="switch" checked>
+						<span class="slider round"></span>
+					</div>
+					<span id="theme-label">Dark</span>
+				</div>
+			</div>
+			<div class="settings-option">
+				<label for="enable-theme-auto">Match PC Theme:</label>
+				<input type="checkbox" id="enable-theme-auto">
+			</div>
+			<div class="settings-option">
+				<label>Auto Hide Members:</label>
+				<input type="checkbox" id="auto-hide-members"> 
+			</div>
+			<div class="settings-option">
+				<label for="enable-notifications">Enable Notifications:</label>
+				<input type="checkbox" id="enable-notifications">
+			</div>
+			<div class="settings-option">
+				<label for="chat-font-size">Chat Font Size:</label>
+				<select id="chat-font-size">
+					<option value="small">Small</option>
+					<option value="medium" selected>Medium</option>
+					<option value="large">Large</option>
+					<option value="x-large">Extra Large</option>
+					<option value="xx-large">2x Extra Large</option>
+				</select>
+			</div>
+			<div class="settings-option">
+				<label for="nickname-font-size">Nickname Font Size:</label>
+				<select id="nickname-font-size">
+					<option value="small">Small</option>
+					<option value="medium" selected>Medium</option>
+					<option value="large">Large</option>
+					<option value="x-large">Extra Large</option>
+					<option value="xx-large">2x Extra Large</option>
+				</select>
+			</div>
+		</div>
+		<div id="broadcast-settings" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Broadcast Settings</h3>
+					<span class="close">&times;</span>
+				</div>
+				<div id="model-preview">
+					<div class="modal-body">
+						<div>
+							<label for="camera">Camera:</label>
+							<select id="camera"></select>
+						</div>
+						<div>
+							<label for="microphone">Microphone:</label>
+							<select id="microphone">
+								<option value="muted">Muted</option>
+							</select>
+						</div>
+						<div class="video-preview">
+							<video id="video-preview" controls controlsList="nodownload nofullscreen noremoteplayback"></video>
+						</div>
+						<% if (room?.vip) { %>
+							<div>
+								<label><input type="checkbox" id="high-definition"> High Definition</label>
+							</div>
+						<% } %>
+					</div>
+					<div class="modal-footer">
+						<button id="start-stream" class="button">Start Broadcast</button>
+					</div>
+				</div>
+				<div class="pong-loader"></div>
+			</div>
+		</div>
+		<div id="user-menu" class="user-menu slideLoad">
+			<div class="user-menu-content">
+				<img src="/images/user-avatar.png" alt="Profile Photo" class="profile-photo">
+				<p class="bio"></p>
+				<div class="actions">
+					<% if (room.allowedRoles.includes(user.role)) { %>
+						<div class="moderation-controls">
+							<button id="kickUser" class="action-button">Kick</button>
+							<button id="muteUser" class="action-button">Mute</button>
+							<button id="banUser" class="action-button">Ban</button>
+							<button id="shadowBanUser" class="action-button">Shadow Ban</button>
+							<% if (user.role === 'developer') { %>
+								<button id="suspendUser" class="action-button">Suspend</button>
+							<% } %>
+						</div>
+					<% } %>
+					<div class="basic-controls">
+						<button id="pokeUser" class="action-button">Poke</button>
+						<button id="shoutUser" class="action-button">Shout</button>
+						<% if (room.memberAllowedRoles.includes(user.role)) { %>
+							<button id="followUser" class="action-button">Follow</button>
+							<button id="msgUser" class="action-button">Message</button>
+							<button id="blockUser" class="action-button">Block</button>
+						<% } %>
+					</div>
+				</div>
+				<div class="button-container exit-button">
+					<div class="circle" title="Close Button">
+						<div class="arrow" title="Close Button"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="profile-modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Profile</h3>
+					<span class="close">&times;</span>
+				</div>
+				<div class="modal-body">
+					<div class="profile-avatar-container" id="profile-avatar-container">
+						<img id="profile-avatar" src="<%= user?.profilePhoto || '/images/user-avatar.png' %>" alt="User Avatar">
+						<input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+					</div>
+					<div class="profile-info">
+						<p id="profile-username"><%= user.username %></p>
+						<p id="profile-role"><%= user.role %></p>
+						<div class="profile-status">
+							<label for="status-select">Status:</label>
+							<select id="status-select">
+								<option value="online">Online</option>
+								<!--<option value="away">Away</option>-->
+								<option value="busy">Busy</option>
+								<option value="dnd">Do Not Disturb</option>
+								<option value="offline">Offline</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button id="save-profile" class="button">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="stickpm-custom-cursor-wrap">
+		<div id="stickpm-custom-cursor"></div>
+	</div>
+	<div class="preloader-overlay">
+		<div id="page-preloader" class="preloader ">
+			<div class="pong-loader"></div>
+				<div class="hcfont serverMessage">
+					<%- maintenance ? `Server <span class="themefont">Maint</span>enance` : `Loading <span class="themefont">Chat</span>room <span class="loading-dot">.</span> <span class="loading-dot">.</span> <span class="loading-dot">.</span>`; %>
+				</div>
+		</div>
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const socket = io('/chat', { 
+			path: '/socket.io', 
+			reconnectionAttempts: 3, 
+			reconnectionDelay: 5000,
+			transports: ['websocket']
+		});
+
+		const mainElements = { 
+			enableNotificationsCheckbox: document.getElementById('enable-notifications'),
+			broadcastSettingsModal: document.getElementById('broadcast-settings'),
+			streamersContainer: document.querySelector('.streamers-container'),
+			localVideoElement: document.getElementById('local-video-element'),
+			closeModalButton: document.querySelector('.modal-header .close'),
+			startBroadcastButton: document.getElementById('start-broadcast'),
+			autoThemeCheckbox: document.getElementById('enable-theme-auto'),
+			nicknameFontSize: document.getElementById('nickname-font-size'),
+			preloaderOverlay: document.querySelector('.preloader-overlay'),
+			chatFontSizeSelect: document.getElementById('chat-font-size'),
+			autoHideMembers: document.getElementById('auto-hide-members'),
+			localVideoControls: document.querySelector('.video-controls'),
+			creditRoomButton: document.getElementById('creditRoomButton'),
+			profileUsername: document.getElementById('profile-username'),
+			saveProfileButton: document.getElementById('save-profile'),
+			startStreamButton: document.getElementById('start-stream'),
+			creditIncrease: document.getElementById('creditIncrease'),
+			creditDecrease: document.getElementById('creditDecrease'),
+			mainVolumeButton: document.getElementById('main-volume'),
+			settingsPanel: document.getElementById('settings-panel'),
+			streamersList: document.querySelector('.streamers-list'),
+			profileAvatar: document.getElementById('profile-avatar'),
+			cursor: document.getElementById('stickpm-custom-cursor'),
+			serverMessage: document.querySelector('.serverMessage'),
+			microphoneSelect: document.getElementById('microphone'),
+			videoPreview: document.getElementById('video-preview'),
+			chatMessages: document.querySelector('.chat-messages'),
+			profileModal: document.getElementById('profile-modal'),
+			avatarUpload: document.getElementById('avatar-upload'),
+			closeCredits: document.getElementById('close-credits'),
+			statusSelect: document.getElementById('status-select'),
+			previewVideo: document.getElementById('model-preview'),
+			settingsIcon: document.getElementById('settings-icon'),
+			nicknameMenu: document.getElementById('nickname-menu'),
+			validCredits: document.getElementById('validCredits'),
+			emojiButton: document.querySelector('.emoji-button'),
+			emojiPicker: document.querySelector('.emoji-picker'),
+			userSidebar: document.querySelector('.left-sidebar'),
+			mainContent: document.querySelector('.main-content'),
+			profileRole: document.getElementById('profile-role'),
+			themeToggle: document.getElementById('theme-toggle'),
+			mainCredits: document.getElementById('main-credits'),
+			searchUsers: document.getElementById('searchUsers'),
+			loadingPong: document.querySelector('.pong-loader'),
+			pushToTalk: document.getElementById('push-to-talk'),
+			userAvatar: document.getElementById('user-avatar'),
+			localVideo: document.getElementById('local-video'),
+			sendButton: document.querySelector('.send-button'),
+			themeLabel: document.getElementById('theme-label'),
+			creditRoom: document.getElementById('creditRoom'),
+			usernameSpan: document.getElementById('username'),
+			menuButton: document.querySelector('.menuButton'),
+			creditTab: document.querySelector('.credit-tab'),
+			fakeInput: document.querySelector('.fake-input'),
+			emojiIcon: document.querySelector('.chat-icon'),
+			cameraSelect: document.getElementById('camera'),
+			userMenu: document.getElementById('user-menu'),
+			userList: document.querySelector('.user-list'),
+			search: document.querySelector('.search'),
+			body: document.body
+		};
+		
+		const controlElements = {
+			<% if (user.role === 'developer') { %>
+				suspendUserElement: document.getElementById('suspendUser'),
+			<% } if (room.allowedRoles.includes(user.role)) { %>
+				shadowBanUserElement: document.getElementById('shadowBanUser'),
+				kickUserElement: document.getElementById('kickUser'),
+				muteUserElement: document.getElementById('muteUser'),
+				banUserElement: document.getElementById('banUser'),
+			<% } if (room.memberAllowedRoles.includes(user.role)) { %>
+				msgUserElement: document.getElementById('msgUser'),
+				blockUserElement: document.getElementById('blockUser'),
+				followUserElement: document.getElementById('followUser'),
+			<% } %>
+			pokeUserElement: document.getElementById('pokeUser'),
+			shoutUserElement: document.getElementById('shoutUser')
+		};
+		
+		const elements = {
+			...mainElements,
+			...controlElements,
+		};
+
+		const profile = {
+			id: '<%= user.id %>',
+			username: '<%= user.username %>',
+			role: '<%= user.role %>',
+			credits: <%= user?.credits?.amount || 0 %>,
+			avatar: "<%= user?.profilePhoto || '/images/user-avatar.png' %>",
+			clever: 'stickpm.com',
+			status: 'online',
+			manualStatus: false,
+			approveAvatar: false,
+			notifcationSounds: <%= user?.notifcationSounds || false %>,
+			notifcationVolume: 70,
+			twoFactorEnabled: <%= user?.twoFactorEnabled || false %>,
+			updateAvatar: function (newAvatar) {
+				let avatarPoop = newAvatar;
+				letInterval = setInterval(function () {
+					if (avatarPoop === profile.avatar || profile.approveAvatar) {
+						if (profile.approveAvatar) profile.approveAvatar = false;
+						clearInterval(letInterval);
+						elements.profileAvatar.src = avatarPoop;
+					}
+					else elements.profileAvatar.src = (avatarPoop === elements.profileAvatar.src) ? this.avatar : avatarPoop;
+				}, 6000);
+			},
+			updateProfile: function () {
+				if (letInterval) clearInterval(letInterval);
+				this.approveAvatar = true;
+				this.avatar = elements.profileAvatar.src;
+				elements.userAvatar.src = this.avatar;
+				this.updateStatus(elements.statusSelect.value, true);
+			},
+			updateStatus: function (newStatus, isManual = false) {
+				this.status = newStatus;
+				if (isManual) this.manualStatus = newStatus.toLowerCase() !== 'online';
+				if (this.approveAvatar) socket.emit('updateStatus', { status: newStatus, profile: this });
+				else socket.emit('updateStatus', { status: newStatus });
+			}
+		};
+
+		let mainMute = false;
+		let autoTheme = false;
+		let hideTimer;
+		let hideProfile;
+		let streamsData = [];
+		let dataChannel;
+		let letInterval;
+		let localStream = null;
+		let lastMessage = '';
+		let previewStream;
+		let streamInterval;
+		let storeLocalPeer = null;
+		let openConnections = {};
+		let pushToTalkStream;
+		let pushToTalkStatus = false;
+		let themeCheckInterval;
+		let followedUsers = [<%= user.following %>];
+
+		const uiTheme = {
+			inactivityTimeLimit: 5 * 60 * 1000,
+			inactivityTimeout: null,
+			cursorTimeout: null,
+			cursorVisibilityTimeout: 30 * 1000,
+			events: ['mousemove', 'keydown', 'click', 'scroll', 'touchstart', 'touchmove', 'touchend', 'pointerdown', 'pointermove', 'pointerup'],
+			lastActivityTimestamp: Date.now(),
+			lastCheckedTimestamp: Date.now(),
+			debounce: (func, wait) => {
+				let timeout;
+				return function (...args) {
+					const context = this;
+					clearTimeout(timeout);
+					timeout = setTimeout(() => func.apply(context, args), wait);
+				};
+			},
+			throttle: (func, limit) => {
+				let lastFunc;
+				let lastRan;
+				return function (...args) {
+					const context = this;
+					if (!lastRan) {
+						func.apply(context, args);
+						lastRan = Date.now();
+					} else {
+						clearTimeout(lastFunc);
+						lastFunc = setTimeout(function () {
+							if ((Date.now() - lastRan) >= limit) {
+								func.apply(context, args);
+								lastRan = Date.now();
+							}
+						}, limit - (Date.now() - lastRan));
+					}
+				};
+			},
+			resetInactivityTimer: () => {
+				clearTimeout(uiTheme.inactivityTimeout);
+				uiTheme.lastActivityTimestamp = Date.now();
+				uiTheme.inactivityTimeout = setTimeout(() => {
+					if (!profile.manualStatus && profile.status === 'online') profile.updateStatus('away');
+				}, uiTheme.inactivityTimeLimit);
+			},
+			handleUserActivity: () => {
+				if (!profile.manualStatus && profile.status === 'away') {
+					profile.updateStatus('online');
+					socket.emit('updateStatus', { status: 'online' });
+				}
+				uiTheme.resetInactivityTimer();
+			},
+			updateUserStatusVisual: (status) => {
+				const userStatusElement = document.getElementById('user-status');
+				if (userStatusElement) {
+					userStatusElement.className = `status-icon ${status}-status`;
+				}
+			},
+			resetCursorTimeout: () => {
+				clearTimeout(uiTheme.cursorTimeout);
+				uiTheme.cursorTimeout = setTimeout(uiTheme.hideCursor, uiTheme.cursorVisibilityTimeout);
+			},
+			showCursor: () => {
+				const cursorElement = document.getElementById('stickpm-custom-cursor');
+				if (cursorElement) cursorElement.style.opacity = 1;
+			},
+			hideCursor: () => {
+				const cursorElement = document.getElementById('stickpm-custom-cursor');
+				if (cursorElement) cursorElement.style.opacity = 0;
+			},
+			updateCursorPosition: (event) => {
+				const cursorElement = document.getElementById('stickpm-custom-cursor');
+				let cursorX, cursorY;
+				if (event.touches && event.touches.length > 0) {
+					cursorX = event.touches[0].clientX;
+					cursorY = event.touches[0].clientY;
+				} else if (event.clientX !== undefined && event.clientY !== undefined) {
+					cursorX = event.clientX;
+					cursorY = event.clientY;
+				} else {
+					cursorX = event.pageX;
+					cursorY = event.pageY;
+				}
+				if (cursorElement) cursorElement.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+				uiTheme.showCursor();
+				uiTheme.resetCursorTimeout();
+			},
+			cursor: () => {
+				uiTheme.showCursor();
+				uiTheme.resetCursorTimeout();
+				uiTheme.events.forEach(eventType => {
+					window.addEventListener(eventType, uiTheme.updateCursorPosition, { passive: true });
+				});
+			},
+			init: () => {
+				uiTheme.resetInactivityTimer();
+				const handleUserActivityDebounced = uiTheme.debounce(uiTheme.handleUserActivity, 100);
+				uiTheme.events.forEach(eventType => {
+					window.addEventListener(eventType, handleUserActivityDebounced, { passive: true });
+				});
+				uiTheme.cursor();
+			},
+			theme: (auto) => {
+				const applyTheme = (theme) => {
+					if (theme === 'dark') {
+						elements.body.classList.add('dark-theme');
+						elements.body.classList.remove('light-theme');
+						elements.themeLabel.textContent = 'Dark';
+						elements.themeToggle.checked = true;
+					} else {
+						elements.body.classList.add('light-theme');
+						elements.body.classList.remove('dark-theme');
+						elements.themeLabel.textContent = 'Light';
+						elements.themeToggle.checked = false;
+					}
+					localStorage.setItem("theme", theme);
+				};
+				const checkSystemTheme = () => {
+					const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+					if (prefersDarkScheme.matches) applyTheme('dark');
+					else applyTheme('light');
+				};
+				if (auto) {
+					checkSystemTheme();
+					themeCheckInterval = setInterval(checkSystemTheme, 3600000);
+				} else {
+					clearInterval(themeCheckInterval);
+					applyTheme('dark');
+				}
+				elements.themeToggle.addEventListener('change', () => {
+					if (elements.themeToggle.checked) applyTheme('dark');
+					else applyTheme('light');
+				});
+				elements.autoThemeCheckbox.addEventListener('change', () => {
+					if (elements.autoThemeCheckbox.checked) uiTheme.theme(true);
+					else uiTheme.theme(false);
+				});
+			},
+			scroller: () => {
+				let offsetStart = 0;
+				let offsetEnd = 0;
+				window.addEventListener('scroll', () => {
+					const scrollPosition = (window.pageYOffset - offsetStart) / (document.body.offsetHeight - offsetStart - offsetEnd - window.innerHeight);
+					elements.body.style.setProperty('--scroll', scrollPosition);
+				}, false);
+			}
+		};
+
+		uiTheme.init();
+		uiTheme.theme(autoTheme);
+		<% if (!maintenance) { %>
+		const profiles = [];
+		const userManagement = {
+			toggleUserMenu: (data) => {
+				if (data.id === profile.id) {
+					elements.userMenu.querySelector('.profile-photo').src = profile.avatar;
+					elements.userMenu.querySelector('.bio').textContent = data.bio || `This is a short bio about ${data.username}.`;
+				}
+				else {
+					const profileId = data.uuid || data.id;
+					const profilePhoto = profiles[profileId]?.profilePhoto || data.profilePhoto || '/images/user-avatar.png';
+					const profileBio = profiles[profileId]?.bio || data.bio || `This is a short bio about ${data.username}.`;
+					elements.userMenu.querySelector('.profile-photo').src = profilePhoto;
+					elements.userMenu.querySelector('.profile-photo').onclick = () =>{
+						const mainDomain = window.location.hostname.replace('chat.', '');
+						const profileUrl = `https://${mainDomain}/profile/${data.username}`;
+						window.open(profileUrl, '_blank');
+					};
+					elements.userMenu.querySelector('.bio').textContent = profileBio;
+					elements.pokeUserElement.onclick = () => {
+						dataHandling.hideUserMenu();
+						socket.emit('poke', { id: profileId, username: data.username });
+					};
+					elements.shoutUserElement.onclick = () => {
+						dataHandling.hideUserMenu();
+						const mentionText = `@${data.username}`;
+						const selection = window.getSelection();
+						const range = selection.rangeCount ? selection.getRangeAt(0) : null;
+						if (range && elements.fakeInput.contains(range.startContainer)) {
+							range.deleteContents();
+							const mentionNode = document.createTextNode(mentionText);
+							range.insertNode(mentionNode);
+							range.setStartAfter(mentionNode);
+							range.setEndAfter(mentionNode);
+							selection.removeAllRanges();
+							selection.addRange(range);
+						} else {
+							const currentContent = elements.fakeInput.textContent.trim();
+							if (currentContent === placeholder || !currentContent) elements.fakeInput.textContent = mentionText;
+							else elements.fakeInput.textContent += ` ${mentionText}`;
+							const newRange = document.createRange();
+							newRange.selectNodeContents(elements.fakeInput);
+							newRange.collapse(false);
+							selection.removeAllRanges();
+							selection.addRange(newRange);
+						}
+						elements.fakeInput.focus();
+					};
+					<% 	if (user.role === 'developer') { %>
+							elements.suspendUserElement.addEventListener('click', () => {
+								socket.emit('suspendUser', { userId: data.id });
+							});
+					<%  } if (room.allowedRoles.includes(user.role)) { %>
+							elements.shadowBanUserElement.addEventListener('click', () => {
+								socket.emit('shadowBanUser', { userId: data.id });
+							});
+							elements.kickUserElement.addEventListener('click', () => {
+								socket.emit('kickUser', { userId: data.id });
+							});
+							elements.banUserElement.addEventListener('click', () => {
+								socket.emit('banUser', { userId: data.id });
+							});
+							elements.muteUserElement.addEventListener('click', () => {
+								socket.emit('muted', { muted: true, userId: data.id });
+							});
+					<%  } if (room.memberAllowedRoles.includes(user.role)) { %>
+							elements.blockUserElement.onclick = () => {
+								if (!blockedUsers.includes(data.id)) {
+									elements.blockUserElement.innerText = 'Block';
+									socket.emit('blockUser', { id: data.id, username: data.username });
+									blockedUsers.push(data.id);
+								} else {
+									elements.blockUserElement.innerText = 'Unblock';
+									socket.emit('unblockUser', { id: data.id, username: data.username });
+									blockedUsers = blockedUsers.filter(id => id !== data.id);
+								}
+								dataHandling.hideUserMenu();
+							};
+							elements.followUserElement.onclick = () => {
+								if (!followedUsers.includes(data.id)) {
+									elements.followUserElement.innerText = 'Follow';
+									socket.emit('followUser', { id: data.id, username: data.username });
+								}
+								else {
+									elements.followUserElement.innerText = 'Unfollow';
+									socket.emit('unfollowUser', { id: data.id, username: data.username });
+									followedUsers = followedUsers.filter(id => id !== data.id);
+								}
+								dataHandling.hideUserMenu();
+							};
+					<%  } %>
+				}
+			},
+			/*populateUserList: (users) => {
+				 const roleOrder = ['developer', 'owner', 'admin', 'super', 'moderator', 'member', 'guest'];
+				users.sort((a, b) => {
+					const roleComparison = roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+					if (roleComparison !== 0) return roleComparison;
+					return a.username.localeCompare(b.username);
+				});
+				elements.userList.innerHTML = '';
+				if (elements.search.classList.contains('hidden') && users.length > 0) elements.search.classList.remove('hidden');
+				users.forEach(user => {
+					if (!user.username) return;
+					if (user.id && !profiles[user.id]) profiles[user.id] = user;
+					const userItem = document.createElement('div');
+					userItem.classList.add('user-item');
+					userItem.dataset.id = user.id;
+					userItem.dataset.username = user.username;
+					userItem.title = user.username.charAt(0).toUpperCase() + user.username.slice(1);
+					const userIcon = document.createElement('span');
+					userIcon.classList.add('user-icon', `${user.role}-icon`);
+					userIcon.title = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+					userIcon.textContent = user.role.charAt(0).toUpperCase();
+					const streamingIcon = document.createElement('span');
+					streamingIcon.addEventListener('click', () => {
+						socket.emit('request consumer', { uuid: user.id, username: user.username });
+						streamingIcon.classList.add('hidden');
+					});
+					const statusIcon = document.createElement('span');
+					statusIcon.classList.add('status-icon', `${user.status}-status`);
+					statusIcon.innerHTML = userManagement.getStatusSVG(user.status);
+					userItem.appendChild(userIcon);
+					userItem.appendChild(document.createTextNode(user.username));
+					userItem.appendChild(streamingIcon);
+					userItem.appendChild(statusIcon);
+					userItem.addEventListener('click', () => {
+						elements.userMenu.classList.remove('slideLoad', 'slideDown');
+						elements.userMenu.classList.add('slideUp');
+						userManagement.toggleUserMenu(user);
+					});
+					elements.userList.appendChild(userItem);
+				});
+			},
+			addUserList: (user) => {
+				if (elements.search.classList.contains('hidden') && user.id) elements.search.classList.remove('hidden');
+				const currentUsers = Array.from(elements.userList.querySelectorAll('.user-item'));
+				const roleOrder = ['developer', 'owner', 'admin', 'super', 'moderator', 'member', 'guest'];
+				const getUserDetails = (element) => {
+					return {
+						role: element.querySelector('.user-icon').classList[1].split('-')[0],
+						username: element.textContent.trim()
+					};
+				};
+				let insertIndex = currentUsers.length;
+				for (let i = 0; i < currentUsers.length; i++) {
+					const existingUser = getUserDetails(currentUsers[i]);
+					if (roleOrder.indexOf(user.role) < roleOrder.indexOf(existingUser.role) ||
+						(roleOrder.indexOf(user.role) === roleOrder.indexOf(existingUser.role) &&
+						user.username.localeCompare(existingUser.username) < 0)) {
+						insertIndex = i;
+						break;
+					}
+				}
+				if (user.id && !profiles[user.id]) profiles[user.id] = user;
+				const userItem = document.createElement('div');
+				userItem.classList.add('user-item');
+				userItem.dataset.id = user.id;
+				userItem.dataset.username = user.username;
+				userItem.title = user.username.charAt(0).toUpperCase() + user.username.slice(1);
+				const userIcon = document.createElement('span');
+				userIcon.classList.add('user-icon', `${user.role}-icon`);
+				userIcon.title = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+				userIcon.textContent = user.role.charAt(0).toUpperCase();
+				const streamingIcon = document.createElement('span');
+				streamingIcon.addEventListener('click', () => {
+					socket.emit('request consumer', { uuid: user.id, username: user.username });
+					streamingIcon.classList.add('hidden');
+				});
+				const statusIcon = document.createElement('span');
+				statusIcon.classList.add('status-icon', `${user.status}-status`);
+				statusIcon.innerHTML = userManagement.getStatusSVG(user.status);
+				userItem.appendChild(userIcon);
+				userItem.appendChild(document.createTextNode(user.username));
+				userItem.appendChild(streamingIcon);
+				userItem.appendChild(statusIcon);
+				userItem.addEventListener('click', () => {
+					elements.userMenu.classList.remove('slideLoad', 'slideDown');
+					elements.userMenu.classList.add('slideUp');
+					userManagement.toggleUserMenu(user);
+				});
+				if (insertIndex === currentUsers.length) elements.userList.appendChild(userItem);
+				else elements.userList.insertBefore(userItem, currentUsers[insertIndex]);
+			},*/
+			createUserItem: (user) => {
+				if (!user.username) return null;
+				if (user.id && !profiles[user.id]) profiles[user.id] = user;
+				const userItem = document.createElement('div');
+				userItem.classList.add('user-item');
+				userItem.dataset.id = user.id;
+				userItem.dataset.username = user.username;
+				userItem.title = user.username.charAt(0).toUpperCase() + user.username.slice(1);
+				const userIcon = document.createElement('span');
+				userIcon.classList.add('user-icon', `${user.role}-icon`);
+				userIcon.title = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+				userIcon.textContent = user.role.charAt(0).toUpperCase();
+				const streamingIcon = document.createElement('span');
+				streamingIcon.classList.add('streaming', 'hidden');
+				streamingIcon.title = 'View Live Stream';
+				streamingIcon.addEventListener('click', () => {
+					if (document.getElementById(`streamer-${user.id}`)) return;
+					socket.emit('request consumer', { uuid: user.id, username: user.username });
+					streamingIcon.classList.add('hidden');
+				});
+				const statusIcon = document.createElement('span');
+				statusIcon.classList.add('status-icon', `${user.status}-status`);
+				statusIcon.innerHTML = userManagement.getStatusSVG(user.status);
+				userItem.appendChild(userIcon);
+				userItem.appendChild(document.createTextNode(user.username));
+				userItem.appendChild(streamingIcon);
+				userItem.appendChild(statusIcon);
+				userItem.addEventListener('click', () => {
+					elements.userMenu.classList.remove('slideLoad', 'slideDown');
+					elements.userMenu.classList.add('slideUp');
+					userManagement.toggleUserMenu(user);
+				});
+				return userItem;
+			},
+			populateUserList: (users) => {
+				const roleOrder = ['developer', 'owner', 'admin', 'super', 'moderator', 'member', 'guest'];
+				users.sort((a, b) => {
+					const roleComparison = roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+					if (roleComparison !== 0) return roleComparison;
+					return a.username.localeCompare(b.username);
+				});
+				elements.userList.innerHTML = '';
+				if (elements.search.classList.contains('hidden') && users.length > 0) elements.search.classList.remove('hidden');
+				users.forEach(user => {
+					const userItem = createUserItem(user);
+					if (userItem) elements.userList.appendChild(userItem);
+				});
+			},
+			addUserList: (user) => {
+				if (elements.search.classList.contains('hidden') && user.id) elements.search.classList.remove('hidden');
+				const currentUsers = Array.from(elements.userList.querySelectorAll('.user-item'));
+				const roleOrder = ['developer', 'owner', 'admin', 'super', 'moderator', 'member', 'guest'];
+				const getUserDetails = (element) => {
+					return {
+						role: element.querySelector('.user-icon').classList[1].split('-')[0],
+						username: element.textContent.trim()
+					};
+				};
+				let insertIndex = currentUsers.length;
+				for (let i = 0; i < currentUsers.length; i++) {
+					const existingUser = getUserDetails(currentUsers[i]);
+					if (roleOrder.indexOf(user.role) < roleOrder.indexOf(existingUser.role) ||
+						(roleOrder.indexOf(user.role) === roleOrder.indexOf(existingUser.role) &&
+						user.username.localeCompare(existingUser.username) < 0)) {
+						insertIndex = i;
+						break;
+					}
+				}
+				const userItem = createUserItem(user);
+				if (!userItem) return;
+				if (insertIndex === currentUsers.length) elements.userList.appendChild(userItem);
+				else elements.userList.insertBefore(userItem, currentUsers[insertIndex]);
+			},
+			removeUserList: (data) => {
+				const userItems = document.querySelectorAll('.user-item');
+				userItems.forEach(item => {
+					if (item.dataset.id.includes(data.id)) item.remove();
+				});
+			},
+			getStatusSVG: (status) => `<span class="StickPMsvgMenu ${status}" title=""></span>`,
+		};
+
+		const roomManagement = {
+			keepAlive: () => {
+				const getTimestamp = () => new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' + String(new Date().getMilliseconds()).padStart(3, '0');
+				const ping = () => {
+					socket.emit('ping');
+					console.log(`%cPing! %c${getTimestamp()}`, 'color: black;', 'color: gray;');
+				};
+				ping();
+				setInterval(ping, 30000);
+				socket.on('pong', () => {
+					console.log(`%cPong! %c${getTimestamp()}`, 'color: black;', 'color: gray;');
+				});
+			},
+			toggleDisplay: (element, displayStyle = 'block') => {
+				element.style.display = (element.style.display === 'none' || !element.style.display) ? displayStyle : 'none';
+			},
+			moveLocalVideoToStreamers: () => {
+				if (elements.streamersList && !elements.streamersList.contains(elements.localVideo)) {
+					elements.mainContent.appendChild(elements.pushToTalk);
+					elements.localVideo.classList.remove('hidden');
+					elements.streamersList.appendChild(elements.localVideo);
+					const expandButton = document.createElement('button');
+					expandButton.classList.add('control-button', 'StickPMsvgStreamer', 'expand');
+					expandButton.id = 'expandControlButton';
+					let sizeIndex = 0;
+					const sizes = ['200px', '400px', '100%'];
+					expandButton.addEventListener('click', () => {
+						sizeIndex = (sizeIndex + 1) % sizes.length;
+						elements.localVideo.style.width = sizes[sizeIndex];
+					});
+					elements.localVideoControls.appendChild(expandButton);
+					elements.localVideo.style.width = '200px';
+					elements.streamersContainer.classList.remove('hidden');
+				}
+			},
+			returnLocalVideoToMenu: () => {
+				if (elements.userSidebar && !elements.userSidebar.contains(elements.localVideo)) {
+					const checkExpandButton = document.getElementById('expandControlButton');
+					if (checkExpandButton) {
+						elements.localVideo.style.width = '100%';
+						checkExpandButton.remove();
+					}
+					elements.userSidebar.insertBefore(elements.localVideo, elements.userSidebar.firstChild);
+					elements.userSidebar.insertBefore(elements.pushToTalk, elements.userSidebar.firstChild.nextSibling);
+					elements.localVideo.style.display = elements.localVideo.classList.contains('streaming') ? 'block' : 'none';
+				}
+			},
+			handlePreviewLoading: () => {
+				dataHandling.getMediaDevices();
+				elements.broadcastSettingsModal.style.display = 'flex';
+			},
+			startStream: async () => {
+				await dataHandling.addLocalStream();
+				dataHandling.stopStream(previewStream);
+				previewStream = null; //added to test if helps second broadcast
+				elements.broadcastSettingsModal.style.display = 'none';
+				elements.localVideo.classList.add('streaming', 'watermarked-video');
+				elements.localVideo.classList.remove('exited');
+				elements.localVideo.style.display = 'block';
+				elements.startBroadcastButton.style.display = 'none';
+				streamInterval = setInterval(() => {
+					elements.autoHideMembers.checked ? roomManagement.moveLocalVideoToStreamers() : roomManagement.returnLocalVideoToMenu();
+				}, 1000);
+			},
+			addWatermark: (videoElement, text) => {
+				const canvas = document.createElement('canvas');
+				const context = canvas.getContext('2d');
+				canvas.width = videoElement.videoWidth || 200;
+				canvas.height = videoElement.videoHeight || 150;
+				context.font = '12px Arial';
+				context.fillStyle = 'rgba(255, 255, 255, 0.2)';
+				const updateCanvasSize = () => {
+					canvas.width = videoElement.videoWidth || 200;
+					canvas.height = videoElement.videoHeight || 150;
+					context.font = `${Math.floor(canvas.height / 15)}px Arial`;
+				};
+				const drawWatermark = (x, y) => {
+					context.clearRect(0, 0, canvas.width, canvas.height);
+					context.fillText(text, x, y);
+				};
+				videoElement.addEventListener('play', () => {
+					let randomX = Math.random() * (canvas.width - 100);
+					let randomY = Math.random() * (canvas.height - 50);
+					drawWatermark(randomX, randomY);
+					const draw = () => {
+						if (videoElement.paused || videoElement.ended) return;
+						requestAnimationFrame(draw);
+					};
+					draw();
+					setInterval(() => {
+						randomX = Math.random() * (canvas.width - 100);
+						randomY = Math.random() * (canvas.height - 50);
+						drawWatermark(randomX, randomY);
+					}, 3000);
+				});
+				videoElement.addEventListener('loadedmetadata', updateCanvasSize);
+				window.addEventListener('resize', updateCanvasSize);
+				return canvas;
+			}
+		};
+
+		roomManagement.keepAlive();
+
+		const dataHandling = {
+			safeDomains: [
+				'youtube.com', 
+				'youtu.be', 
+				'vimeo.com', 
+				'twitter.com', 
+				'facebook.com', 
+				'instagram.com', 
+				'tiktok.com'
+			],
+
+			convertUrlsToSafeLinks: function(text) {
+				const urlPattern = /(\b(?:https?:\/\/)?[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+				const parts = text.split(urlPattern);
+				const fragment = document.createDocumentFragment();
+				parts.forEach(part => {
+					if (urlPattern.test(part)) {
+						let url = part.trim();
+						if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
+						const domain = url.match(/:\/\/(www\.)?([^\/]+)/i)[2];
+						const isSafe = this.safeDomains.some(safeDomain => domain.includes(safeDomain));
+						if (isSafe) {
+							const a = document.createElement('a');
+							a.href = url;
+							a.target = '_blank';
+							a.rel = 'noopener noreferrer';
+							a.textContent = part;
+							fragment.appendChild(a);
+						} else fragment.appendChild(document.createTextNode(part));
+					} else fragment.appendChild(document.createTextNode(part));
+				});
+				return fragment;
+			},
+
+			displayMessage: function (data) {
+				const messageElement = document.createElement('div');
+				messageElement.classList.add('chat-message');
+				messageElement.dataset.id = data.id;
+				messageElement.dataset.username = data.username;
+				const timestamp = new Date(data.timestamp);
+				const formattedTimestamp = timestamp.toLocaleString('en-US', { 
+					day: '2-digit', 
+					month: '2-digit', 
+					year: 'numeric', 
+					hour: '2-digit', 
+					minute: '2-digit', 
+					second: '2-digit', 
+					hour12: true 
+				});
+				const timestampElement = document.createElement('span');
+				timestampElement.classList.add('timestamp');
+				timestampElement.textContent = formattedTimestamp;
+				const nickSpan = document.createElement('span');
+				nickSpan.dataset.id = data.id;
+				nickSpan.dataset.username = data.username;
+				nickSpan.title = data.user;
+				nickSpan.classList.add('nick');
+				nickSpan.textContent = `${data.user}: `;
+				const messageTextSpan = document.createElement('span');
+				const safeMessageFragment = this.convertUrlsToSafeLinks(data.text);
+				messageTextSpan.appendChild(safeMessageFragment);
+				messageElement.appendChild(timestampElement);
+				messageElement.appendChild(nickSpan);
+				messageElement.appendChild(messageTextSpan);
+				elements.chatMessages.appendChild(messageElement);
+				elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+			},
+
+			soundNotifcations: function (type) {
+				const defaultSounds = {
+					poke: 		"<%= room?.isVip ? (room?.customSounds?.poke || 		'../sounds/poke.mp3') : 		'../sounds/poke.mp3' %>",
+					role: 		"<%= room?.isVip ? (room?.customSounds?.role || 		'../sounds/role.mp3') : 		'../sounds/role.mp3' %>",
+					muted: 		"<%= room?.isVip ? (room?.customSounds?.muted || 		'../sounds/muted.mp3') : 		'../sounds/muted.mp3' %>",
+					kicked: 	"<%= room?.isVip ? (room?.customSounds?.kicked || 		'../sounds/kicked.mp3') : 		'../sounds/kicked.mp3' %>",
+					banned: 	"<%= room?.isVip ? (room?.customSounds?.banned || 		'../sounds/banned.mp3') : 		'../sounds/banned.mp3' %>",
+					joined: 	"<%= room?.isVip ? (room?.customSounds?.joined || 		'../sounds/joined.mp3') : 		'../sounds/joined.mp3' %>",
+					mention: 	"<%= room?.isVip ? (room?.customSounds?.mention || 		'../sounds/mention.mp3') : 		'../sounds/mention.mp3' %>",
+					followed: 	"<%= room?.isVip ? (room?.customSounds?.followed || 	'../sounds/followed.mp3') : 	'../sounds/followed.mp3' %>"
+				};
+				const soundFile = defaultSounds[type];
+				if (profile.notifcationSounds) {
+					try {
+						const audio = new Audio(soundFile);
+						const volume = (typeof profile.notificationVolume === 'number') ? 
+                            Math.max(0, Math.min(profile.notificationVolume / 100, 1)) : 
+                            0.7;
+						audio.volume = volume;
+						audio.play().catch(err => console.error('Error playing the sound:', err));
+					} catch (error) {
+						console.error('Failed to play sound notification:', error);
+					}
+				}
+			},
+
+			displayNotification: function (message) {
+				const chatSoundsTypes = ['mention', 'poke', 'role', 'muted', 'kicked', 'banned', 'followed', 'joined'];
+				const foundType = chatSoundsTypes.find(type => message.toLowerCase().includes(type));
+				if (foundType && profile.notifcationSounds) dataHandling.soundNotifcations(foundType);
+				const notificationElement = document.createElement('div');
+				notificationElement.classList.add('chat-notification');
+				notificationElement.textContent = message;
+				elements.chatMessages.appendChild(notificationElement);
+				elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+			},
+
+			getMediaDevices: async function () {
+				try {
+					let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+					.catch(error => {
+						console.warn('Permissions not granted or device access not supported:', error);
+						alert('Please ensure your browser has access to the camera and microphone.');
+						return null;
+					});
+					if (!stream) return;
+					stream.getTracks().forEach(track => track.stop());
+					await this.enumerateAndPopulateDevices();
+					if (elements.cameraSelect.options.length > 0 || elements.microphoneSelect.options.length > 0) {
+						await this.updatePreview();
+						elements.loadingPong.style.display = 'none';
+						elements.previewVideo.style.display = 'block';
+					} else {
+						elements.loadingPong.style.display = 'none';
+						alert('No camera or microphone devices were found.');
+					}
+				} catch (error) {
+					console.error('Error getting media devices:', error);
+				}
+			},
+
+			enumerateAndPopulateDevices: async function () {
+				const devices = await navigator.mediaDevices.enumerateDevices();
+				const videoDevices = devices.filter(device => device.kind === 'videoinput');
+				const audioDevices = devices.filter(device => device.kind === 'audioinput');
+				elements.cameraSelect.innerHTML = '';
+				elements.microphoneSelect.innerHTML = '';
+				const mutedOption = document.createElement('option');
+				mutedOption.value = 'muted';
+				mutedOption.text = 'Muted';
+				elements.microphoneSelect.appendChild(mutedOption);
+				videoDevices.forEach((device, index) => {
+					const option = document.createElement('option');
+					option.value = device.deviceId;
+					option.text = device.label || `Camera ${index + 1}`;
+					elements.cameraSelect.appendChild(option);
+				});
+				audioDevices.forEach((device, index) => {
+					const option = document.createElement('option');
+					option.value = device.deviceId;
+					option.text = device.label || `Microphone ${index + 1}`;
+					elements.microphoneSelect.appendChild(option);
+				});
+				if (!elements.cameraSelect.dataset.listenersAdded) {
+					elements.cameraSelect.addEventListener('change', this.updatePreview.bind(this));
+					elements.microphoneSelect.addEventListener('change', this.updatePreview.bind(this));
+					elements.cameraSelect.dataset.listenersAdded = true;
+					elements.microphoneSelect.dataset.listenersAdded = true;
+				}
+			},
+
+			updatePreview: async function () {
+				const videoSource = elements.cameraSelect.value;
+				const audioSource = elements.microphoneSelect.value;
+				const constraints = {
+					video: { deviceId: videoSource ? { exact: videoSource } : undefined },
+					audio: audioSource === 'muted' ? false : { deviceId: audioSource ? { exact: audioSource } : undefined }
+				};
+				try {
+					this.stopStream(previewStream);
+					previewStream = await navigator.mediaDevices.getUserMedia(constraints);
+					elements.videoPreview.videoPreview = true;
+					elements.videoPreview.srcObject = previewStream;
+					elements.videoPreview.addEventListener('loadedmetadata', () => {
+						elements.videoPreview.controlsList = "nodownload nofullscreen noremoteplayback";
+					});
+					elements.videoPreview.addEventListener('canplay', () => {
+						elements.videoPreview.play().catch(error => {
+							console.error('Error playing video preview:', error);
+						});
+					});
+				} catch (error) {
+					console.error('Error updating preview:', error);
+				}
+			},
+
+			addLocalStream: async function () {
+				const videoSource = elements.cameraSelect.value;
+				const audioSource = elements.microphoneSelect.value; 
+				const extra = <%- (room && room.isVip) ? `{ width: { ideal: 1920 }, height: { ideal: 1080 }, aspectRatio: 16 / 9 }` : `{}` %>;
+				try {
+					if (localStream) {
+						this.stopStream(localStream);
+						localStream = null;
+					}
+					const constraints = {
+						video: { deviceId: videoSource ? { exact: videoSource } : undefined, extra },
+						audio: { deviceId: audioSource && audioSource !== 'muted' ? { exact: audioSource } : false }
+					};
+					if (audioSource === 'muted' && !elements.pushToTalk.classList.contains('hidden')) elements.pushToTalk.classList.add('hidden');
+					localStream = await navigator.mediaDevices.getUserMedia(constraints);
+					elements.localVideoElement.playsInline = true;
+					try {
+						elements.localVideoElement.srcObject = localStream;
+					} catch (error) {
+						console.error("Failed to set srcObject, using src as fallback", error);
+						if (!(localStream instanceof MediaStream)) return;
+						const url = URL.createObjectURL(localStream);
+						elements.localVideoElement.src = url;
+					}
+					elements.localVideoElement.onloadedmetadata = () => {
+						elements.localVideoElement.controlsList = "nodownload nofullscreen noremoteplayback";
+					};
+					elements.localVideoElement.poster = '/images/poster.png';
+					elements.localVideoElement.play();
+					elements.localVideoElement.oncanplaythrough = () => elements.localVideoElement.play();
+					elements.localVideo.classList.remove('hidden');
+					if (elements.localVideo.classList.contains('streaming')) {
+						for (let uuid in openConnections) {
+							const peer = openConnections[uuid];
+							localStream.getTracks().forEach(track => {
+								const sender = peer.getSenders().find(s => s.track && s.track.kind === track.kind);
+								if (sender) sender.replaceTrack(track);
+								else {
+									peer.addTrack(track, localStream);
+									if (peer.signalingState !== 'stable') peer.onnegotiationneeded();
+								}
+							});
+						}
+					} else {
+						const peer = await stickpmHandler.initializePeer({ uuid: socket.id, username: profile.username }, 'b');
+						localStream.getTracks().forEach(track => peer.addTrack(track, localStream));
+						openConnections[peer.uuid] = peer;
+						elements.localVideo.classList.add('streaming');
+					}
+					const viewButton = elements.localVideo.querySelector('.control-button.view');
+					viewButton.onclick = () => {
+						if (elements.localVideoElement.paused) elements.localVideoElement.play();
+						else elements.localVideoElement.pause();
+					};
+					elements.localVideoElement.onpause = () => {
+						const videoTrack = localStream.getVideoTracks()[0];
+						if (videoTrack) videoTrack.enabled = false;
+						if (dataChannel && dataChannel.readyState === 'open') socket.emit('pause playing stream', { uuid: socket.id, status: 'paused' });
+						viewButton.classList.remove('streaming');
+						viewButton.classList.add('notstreaming');
+					};
+					elements.localVideoElement.onplay = () => {
+						const videoTrack = localStream.getVideoTracks()[0];
+						if (videoTrack) videoTrack.enabled = true;
+						if (dataChannel && dataChannel.readyState === 'open') socket.emit('pause playing stream', { uuid: socket.id, status: 'playing' });
+						viewButton.classList.remove('notstreaming');
+						viewButton.classList.add('streaming');
+					};
+					const settingsButton = elements.localVideo.querySelector('.control-button.settings');
+					settingsButton.onclick = () => roomManagement.handlePreviewLoading();
+					const exitButton = elements.localVideo.querySelector('.control-button.exit');
+					exitButton.onclick = () => {
+						if (dataChannel && dataChannel.readyState === 'open') dataChannel.close();
+						this.stopStream(localStream);
+						localStream = null;
+						elements.localVideo.classList.add('exited');
+						elements.localVideo.classList.remove('streaming');
+						elements.localVideo.style.display = 'none';
+						elements.localVideoElement.srcObject = null;
+						elements.localVideo.classList.add('hidden');
+						elements.startBroadcastButton.classList.remove('hidden');
+						elements.startBroadcastButton.style.display = 'block';
+						elements.pushToTalk.classList.add('hidden');
+						clearInterval(streamInterval);
+						roomManagement.returnLocalVideoToMenu();
+						socket.emit('stop broadcasting');
+					};
+					if (audioSource && audioSource !== 'muted') initializePushToTalk();
+					return true;
+				} catch (error) {
+					console.error('Error accessing media devices.', error);
+					alert('Error accessing media devices. Please check your camera and microphone settings.');
+				}
+			},
+
+			addStreamer: function ({ name, id, src }) {
+				if (!src || !(src instanceof MediaStream) || !src.getVideoTracks().length) return;
+				if (document.getElementById(`streamer-${id}`)) return;
+				const streamer = document.createElement('div');
+				streamer.classList.add('streamer', 'watermarked-video');
+				streamer.dataset.id = id;
+				streamer.id = `streamer-${id}`;
+				const nickname = document.createElement('div');
+				nickname.classList.add('nickname');
+				nickname.textContent = name;
+				streamer.appendChild(nickname);
+				const video = document.createElement('video');
+				video.id = `video-${id}`;
+				video.dataset.uuid = id;
+				video.controls = false;
+				video.muted = true;
+				video.autoplay = true;
+				video.playsInline = true;
+				try {
+					video.srcObject = src;
+				} catch (error) {
+					console.error("Failed to set srcObject", error);
+				}
+				const poster = document.createElement('img');
+				poster.src = '/images/poster.png';
+				poster.classList.add('video-poster');
+				poster.style.display = 'none';
+				streamer.appendChild(poster);
+				video.addEventListener('loadedmetadata', () => {
+					video.controlsList = "nodownload nofullscreen noremoteplayback";
+				});
+				video.addEventListener('canplaythrough', () => video.play());
+				video.addEventListener('pause', () => {
+					poster.style.display = 'block';
+				});
+				video.addEventListener('playing', () => {
+					poster.style.display = 'none';
+				});
+				video.addEventListener('ended', () => {
+					poster.style.display = 'block';
+				});
+				streamer.appendChild(video);
+				const controls = document.createElement('div');
+				controls.classList.add('video-controls');
+				const expandButton = document.createElement('button');
+				expandButton.classList.add('control-button', 'StickPMsvgStreamer', 'expand');
+				let sizeIndex = 0;
+				const sizes = ['200px', '400px', '100%'];
+				expandButton.onclick = () => {
+					sizeIndex = (sizeIndex + 1) % sizes.length;
+					streamer.style.width = sizes[sizeIndex];
+				};
+				controls.appendChild(expandButton);
+				const popoutButton = document.createElement('button');
+				popoutButton.classList.add('control-button', 'StickPMsvgStreamer', 'popout');
+				popoutButton.onclick = async () => {
+					if ('pictureInPictureEnabled' in document) {
+						try {
+							if (document.pictureInPictureElement && document.pictureInPictureElement !== video) await document.exitPictureInPicture();
+							if (video !== document.pictureInPictureElement) await video.requestPictureInPicture();
+							else await document.exitPictureInPicture();
+						} catch (error) {
+							console.error('Error with Picture-in-Picture:', error);
+						}
+					}
+				};
+				controls.appendChild(popoutButton);
+				const muteButton = document.createElement('button');
+				muteButton.classList.add('control-button', 'StickPMsvgStreamer', 'mute');
+				muteButton.dataset.id = `mute-${id}`;
+				muteButton.onclick = () => {
+					video.muted = !video.muted;
+					muteButton.classList.toggle('mute', 'ummute');
+				};
+				controls.appendChild(muteButton);
+				const settingsButton = document.createElement('button');
+				settingsButton.classList.add('control-button', 'StickPMsvgStreamer', 'settings');
+				settingsButton.onclick = () => {
+					elements.userMenu.classList.remove('slideLoad', 'slideDown' );
+					elements.userMenu.classList.add('slideUp');
+					userManagement.toggleUserMenu({ username: name , uuid: id });
+				};
+				controls.appendChild(settingsButton);
+				const exitButton = document.createElement('button');
+				exitButton.classList.add('control-button', 'StickPMsvgStreamer', 'exit');
+				exitButton.onclick = () => {
+					streamer.remove();
+					if (elements.streamersList.children.length === 0) elements.streamersContainer.classList.add('hidden');
+					this.removeStreamer(id);
+					const userItem = elements.userList.querySelector(`.user-item[data-id="${id}"]`);
+					if (userItem) {
+						const streamingIcon = userItem.querySelector('.streaming');
+						streamingIcon.classList.remove('hidden');
+					}
+				};
+				controls.appendChild(exitButton);
+				streamer.appendChild(controls);
+				elements.streamersList.appendChild(streamer);
+				elements.streamersContainer.classList.remove('hidden');
+				streamsData.push({
+					uuid: id,
+					username: name,
+					stream: src,
+					elementId: `streamer-${id}`
+				});
+			},
+
+			removeStreamer: function (uuid) {
+				if (openConnections[uuid]) {
+					openConnections[uuid].close();
+					delete openConnections[uuid];
+				}
+				const videoElement = document.getElementById(`streamer-${uuid}`);
+				if (videoElement && videoElement.parentNode) 
+					videoElement.parentNode.removeChild(videoElement);
+				streamsData = streamsData.filter(stream => stream.uuid !== uuid);
+				if (elements.streamersList.children.length === 0) 
+					elements.streamersContainer.classList.add('hidden');
+			},
+
+			hideUserMenu: function () {
+				elements.userMenu.classList.remove('slideUp');
+				elements.userMenu.classList.add('slideDown');
+			},
+
+			hideAll: function (event) {
+				if (elements.userMenu.classList.contains('slideUp')) {
+					elements.userMenu.classList.remove('slideUp');
+					elements.userMenu.classList.add('slideDown');
+				}
+				if (elements.settingsPanel.style.display !== 'none') elements.settingsPanel.style.display = 'none';
+				if (!elements.emojiPicker.classList.contains('hidden')) elements.emojiPicker.classList.add('hidden');
+				if (!elements.closeCredits.classList.contains('hidden')) elements.closeCredits.classList.add('hidden');
+				if (elements.closeModalButton.style.display !== 'none') elements.closeModalButton .style.display = 'none';
+				if (elements.broadcastSettingsModal.style.display !== 'none') elements.broadcastSettingsModal.style.display = 'none';
+			},
+			
+			stopStream: function (stream) {
+				if (stream) stream.getTracks().forEach(track => track.stop());
+			},
+
+			showSidebar: function () {
+				clearTimeout(hideTimer);
+				elements.userSidebar.style.display = 'block';
+				elements.menuButton.style.display = 'none';
+			},
+
+			hideSidebar: function () {
+				if (elements.autoHideMembers.checked) {
+					hideTimer = setTimeout(() => {
+						if (!elements.userSidebar.matches(':hover') && !elements.nicknameMenu.matches(':hover')) {
+							elements.userSidebar.style.display = 'none';
+							elements.menuButton.style.display = 'block';
+						}
+					}, 2000);
+				}
+			},
+			
+			isMsgSimilar: (newMsg, lastMsg) => {
+				if (newMsg === lastMsg) return true;
+				if (newMsg.trim().length <= 10) return false;
+				if (Math.abs(newMsg.length - lastMsg.length) > 5) return false;
+				let diff = 0;
+				for (let i = 0; i < Math.min(newMsg.length, lastMsg.length); i++) {
+					if (newMsg[i] !== lastMsg[i]) diff++;
+					if (diff > 5) return false;
+				}
+				return true;
+			}
+		};
+
+		const initializePushToTalk = () => {
+			let audioTrack;
+			let isTalking = false;
+			let isKeyHeld = false;
+			const startTalking = () => {
+				if (!isTalking && audioTrack && !elements.pushToTalk.classList.contains('hidden')) {
+					audioTrack.enabled = true;
+					elements.pushToTalk.classList.add('active');
+					elements.pushToTalk.textContent = "Talking...";
+					socket.emit('push to talk', { status: 'start' });
+					isTalking = true;
+				}
+			};
+			const stopTalking = () => {
+				if (isTalking && audioTrack && !elements.pushToTalk.classList.contains('hidden')) {
+					audioTrack.enabled = false;
+					elements.pushToTalk.classList.remove('active');
+					elements.pushToTalk.textContent = "Push to Talk";
+					socket.emit('push to talk', { status: 'stop' });
+					isTalking = false;
+				}
+			};
+			const handleKeyDown = (event) => {
+				if ((event.key === 'CapsLock' || event.key === 'Alt') && !isKeyHeld) {
+					startTalking();
+					isKeyHeld = true;
+				}
+			};
+			const handleKeyUp = (event) => {
+				if ((event.key === 'CapsLock' || event.key === 'Alt') && isKeyHeld) {
+					stopTalking();
+					isKeyHeld = false;
+				}
+			};
+			if (localStream) {
+				audioTrack = localStream.getAudioTracks()[0];
+				audioTrack.enabled = false;
+				elements.pushToTalk.classList.remove('hidden');
+				elements.pushToTalk.addEventListener('mousedown', startTalking);
+				elements.pushToTalk.addEventListener('mouseup', stopTalking);
+				elements.pushToTalk.addEventListener('touchstart', startTalking);
+				elements.pushToTalk.addEventListener('touchend', stopTalking);
+				document.addEventListener('keydown', handleKeyDown);
+				document.addEventListener('keyup', handleKeyUp);
+			}
+		};
+		
+		const handlePushToTalkMessage = (data) => {
+			const videoElement = document.querySelector(`video[data-uuid="${data.speaker}"]`);
+			if (videoElement) {
+				const videoHighlight = document.querySelector(`[data-id="streamer-${data.speaker}"]`);
+				const muteButton = document.querySelector(`[data-id="mute-${data.speaker}"]`);
+				const audioTracks = videoElement.srcObject.getAudioTracks();
+				if (data.status === 'start') {
+					if (mainMute) {
+						audioTracks.forEach(track => track.enabled = true);
+						videoElement.muted = false;
+					}
+					if (muteButton && !muteButton.classList.contains('speaker2waves')) {
+						muteButton.classList.remove('nospeaker');
+						muteButton.classList.add('speaker2waves');
+					}
+					if (videoHighlight) elements.mainVolumeButton.style.backgroundColor = '#e67e00';
+					steamHighlight(audioTracks, videoHighlight);
+				} else if (data.status === 'stop') {
+					if (mainMute) {
+						audioTracks.forEach(track => track.enabled = false);
+						videoElement.muted = true;
+					}
+					if (muteButton && !muteButton.classList.contains('nospeaker')) {
+						muteButton.classList.remove('speaker2waves');
+						muteButton.classList.add('nospeaker');
+					}
+					elements.mainVolumeButton.style.backgroundColor = '#ff8c00';
+					if (videoHighlight) videoHighlight.classList.remove('innerOutterShadowsVol0', 'innerOutterShadowsVol2', 'innerOutterShadowsVol4');
+				}
+			}
+		};
+		
+		const steamHighlight = (audioTracks, videoHighlight) => {
+			if (audioTracks.length > 0 && videoHighlight) {
+				const audioContext = new AudioContext();
+				const mediaStreamSource = audioContext.createMediaStreamSource(new MediaStream(audioTracks));
+				const analyser = audioContext.createAnalyser();
+				analyser.fftSize = 256;
+				mediaStreamSource.connect(analyser);
+				const dataArray = new Uint8Array(analyser.frequencyBinCount);
+				function updateVolume() {
+					analyser.getByteFrequencyData(dataArray);
+					let sum = 0;
+					for (let i = 0; i < dataArray.length; i++) sum += dataArray[i] * dataArray[i];
+					const rms = Math.sqrt(sum / dataArray.length);
+					const threshold = 10;
+					videoHighlight.classList.remove('innerOutterShadowsVol0', 'innerOutterShadowsVol2', 'innerOutterShadowsVol4');
+					if (rms > threshold) {
+						if (rms > threshold * 2) videoHighlight.classList.add('innerOutterShadowsVol4');
+						else videoHighlight.classList.add('innerOutterShadowsVol2');
+					} else videoHighlight.classList.add('innerOutterShadowsVol0');
+					requestAnimationFrame(updateVolume);
+				}
+				updateVolume();
+			}
+		};	
+
+		const initializeSocketEvents = () => {
+			socket.on('stream status', ({ uuid, status }) => {
+				const videoElement = document.querySelector(`video[data-uuid="${uuid}"]`);
+				if (videoElement) {
+					if (status === 'paused') {
+						const videoTracks = videoElement.srcObject.getVideoTracks();
+						videoTracks.forEach(track => track.enabled = false);
+						videoElement.pause();
+					} else if (status === 'playing') {
+						const videoTracks = videoElement.srcObject.getVideoTracks();
+						videoTracks.forEach(track => track.enabled = true);
+						videoElement.play();
+					}
+					videoElement.classList.toggle('paused');
+				}
+			});
+			
+			socket.on('updateProfile', (data) => {
+				const { saveProfileButton } = elements;
+				if (hideProfile) clearTimeout(hideProfile);
+				const changeButtonColor = (color) => {
+					saveProfileButton.classList.remove('red', 'green');
+					saveProfileButton.style.transition = 'background-color 0.5s ease';
+					saveProfileButton.classList.add(color);
+				};
+				const newColor = data.data ? 'green' : 'red';
+				changeButtonColor(newColor);
+				if (data.data && data.profilePhoto) {
+					profile.approveAvatar = false;
+					profile.updateAvatar(data.profilePhoto);
+				}
+				let tempBlah = newColor;
+				hideProfile = setTimeout(() => {
+					saveProfileButton.style.transition = 'background-color 0.5s ease';
+					saveProfileButton.classList.remove(tempBlah);
+				}, 3000);
+			});
+
+			socket.on('statusUpdated', ({ id, status }) => {
+				const userItem = elements.userList.querySelector(`.user-item[data-id="${id}"]`);
+				if (userItem) {
+					const statusIcon = userItem.querySelector('.status-icon');
+					statusIcon.className = `status-icon ${status}-status`;
+					statusIcon.innerHTML = userManagement.getStatusSVG(status);
+				}
+			});
+
+			socket.on('poked', (data) => {
+				if (data.to) dataHandling.displayNotification(`You poked ${data.username}`);
+				if (data.from) dataHandling.displayNotification(`You were poked by ${data.fromUsername}`);
+			});
+
+			socket.on('stickpm', (data) => {
+				if (data.loaded) elements.preloaderOverlay.style.transform = 'translateY(100%)';
+				dataHandling.displayMessage(data);
+			});
+
+			socket.on('user-joined', (data) => {
+				dataHandling.displayNotification(data.message);
+				userManagement.addUserList(data);
+			});
+
+			socket.on('user-left', (data) => {
+				dataHandling.displayNotification(data.message);
+				userManagement.removeUserList(data);
+			});
+
+			socket.on('populate-users', (data) => {
+				userManagement.populateUserList(data);
+			});
+
+			socket.on('2FAEnabled', ({ userId }) => {
+				if (userId === profile.id) alert('2FA has been enabled for your account.');
+			});
+
+			socket.on('2FADisabled', ({ userId }) => {
+				if (userId === profile.id) alert('2FA has been disabled for your account.');
+			});
+
+			socket.on('customEvent', ({ event, data }) => {
+				handleCustomEvent(event, data);
+			});
+
+			socket.on('message', (archivedMessage) => {
+				dataHandling.displayMessage(archivedMessage);
+			});
+			
+			socket.on('error', (data) => {
+				if (data.loading) {
+					let message = data.message;
+					elements.preloaderOverlay.style.transform = 'translateY(0)';
+					let randomIndex = Math.floor(Math.random() * (message.length - 1));
+					while (message[randomIndex] === ' ' || message[randomIndex + 1] === ' ') {
+						randomIndex = Math.floor(Math.random() * (message.length - 1));
+					}
+					const formattedMessage = message.slice(0, randomIndex) + 
+							`<span class="themefont">${message.slice(randomIndex, randomIndex + 2)}</span>` + 
+							message.slice(randomIndex + 2);
+					mainElements.serverMessage.innerHTML = formattedMessage;
+				}
+				else if (data.message) dataHandling.displayMessage({ id: 0, user: 'System', text: data.message, timestamp: data.timestamp });
+			});
+
+			socket.on('highlightMessage', ({ id }) => {
+				const messageElement = document.querySelector(`.chat-message[data-id="${id}"]`);
+				if (messageElement) {
+					if (profile.notifcationSounds) dataHandling.soundNotifcations('mention');
+					messageElement.classList.add('highlight');
+					setTimeout(() => { messageElement.classList.remove('highlight'); }, 5000);
+				}
+			});
+
+			socket.on('messages', (messages) => {
+				messages.forEach(dataHandling.displayMessage);
+			});
+
+			socket.on('whisper', (whisperMessage) => {
+				displayWhisper(whisperMessage);
+			});
+
+			socket.on('typing', ({ username }) => {
+				displayTyping(username);
+			});
+
+			socket.on('readReceipt', ({ messageId, userId }) => {
+				markMessageAsRead(messageId, userId);
+			});
+
+			socket.on('creditedRoom', (data) => {
+				if (profile.credits >= 1 && data.amount) elements.validCredits.innerText = data.amount;
+				//? Message room donation or no
+			});
+
+			socket.on('newPoll', (poll) => {
+				displayNewPoll(poll);
+			});
+
+			socket.on('pollUpdate', (poll) => {
+				updatePollResults(poll);
+			});
+
+			socket.on('newClip', (clip) => {
+				displayNewClip(clip);
+			});
+
+			socket.on('load broadcast', (streams) => streams.forEach(async streamInfo => {
+				if (streamInfo.uuid !== socket.id) stickpmHandler.initializePeer(streamInfo, 'v');
+			}));
+
+			socket.on('new broadcast', async (stream) => {
+				if (stream?.isAdvertisement) console.log('Broadcast Ad Triggered');
+				else if (stream.uuid !== socket.id) stickpmHandler.initializePeer(stream, 'c');
+			});
+
+			socket.on('exit broadcast', (uuid) => {
+				dataHandling.removeStreamer(uuid);
+			});
+
+			socket.on('push to talk', (data) => handlePushToTalkMessage(data));
+
+			socket.on('fileShared', ({ file, username }) => {
+				notifyFileShared(file, username);
+			});
+
+			socket.on('reactionAdded', ({ messageId, emoji }) => {
+				updateMessageReaction(messageId, emoji);
+			});
+
+			socket.on('muted', (data) => {
+				if (data.muted && (data.userId === socket.id)) {
+					dataHandling.displayNotification(`You were muted by ${data.username}.`);
+					const audioTrack = localStream.getAudioTracks()[0];
+					if (audioTrack) {
+						audioTrack.enabled = false;
+						elements.pushToTalk.classList.remove('active');
+						elements.pushToTalk.textContent = "Push to Talk";
+						socket.emit('push to talk', { status: 'stop' });
+					}
+				}
+				else dataHandling.displayNotification(`${data.userTarget} was muted by ${data.username}.`);
+			});
+
+			socket.on('userSuspended', ({ userId }) => {
+				notifyUserSuspended(userId);
+			});
+
+			socket.on('rateLimitExceeded', () => {
+				alert('You are sending messages too quickly. Please slow down.');
+			});
+
+			socket.on('userRoleChanged', ({ userId, role }) => {
+				if (userId === profile.id) {
+					alert(`Your role has been changed to ${role}`);
+					if (profile.notifcationSounds) dataHandling.soundNotifcations('role');
+					location.reload();
+				} else updateUserRoleInMenu(userId, role);
+			});
+
+			socket.on('roleCreated', ({ role, permissions }) => {
+				notifyRoleCreated(role, permissions);
+			});
+
+			socket.on('roleDeleted', ({ role }) => {
+				notifyRoleDeleted(role);
+			});
+
+			socket.on('roomInvite', ({ roomId }) => {
+				notifyRoomInvite(roomId);
+			});
+
+			socket.on('themeSwitched', ({ theme }) => {
+				//switchTheme(theme);
+			});
+
+			socket.on('recordingStarted', ({ streamId }) => {
+				notifyRecordingStarted(streamId);
+			});
+
+			socket.on('recordingStopped', ({ streamId }) => {
+				notifyRecordingStopped(streamId);
+			});
+
+			socket.on('disconnect', () => {
+				console.log('Disconnected');
+				elements.preloaderOverlay.style.transform = 'translateY(0)';
+				mainElements.serverMessage.innerHTML = 'Server <span class="themefont">Dis</span>connected...';
+			});
+			
+			socket.on('newWindowToGame', (data) => {
+				const { url } = data;
+				if (url) {
+					window.open(url, '_blank');
+				}
+			});
+			
+			<% if (room.allowedRoles.includes(user.role)) { %>
+				
+					/*<div class="actions">
+						<button id="suspendUser" class="action-button">Suspend</button>
+						<button id="kickUser" class="action-button">Kick</button>
+						<button id="banUser" class="action-button">Ban</button>
+					</div>*/
+			<% } if (room.memberAllowedRoles.includes(user.role)) { %>
+					/*<div class="actions">
+						<button id="followUser" class="action-button">Follow</button>
+						<button id="msgUser" class="action-button">Message</button>
+						<button id="muteUser" class="action-button">Mute</button>
+						<button id="blockUser" class="action-button">Block</button>
+					</div>*/
+					socket.on('following', (data) => {
+						if (data.to) {
+							followedUsers.push(data.to);
+							dataHandling.displayNotification(`You followed ${data.username}`);
+						}
+						if (data.from) 
+							dataHandling.displayNotification(`You were followed by ${data.fromUsername}`);
+					});
+			<% } if (user.role === 'developer') { %>
+				socket.on('profileApprovalRequest', (data) => {
+					const approvalModal = document.createElement('div');
+					approvalModal.classList.add('modal', 'approval-modal');
+					const modalContent = document.createElement('div');
+					modalContent.classList.add('modal-content');
+					const modalHeader = document.createElement('div');
+					modalHeader.classList.add('modal-header');
+					const headerTitle = document.createElement('h3');
+					headerTitle.textContent = 'Profile Approval Request';
+					const closeButton = document.createElement('span');
+					closeButton.classList.add('close');
+					closeButton.innerHTML = '&times;';
+					modalHeader.appendChild(headerTitle);
+					modalHeader.appendChild(closeButton);
+					const modalBody = document.createElement('div');
+					modalBody.classList.add('modal-body');
+					const usernameLabel = document.createElement('p');
+					usernameLabel.innerHTML = `<strong>Username:</strong> ${data.profile.username}`;
+					const currentAvatarLabel = document.createElement('p');
+					currentAvatarLabel.innerHTML = '<strong>Current Avatar:</strong>';
+					const currentAvatar = document.createElement('img');
+					currentAvatar.src = data.profile.avatar;
+					currentAvatar.alt = 'Current Avatar';
+					currentAvatar.classList.add('current-avatar');
+					const requestedAvatarLabel = document.createElement('p');
+					requestedAvatarLabel.innerHTML = '<strong>Requested Avatar:</strong>';
+					const requestedAvatar = document.createElement('img');
+					requestedAvatar.src = data.profile.newAvatar;
+					requestedAvatar.alt = 'Requested Avatar';
+					requestedAvatar.classList.add('requested-avatar');
+					modalBody.appendChild(usernameLabel);
+					modalBody.appendChild(currentAvatarLabel);
+					modalBody.appendChild(currentAvatar);
+					modalBody.appendChild(requestedAvatarLabel);
+					modalBody.appendChild(requestedAvatar);
+					const modalFooter = document.createElement('div');
+					modalFooter.classList.add('modal-footer');
+					const approveButton = document.createElement('button');
+					approveButton.id = 'approve-profile';
+					approveButton.classList.add('button');
+					approveButton.textContent = 'Approve';
+					const rejectButton = document.createElement('button');
+					rejectButton.id = 'reject-profile';
+					rejectButton.classList.add('button');
+					rejectButton.textContent = 'Reject';
+					modalFooter.appendChild(approveButton);
+					modalFooter.appendChild(rejectButton);
+					modalContent.appendChild(modalHeader);
+					modalContent.appendChild(modalBody);
+					modalContent.appendChild(modalFooter);
+					approvalModal.appendChild(modalContent);
+					document.body.appendChild(approvalModal);
+					const closeModal = () => approvalModal.remove();
+					closeButton.addEventListener('click', closeModal);
+					approveButton.addEventListener('click', () => {
+						socket.emit('approveProfile', { userId: data.userId, approved: true });
+						closeModal();
+					});
+					rejectButton.addEventListener('click', () => {
+						socket.emit('approveProfile', { userId: data.userId, approved: false });
+						closeModal();
+					});
+					approvalModal.style.display = 'flex';
+				});
+			<% } %>
+		};
+
+		const iceSetup = {
+			iceServers: [
+				{ urls: 'stun:stun1.l.google.com:19302' },
+				{ urls: 'stun:stun2.l.google.com:19302' },
+				{ urls: 'stun:stun3.l.google.com:19302' },
+				{ urls: 'stun:stun4.l.google.com:19302' },
+				<% if (room.iceServer && room.iceServer.urls) { %>
+					{
+						urls: '<%= room.iceServer.urls %>',
+						username: '<%= room.iceServer.username %>',
+						credential: '<%= room.iceServer.credential %>'
+					}
+				<% } %>
+			],
+			iceCandidatePoolSize: <%= room.iceCandidatePoolSize || 14 %>,
+		};
+
+		const stickpmHandler = {
+			setupDataChannel: (dataChannel) => {
+				dataChannel.onopen = (data) => {
+					stickpmHandler.startPing(dataChannel);
+				};
+				dataChannel.onclose = () => {
+					clearInterval(this.pingInterval);
+				};
+				dataChannel.onmessage = (event) => {
+					const message = event.data;
+					if (message === 'pong') {};
+				};
+			},
+			startPing: (dataChannel) => {
+				this.pingInterval = setInterval(() => {
+					if (dataChannel.readyState === 'open') {
+						dataChannel.send('ping');
+					}
+				}, 15000);
+			},
+			handleNegotiationNeeded: async (peer, type) => {
+				await peer.setLocalDescription(await peer.createOffer()); //{ iceRestart: true }
+				const iceGatheringTimeout = 4000;
+				const iceGatheringPromise = new Promise((resolve) => {
+					if (peer.iceGatheringState === 'complete') resolve();
+					else peer.addEventListener('icegatheringstatechange', function checkState() {
+						if (peer.iceGatheringState === 'complete') {
+							peer.removeEventListener('icegatheringstatechange', checkState);
+							resolve();
+						}
+					});
+				});
+				await Promise.race([
+					iceGatheringPromise,
+					new Promise((resolve) => setTimeout(resolve, iceGatheringTimeout))
+				]);
+				const payload = { sdp: peer.localDescription, uuid: peer.uuid, username: peer.username };
+				const handlers = { b: 'broadcast', c: 'consumer', v: 'load consumer', ptt: 'push to talk' };
+				socket.emit(handlers[type], payload, (data) => {
+					if (!data.error) peer.setRemoteDescription(new RTCSessionDescription(data.sdp));
+					if (type === 'v') openConnections[data.uuid] = peer;
+				});
+			},
+			handleTrackEvent: (e, peer) => {
+				e.streams.forEach(stream => {
+					if (e.track.kind === 'video') dataHandling.addStreamer({ name: peer.username, id: peer.uuid, src: stream });
+					else if (e.track.kind === 'audio') e.track.enabled = pushToTalkStatus;
+				});
+			},
+			createPeer: async function (type, data) {
+				const peer = storeLocalPeer = new RTCPeerConnection(iceSetup);
+				peer.uuid = data.uuid;
+    			peer.username = data.username; 
+				if (!dataChannel) {
+					const dataChannelLabel = type === 'b' || type === 'ptt' ? 'push-to-talk' : 'controls';
+					dataChannel = peer.createDataChannel(dataChannelLabel);
+					this.setupDataChannel(dataChannel);
+				}
+				if (type !== 'b' && type !== 'ptt') {
+					peer.uuid = data.uuid;
+					peer.username = data.username;
+					peer.addTransceiver('video', { direction: 'recvonly' });
+					peer.addTransceiver('audio', { direction: 'recvonly' });
+				} else if (type === 'b') {
+					peer.addTransceiver('video', { direction: 'sendrecv' });
+					peer.addTransceiver('audio', { direction: 'sendrecv' });
+				}
+				peer.ontrack = (e) => this.handleTrackEvent(e, peer);
+				peer.onnegotiationneeded = () => this.handleNegotiationNeeded(peer, type);
+				return peer;
+			},
+			initializePeer: async function (stream, type) {
+				const peer = await this.createPeer(type, stream);
+				return peer;
+			}
+		};
+		initializeSocketEvents();
+
+		const roleType = profile.role === 'guest';
+		const StickPMdomain = '<%= room.name %>';
+		socket.emit(profile.clever, { StickPMdomain });
+		
+		elements.mainVolumeButton.addEventListener('click', () => {
+			if (mainMute) {
+				mainMute = false;
+				elements.mainVolumeButton.title = 'Unmuted - Main Room Volume Control';
+			} else {
+				mainMute = true;
+				elements.mainVolumeButton.title = 'Muted - Main Room Volume Control';
+			}
+			elements.mainVolumeButton.classList.toggle('speaker2waves');
+			elements.mainVolumeButton.classList.toggle('nospeaker');
+		});
+
+		elements.usernameSpan.addEventListener('click', () => {
+			navigator.clipboard.writeText(profile.username).then(() => {
+				alert('Username copied to clipboard');
+			});
+		});
+
+		elements.userAvatar.addEventListener('click', () => {
+			elements.profileUsername.textContent = profile.username;
+			elements.profileRole.textContent = `Role: ${profile.role.charAt(0).toUpperCase() + profile.role.slice(1)}`;
+			elements.profileAvatar.src = profile.avatar;
+			elements.statusSelect.value = profile.status;
+			elements.profileModal.style.display = 'flex';
+		});
+
+		elements.profileModal.querySelector('.close').addEventListener('click', () => {
+			elements.profileModal.style.display = 'none';
+		});
+
+		function handleAvatarUpload(file) {
+			if (file && file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					profile.updateAvatar(e.target.result);
+				};
+				reader.readAsDataURL(file);
+			} else {
+				alert('File is too large or not an acceptable image format');
+			}
+		}
+
+		elements.profileAvatar.addEventListener('click', () => {
+			elements.avatarUpload.click();
+		});
+
+		elements.avatarUpload.addEventListener('change', (event) => {
+			const file = event.target.files[0];
+			handleAvatarUpload(file);
+		});
+
+		elements.profileAvatar.addEventListener('dragover', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			elements.profileAvatar.classList.add('dragging');
+		});
+
+		elements.profileAvatar.addEventListener('dragleave', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			elements.profileAvatar.classList.remove('dragging');
+		});
+
+		elements.profileAvatar.addEventListener('drop', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			elements.profileAvatar.classList.remove('dragging');
+			const file = event.dataTransfer.files[0];
+			handleAvatarUpload(file);
+		});
+
+		elements.saveProfileButton.addEventListener('click', () => {
+			const newStatus = elements.statusSelect.value;
+			profile.updateStatus(newStatus, true);
+			//profile.updateProfile(); //if profile img changed in comparasion if used
+			elements.profileModal.style.display = 'none';
+		});
+
+		elements.startBroadcastButton.addEventListener('click', () => {
+			elements.previewVideo.style.display = 'none';
+			roomManagement.handlePreviewLoading();
+		});
+
+		elements.startStreamButton.addEventListener('click', roomManagement.startStream);
+
+		elements.closeModalButton.addEventListener('click', () => {
+			dataHandling.stopStream(previewStream);
+			elements.broadcastSettingsModal.style.display = 'none';
+		});
+
+		window.addEventListener('click', (event) => {
+			if (event.target === elements.broadcastSettingsModal) {
+				dataHandling.stopStream(previewStream);
+				elements.broadcastSettingsModal.style.display = 'none';
+			}
+		});
+
+		elements.settingsIcon.addEventListener('click', () => {
+			roomManagement.toggleDisplay(elements.settingsPanel);
+		});
+
+		elements.settingsPanel.querySelector('.close-settings').addEventListener('click', () => {
+			elements.settingsPanel.style.display = 'none';
+		});
+
+		elements.chatFontSizeSelect.addEventListener('change', () => {
+			document.querySelector('.chat-container').style.fontSize = elements.chatFontSizeSelect.value;
+		});
+
+		elements.enableNotificationsCheckbox.addEventListener('change', () => {
+			profile.notifcationSounds = elements.enableNotificationsCheckbox.checked;
+			if (profile.notifcationSounds) dataHandling.soundNotifcations('poke');
+		});
+
+		elements.nicknameFontSize.addEventListener('change', () => {
+			elements.userList.style.fontSize = elements.nicknameFontSize.value;
+		});
+
+		elements.autoHideMembers.addEventListener('change', () => {
+			if (elements.autoHideMembers.checked) {
+				if (!elements.localVideo.classList.contains('hidden')) {
+					roomManagement.moveLocalVideoToStreamers();
+					document.querySelector('header')?.classList.add('hidemenu');
+					elements.streamersContainer?.classList.add('hidemenu');
+				}
+				elements.userSidebar.style.display = 'none';
+				elements.pushToTalk.style.position = 'absolute';
+				elements.pushToTalk.style.right = '220px';
+				elements.pushToTalk.style.top = '10px';
+				elements.menuButton.style.display = 'block';
+			} else {
+				clearTimeout(hideTimer);
+				roomManagement.returnLocalVideoToMenu();
+				elements.menuButton.style.display = 'none';
+				elements.userSidebar.style.display = 'block';
+				elements.pushToTalk.style.position = '';
+				elements.pushToTalk.style.right = '';
+				elements.pushToTalk.style.top = '';
+				document.querySelector('header')?.classList.remove('hidemenu');
+				elements.streamersContainer?.classList.remove('hidemenu');
+				elements.localVideo.style.display = elements.localVideo.classList.contains('streaming') ? 'block' : 'none';
+				elements.startBroadcastButton.style.display = elements.localVideo.classList.contains('streaming') ? 'none' : 'block';
+				if (elements.streamersList.children.length === 0) elements.streamersContainer.classList.add('hidden');
+			}
+		});
+
+		elements.menuButton.addEventListener('click', dataHandling.showSidebar);
+
+		elements.nicknameMenu.addEventListener('mouseover', () => {
+			if (elements.autoHideMembers.checked) {
+				clearTimeout(hideTimer);
+				elements.userSidebar.style.display = 'block';
+			}
+		});
+
+		elements.nicknameMenu.addEventListener('mouseout', dataHandling.hideSidebar);
+
+		elements.userSidebar.addEventListener('mouseover', () => {
+			clearTimeout(hideTimer);
+		});
+
+		elements.userSidebar.addEventListener('mouseout', dataHandling.hideSidebar);
+
+		elements.nicknameMenu.addEventListener('touchstart', () => {
+			if (elements.autoHideMembers.checked) {
+				clearTimeout(hideTimer);
+				elements.userSidebar.style.display = 'block';
+			}
+		});
+
+		elements.nicknameMenu.addEventListener('touchend', dataHandling.hideSidebar);
+
+		document.addEventListener('touchend', (event) => {
+			if (!elements.nicknameMenu.contains(event.target) && !elements.userSidebar.contains(event.target)) {
+				dataHandling.hideSidebar();
+			}
+		});
+
+		window.addEventListener('click', (event) => {
+			if (!event.target.closest('.user-item') && !event.target.closest('.user-menu') && !event.target.closest('.streamer')) {
+				dataHandling.hideUserMenu();
+			} else if (event.target.closest('.exit-button')) {
+				dataHandling.hideUserMenu();
+			} else if (event.target.closest('.toggle-class-target')) {
+				const targetElement = event.target.closest('.toggle-class-target');
+				targetElement.classList.toggle('active-class');
+			} //add emoji menu here
+		});
+
+		const placeholder = elements.fakeInput.getAttribute('data-placeholder');
+
+		elements.fakeInput.addEventListener('click', () => {
+			document.querySelector('.chat-input div[contenteditable="true"]').focus();
+		});
+
+		elements.fakeInput.addEventListener('focus', () => {
+			if (elements.fakeInput.textContent.trim() === placeholder) {
+				elements.fakeInput.textContent = '';
+				elements.fakeInput.classList.remove('placeholder');
+			}
+			elements.fakeInput.style.color = '#fff';
+		});
+
+		elements.fakeInput.addEventListener('blur', () => {
+			if (elements.fakeInput.textContent.trim() === '') {
+				elements.fakeInput.classList.add('placeholder');
+				elements.fakeInput.style.color = '#777';
+			}
+		});
+
+		elements.fakeInput.addEventListener('keypress', (e) => {
+			e.target.spellcheck = true;
+			if (e.key === 'Enter' && !e.shiftKey) {
+				e.preventDefault();
+				const message = elements.fakeInput.textContent.trim();
+				if (message && message.length > 0 && message !== placeholder && !dataHandling.isMsgSimilar(message, lastMessage)) {
+					dataHandling.hideAll();
+					socket.emit('sendMessage', message);
+					lastMessage = message;
+					elements.fakeInput.textContent = '';
+					elements.fakeInput.classList.add('placeholder');
+				}
+			}
+		});
+
+		document.querySelector('.send-arrow .arrow-icon').addEventListener('click', () => {
+			elements.sendButton.style.display = 'inline-block';
+		});
+
+		elements.sendButton.addEventListener('click', () => {
+			const message = elements.fakeInput.textContent.trim();
+			if (message && message.length > 0 && message !== placeholder && !dataHandling.isMsgSimilar(message, lastMessage)) {
+				dataHandling.hideAll();
+				socket.emit('sendMessage', message);
+				elements.fakeInput.textContent = '';
+				elements.fakeInput.classList.add('placeholder'); //add CSS styling
+				lastMessage = message;
+				elements.sendButton.style.display = 'none';
+			}
+		});
+
+		elements.emojiIcon.addEventListener('click', () => {
+			elements.emojiPicker.classList.toggle('hidden');
+		});
+
+		elements.emojiPicker.addEventListener('click', (event) => {
+			if (event.target.classList.contains('emoji')) {
+				const emojiText = event.target.textContent;
+				const selection = window.getSelection();
+				const range = selection.rangeCount ? selection.getRangeAt(0) : null;
+				const selectedText = selection.toString().trim();
+				const currentContent = elements.fakeInput.textContent.trim();
+				if (currentContent === placeholder) elements.fakeInput.textContent = '';
+				if (range && elements.fakeInput.contains(range.startContainer)) {
+					range.deleteContents();
+					const emojiMsg = document.createTextNode(emojiText);
+					range.insertNode(emojiMsg);
+					range.setStartAfter(emojiMsg);
+					range.setStartAfter(range.endContainer);
+					selection.removeAllRanges();
+					selection.addRange(range);
+				} else {
+					const newText = selectedText ? `"${selectedText}" ${emojiText}` : emojiText;
+					if (!currentContent) elements.fakeInput.textContent = newText;
+					else elements.fakeInput.textContent += ` ${newText}`;
+					const newRange = document.createRange();
+					newRange.selectNodeContents(elements.fakeInput);
+					newRange.collapse(false);
+					selection.removeAllRanges();
+					selection.addRange(newRange);
+				}
+				elements.fakeInput.focus();
+				elements.emojiPicker.classList.add('hidden');
+			}
+		});
+
+		elements.mainCredits.addEventListener('click', () => {
+			elements.creditTab.classList.toggle('hidden'); //add transition animation for top
+		});
+		
+		elements.closeCredits.addEventListener('click', () => {
+			elements.creditTab.classList.add('hidden');
+		});
+
+		elements.creditDecrease.addEventListener('click', () => {
+			let inputValue = parseInt(elements.creditRoom.value, 10);
+			if (inputValue > 1 && profile.credits >= 1) {
+				elements.creditRoom.value = inputValue - 1;
+			}
+		});
+
+		elements.creditRoomButton.addEventListener('click', () => {
+			let inputValue = parseInt(elements.creditRoom.value, 10);
+			socket.emit('creditRoom', { amount: inputValue });
+		});
+
+		elements.creditIncrease.addEventListener('click', () => {
+			let inputValue = parseInt(elements.creditRoom.value, 10);
+			if (inputValue >= 1 && profile.credits > inputValue) {
+				elements.creditRoom.value = inputValue + 1;
+			}
+		});
+
+		elements.searchUsers.addEventListener('input', () => {
+			let filter = this.value.toLowerCase();
+			let userItems = Array.from(elements.userList.getElementsByClassName('user-item'));
+			let matchingItems = userItems.filter(function(item) {
+				let username = item.getAttribute('data-username').toLowerCase();
+				let roleSpan = item.querySelector('.user-icon');
+				let role = roleSpan ? roleSpan.getAttribute('title').toLowerCase() : '';
+				let statusSpan = item.querySelector('.status-icon');
+				let status = '';
+				if (statusSpan) {
+					let statusClass = statusSpan.className;
+					let statusMatch = statusClass.match(/(\w+)-status/);
+					if (statusMatch) status = statusMatch[1];
+				}
+				return username.includes(filter) || role.includes(filter) || status.includes(filter);
+			});
+			matchingItems.sort(function(a, b) {
+				let usernameA = a.getAttribute('data-username').toLowerCase();
+				let usernameB = b.getAttribute('data-username').toLowerCase();
+				return usernameA.localeCompare(usernameB);
+			});
+			elements.userList.innerHTML = '';
+			matchingItems.forEach(function(item) {
+				elements.userList.appendChild(item);
+			});
+		});
+
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') {
+				dataHandling.hideAll(event);
+				elements.settingsPanel.classList.remove('slideLeft');
+			}
+		});
+
+		window.addEventListener('beforeunload', () => {
+			if (localStream) {
+				dataHandling.stopStream(localStream);
+				localStream = null;
+			}
+			socket.disconnect();
+		});
+		<% } %>
+	});
+</script>
+</body>
+</html>

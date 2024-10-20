@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+	* StickPM Project
+	* © 2024 BadNintendo
+	* All rights reserved.
+    * Unauthorized copying of this file, via any medium is strictly prohibited.
+    * 
+    * USAGE:
+    * This software is provided 'as-is', without any express or implied
+    * warranty. In no event will the authors be held liable for any damages
+    * arising from the use of this software.
+    * 
+    * You are permitted to use this software for personal and commercial
+    * applications, provided the following conditions are met:
+    * 1. The origin of this software must not be misrepresented; you must
+    *    not claim that you wrote the original software.
+    * 2. Altered source versions must be plainly marked as such, and must
+    *    not be misrepresented as being the original software.
+    * 3. This notice may not be removed or altered from any source
+    *    distribution.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StickPM Error</title>
+    <meta name="description" content="A friendly free video chat service for all. Browse through the free video chat rooms to meet friends or make your own chat room. No downloads, no register, no problem.">
+    <link rel="shortcut icon" href="../images/fav.ico">
+    <style>
+        html {
+            font-size      : 10px;
+        }
+        body {
+            height         : 100%;
+            margin         : 0;
+            padding        : 0;
+            font-family    : system-ui, sans-serif;
+            --grey-color   : rgb(43, 43, 43);
+        }
+        h1, p, li, a {
+            color          : white;
+        }
+        h1 {
+            font-size      : 2.4rem;
+            font-weight    : 500;
+        }
+        ul {
+            margin-top     : 0;
+            margin-bottom  : 1.2rem;
+        }
+        p, li {
+            font-size      : 1.5rem;
+        }
+        p {
+            margin-bottom  : 0;
+        }
+        li {
+            line-height    : 2.4rem;
+        }
+        #content {
+            position       : absolute;
+            top            : 50%;
+            left           : 50%;
+            transform      : translate(-50%, -50%);
+            text-align     : center;
+            z-index        : 1;
+        }
+        .error {
+            font-size      : 1.2rem;
+            color          : lime;
+        }
+        a {
+            text-decoration: none;
+            color          : inherit;
+        }
+        canvas {
+            position       : fixed;
+            top            : 0;
+            left           : 0;
+            width          : 100%;
+            height         : 100%;
+            z-index        : -1;
+            background     : radial-gradient(circle, rgba(20, 20, 20, 1) 0%, rgba(0, 0, 0, 1) 100%);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="content">
+        <% const errors = { 
+            '400': { title: '400 Bad Request', desc: 'The request cannot be fulfilled due to bad syntax.' },
+            '401': { title: '401 Login Error', desc: 'It appears that the password and/or user-name you entered was incorrect.' },
+            '403': { title: '403 Forbidden', desc: 'Sorry, employees and staff only.' },
+            '404': { title: '404 Missing', desc: 'We\'re sorry, but the page you\'re looking for is missing, hiding, or maybe it moved somewhere else and forgot to tell you.' },
+            '405': { title: '405 Method Not Allowed', desc: 'The method specified in the Request-Line is not allowed for the specified resource.' },
+            '408': { title: '408 Request Timeout', desc: 'Your browser failed to send a request in the time allowed by the server.' },
+            '414': { title: '414 URL Too Long', desc: 'The URL you entered is longer than the maximum length.' },
+            '500': { title: '500 Internal Server Error', desc: 'The request was unsuccessful due to an unexpected condition encountered by the server.' },
+            '502': { title: '502 Bad Gateway', desc: 'The server received an invalid response from the upstream server while trying to fulfill the request.' },
+            '504': { title: '504 Gateway Timeout', desc: 'The upstream server failed to send a request in the time allowed by the server.' }
+        }; %>
+        <h1 id="error-title">Error <%= errorNum || errors[errorNum]?.title || 'Unknown Error' %></h1>
+        <p id="error-description"><%= errorMessage || errors[errorNum]?.desc || 'An unknown error occurred.' %></p>
+        <ul>
+            <li>I am a web developer and programmer at <a href="https://StickPM.com/">StickPM Domain</a></li>
+            <li>
+                <a href="https://github.com/BadNintendo">My GitHub has <b><span id="word">random</span></b> stuff</a>
+            </li>
+            <li>
+                <%= errorDescription || 'My Discord is BadNintendo, feel free to contact me.' %>
+            </li>
+            <li>
+                <a href="<%= actionLink || 'javascript:history.go(-1)' %>"><%= action || 'Click Here to Go Back!' %></a>
+            </li>
+        </ul>
+        <div id="error-details" class="error">Error Code: <%= errorNum %></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+			const elements = {
+				canvas: document.getElementById('canvas'),
+			};
+
+            const canvas = elements.canvas;
+            const context = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const [paddle1X, paddle2X] = [0, canvas.width - 10];
+            const [paddleWidth, paddleHeight, ballSize, winningScore] = [10, 100, 10, 10];
+            let [paddle1Y, paddle2Y, ballX, ballY] = [100, 100, 50, 100];
+            let [ballSpeedX, ballSpeedY, ballWidth] = [10, 4, 10];
+            let [playerOneScore, playerTwoScore] = [0, 0];
+            let [gameOver, win] = [false, false];
+
+            const drawEverything = () => {
+                createRectangle(0, 0, canvas.width, canvas.height, 'rgba(20, 20, 20, 1)');
+                createRectangle(paddle1X, paddle1Y, paddleWidth, paddleHeight, 'rgb(0, 255, 0)');
+                createRectangle(paddle2X, paddle2Y, paddleWidth, paddleHeight, 'rgb(0, 255, 0)');
+                createCircle(ballX, ballY, ballWidth, 'rgb(255 208 0)');
+                drawText("Player 1", 100, 100, "20px sans-serif", playerOneScore);
+                drawText("Computer", canvas.width - 200, 100, "20px sans-serif", playerTwoScore);
+                if (gameOver) {
+                    displayMessage(win ? "YOU WIN" : "GAME OVER");
+                }
+                for (let i = 0; i < canvas.height; i += 40) {
+                    createRectangle(canvas.width / 2 - 1, i, 2, 20, 'rgb(0, 255, 0)');
+                }
+            };
+
+            const moveBall = () => {
+                if (gameOver) return;
+                chaseTheBall();
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+                if (ballX > canvas.width - (ballWidth * 2 + paddleWidth)) {
+                    if (ballY > paddle2Y && ballY < paddle2Y + paddleHeight) {
+                        ballSpeedX = -ballSpeedX;
+                        const newSpeed = ballY - (paddle2Y + paddleHeight / 2);
+                        ballSpeedY = newSpeed * 0.35;
+                    } else {
+                        playerOneScore++;
+                        resetBall(playerOneScore);
+                    }
+                }
+                if (ballX < ballWidth * 2 + paddleWidth) {
+                    if (ballY > paddle1Y && ballY < paddle1Y + paddleHeight) {
+                        ballSpeedX = -ballSpeedX;
+                        const newSpeed = ballY - (paddle1Y + paddleHeight / 2);
+                        ballSpeedY = newSpeed * 0.35;
+                    } else {
+                        playerTwoScore++;
+                        resetBall(playerTwoScore);
+                    }
+                }
+                if (ballY > canvas.height - ballWidth) ballSpeedY = -ballSpeedY;
+                if (ballY < ballWidth) ballSpeedY = -ballSpeedY;
+            };
+
+            const createRectangle = (posX, posY, width, height, color) => {
+                context.fillStyle = color;
+                context.fillRect(posX, posY, width, height);
+            };
+            const createCircle = (posX, posY, radius, color) => {
+                context.fillStyle = color;
+                context.beginPath();
+                context.arc(posX, posY, radius, 0, Math.PI * 2, true);
+                context.fill();
+            };
+            const calculateMousePosition = event => {
+                const rect = canvas.getBoundingClientRect();
+                const root = document.documentElement;
+                const mouseX = event.clientX - rect.left - root.scrollLeft;
+                const mouseY = event.clientY - rect.top - root.scrollTop;
+                return {
+                    x: mouseX,
+                    y: mouseY
+                };
+            };
+            const chaseTheBall = () => {
+                const paddle2YCenter = paddle2Y + paddleHeight / 2;
+                if (paddle2YCenter < ballY - 35) paddle2Y += 10;
+                else if (paddle2YCenter > ballY + 35) paddle2Y -= 10;
+            };
+            const resetBall = player => {
+                if (player >= winningScore) {
+                    win = player > playerTwoScore;
+                    playerOneScore = 0;
+                    playerTwoScore = 0;
+                    gameOver = true;
+                }
+                ballSpeedX = -ballSpeedX;
+                ballX = canvas.width / 2;
+                ballY = canvas.height / 2;
+            };
+            const drawText = (name, x, y, font, counter) => {
+                context.font = font;
+                context.fillStyle = 'rgb(0, 255, 0)';
+                context.fillText(name, x, y);
+                context.fillText(counter, x, y + 20);
+            };
+            const displayMessage = message => {
+                context.font = "50px sans-serif";
+                context.fillStyle = 'rgb(0, 255, 0)';
+                context.fillText(message, canvas.width / 2 - 100, canvas.height / 3);
+                context.font = "25px sans-serif";
+                context.fillText("Click to continue", canvas.width / 2 - 100, canvas.height / 2 + 150);
+            };
+            setInterval(drawEverything, 1000 / 30);
+            document.addEventListener('mousemove', event => {
+                const mousePosition = calculateMousePosition(event);
+                paddle1Y = mousePosition.y - paddleHeight / 2;
+            });
+            document.addEventListener('mousedown', () => {
+                if (gameOver) gameOver = false;
+            });
+            setInterval(moveBall, 1000 / 30);
+        });
+    </script>
+</body>
+</html>

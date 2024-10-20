@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--
+		*  ██╗██╗                                                                                           ██╗██╗
+		*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+		*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+		*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+		*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+		*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+		*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+		*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+		* StickPM Project
+		* © 2024 BadNintendo
+		* All rights reserved.
+		* Unauthorized copying of this file, via any medium is strictly prohibited.
+		* 
+		* USAGE:
+		* This software is provided 'as-is', without any express or implied
+		* warranty. In no event will the authors be held liable for any damages
+		* arising from the use of this software.
+		* 
+		* You are permitted to use this software for personal and commercial
+		* applications, provided the following conditions are met:
+		* 1. The origin of this software must not be misrepresented; you must
+		*	not claim that you wrote the original software.
+		* 2. Altered source versions must be plainly marked as such, and must
+		*	not be misrepresented as being the original software.
+		* 3. This notice may not be removed or altered from any source
+		*	distribution.
+		-->
+		<meta charset="<%= headData.charset %>">
+        <meta name="viewport" content="<%= headData.viewport %>">
+        <meta name="description" content="<%= headData.description %>">
+        <meta name="author" content="<%= headData.author %>">
+        <meta name="keywords" content="<%= headData.keywords %>">
+        <meta name="robots" content="<%= headData.robots %>">
+        <meta property="og:url" content="<%= headData.url %>">
+        <meta property="og:title" content="<%= headData.title %>">
+        <meta property="og:description" content="<%= headData.description %>">
+        <meta property="og:image" content="<%= headData.image %>">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="<%= headData.url %>">
+        <meta name="twitter:title" content="<%= headData.title %>">
+        <meta name="twitter:description" content="<%= headData.description %>">
+        <meta name="twitter:image" content="<%= headData.image %>">
+        <meta name="twitter:site" content="<%= headData.twitterSite %>">
+        <meta name="theme-color" content="<%= headData.themeColor %>">
+        <link rel="shortcut icon" href="<%= headData.favicon %>">
+        <link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+        <link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+        <title><%= headData.title %></title>
+		<%- headData.style %>
+	</head>
+	<body>
+		<header>
+			<h1>Terms of StickPM User Agreement</h1>
+		</header>
+		<main>
+            <div class="background-container">
+                <div class="background-image"></div>
+                <div class="background-image rotated"></div>
+            </div>
+			<h1><strong>Introduction</strong></h1>
+			<p>
+				Welcome to StickPM, a real-time platform for creating chatrooms, streaming video, and managing profiles. StickPM provides customizable rooms through virtual credits and VIP services. By using our platform, you agree to the terms outlined here. Please read them carefully.
+			</p>
+	
+			<ul>
+				<li>
+					<strong>Room Creation and Virtual Credits</strong>
+					<p>
+						Members can create up to 3 rooms per account. Each room can be upgraded using non-refundable virtual credits, which may enable VIP status, enhanced stream capacity, and other features. VIP rooms support up to 24 streams with improved quality.
+					</p>
+					<p>
+						Credits can only be withdrawn once a threshold of 100-500 credits is reached. Withdrawals are currently disabled during development. Credits are non-refundable and for in-platform use only.
+					</p>
+				</li>
+	
+				<li>
+					<strong>Credit Expiration and Transfer</strong>
+					<p>
+						If a room's credit balance remains unused for over 365 days, a portion may be transferred to the room owner's account. StickPM reserves the right to adjust expiration periods and related policies at any time.
+					</p>
+				</li>
+	
+				<li>
+					<strong>Room Management and Accountability</strong>
+					<p>
+						Room owners are responsible for managing their rooms and ensuring that user activities comply with StickPM's guidelines. Moderators can be assigned roles to assist in maintaining order. All streams and chat activities are the responsibility of the room owner and moderators.
+					</p>
+					<p>
+						Failure to address misconduct, such as harassment or abuse, may result in room suspension or loss of privileges.
+					</p>
+				</li>
+	
+				<li>
+					<strong>Non-Refundable Virtual Credits</strong>
+					<p>
+						All purchases and transfers of virtual credits are final and cannot be refunded. StickPM reserves the right to modify virtual credit policies, but refunds for unused credits will not be issued under any circumstances.
+					</p>
+				</li>
+	
+				<li>
+					<strong>Amendments to Terms</strong>
+					<p>
+						StickPM may modify these terms without prior notice. Continued use of StickPM after updates will constitute your acceptance of the revised terms. Users are encouraged to review the terms regularly.
+					</p>
+				</li>
+			</ul>
+	
+			<h3><strong>Data Protection Policy</strong></h3>
+			<p>
+				StickPM values your privacy and is committed to protecting your personal information. This section explains how we collect, use, and safeguard your data.
+			</p>
+			<ul>
+				<li><strong>Data Collection:</strong> We collect personal information you provide during account registration, platform use, or when contacting us. This includes your name, email, and payment information.</li>
+				<li><strong>Data Usage:</strong> We use your data to enhance your experience, manage accounts, process transactions, and meet legal requirements.</li>
+				<li><strong>Data Sharing:</strong> We do not sell your data to third parties but may share it with trusted partners for operational purposes, subject to privacy agreements.</li>
+				<li><strong>Data Security:</strong> StickPM uses encryption and secure servers to protect your data.</li>
+				<li><strong>Data Retention:</strong> Data is retained as long as necessary for legal and operational reasons. Users can request deletion anytime.</li>
+				<li><strong>Your Rights:</strong> You can access, correct, or delete your personal data by contacting StickPM Support.</li>
+			</ul>
+	
+			<h3><strong>Security Policy</strong></h3>
+			<p>
+				StickPM takes user security seriously. We employ encryption and multi-factor authentication to protect accounts and data. Users must maintain the confidentiality of their account details and passwords.
+			</p>
+	
+			<h3><strong>Content Policy</strong></h3>
+			<p>
+				By using StickPM, you agree not to upload or share content that violates intellectual property laws, is offensive, or breaches StickPM's community guidelines.
+			</p>
+			<ul>
+				<li><strong>Prohibited Content:</strong> Unlawful, abusive, or defamatory content is prohibited.</li>
+				<li><strong>Copyright Infringement:</strong> StickPM respects copyright laws. If you believe your work has been infringed, submit a claim to StickPM Support.</li>
+				<li><strong>Reporting Content:</strong> Users can report content violations, and StickPM will review and take action as necessary.</li>
+			</ul>
+	
+			<h3><strong>Payments, Donations, and Refunds Policy</strong></h3>
+			<p>
+				StickPM offers premium features and virtual items that can be purchased using credits. Transactions and donations are non-refundable.
+			</p>
+			<ul>
+				<li><strong>Transaction Disputes:</strong> Disputes regarding payments or donations must be raised with StickPM Support within 30 days.</li>
+				<li><strong>Refund Policy:</strong> Virtual credits and donations are non-refundable. Disputes will be handled case-by-case.</li>
+			</ul>
+	
+			<h3><strong>Community Guidelines</strong></h3>
+			<p>StickPM fosters a positive and respectful community. Users are expected to follow these guidelines:</p>
+			<ul>
+				<li><strong>Respect:</strong> Be respectful to other users, moderators, and administrators.</li>
+				<li><strong>No Harassment:</strong> Harassment, bullying, or abuse is prohibited.</li>
+				<li><strong>Content Moderation:</strong> StickPM may remove any content violating community guidelines, including hate speech or harmful behavior.</li>
+				<li><strong>Reporting Violations:</strong> Users can report violations directly to StickPM through support channels.</li>
+			</ul>
+	
+			<h3><strong>Limitation of Liability</strong></h3>
+			<p>
+				StickPM provides services on an “as-is” basis and is not liable for damages, including data or financial loss. The maximum liability for StickPM will be limited to the total amount of virtual credits purchased within the last month of the incident.
+			</p>
+	
+			<h3><strong>Dispute Resolution and Governing Law</strong></h3>
+			<p>
+				StickPM encourages informal resolution of disputes. If necessary, disputes will be submitted to arbitration. This agreement is governed by the laws of StickPM's headquarters jurisdiction.
+			</p>
+	
+			<h3><strong>Changes to the Agreement</strong></h3>
+			<p>
+				StickPM reserves the right to modify these terms. Continued use of the platform after changes constitutes acceptance of the updated terms. Users should review the terms periodically.
+			</p>
+	
+			<h3><strong>Contact Information</strong></h3>
+			<p>If you have questions or concerns about these terms, please contact our support team at <a href="mailto:<%= email %>"><%= email %></a>.</p>
+		</main>
+	</body>
+</html>

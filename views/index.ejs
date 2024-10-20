@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+	* StickPM Project
+	* © 2024 BadNintendo
+	* All rights reserved.
+	* Unauthorized copying of this file, via any medium is strictly prohibited.
+	* 
+	* USAGE:
+	* This software is provided 'as-is', without any express or implied
+	* warranty. In no event will the authors be held liable for any damages
+	* arising from the use of this software.
+	* 
+	* You are permitted to use this software for personal and commercial
+	* applications, provided the following conditions are met:
+	* 1. The origin of this software must not be misrepresented; you must
+	*	not claim that you wrote the original software.
+	* 2. Altered source versions must be plainly marked as such, and must
+	*	not be misrepresented as being the original software.
+	* 3. This notice may not be removed or altered from any source
+	*	distribution.
+	*
+	* Need To-Do:
+	* 1. Change the exiting frame timeout for >>> <<< to load after loading screen with javascript
+	* 2. Add public or private listed option on reister form
+	* 3. Create a new sections that works off database rooms
+	* 4. Fix index form container and validation highlights 
+	* 5. Add meta alt dns records msvalidate.01 for validation with bing later
+	-->
+	<meta charset="<%= headData.charset %>">
+	<meta name="viewport" content="<%= headData.viewport %>">
+	<meta name="description" content="<%= headData.description %>">
+	<meta name="author" content="<%= headData.author %>">
+	<meta name="keywords" content="<%= headData.keywords %>">
+	<meta name="robots" content="<%= headData.robots %>">
+	<meta property="og:url" content="<%= headData.url %>">
+	<meta property="og:title" content="<%= headData.title %>">
+	<meta property="og:description" content="<%= headData.description %>">
+	<meta property="og:image" content="<%= headData.image %>">
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="<%= headData.url %>">
+	<meta name="twitter:title" content="<%= headData.title %>">
+	<meta name="twitter:description" content="<%= headData.description %>">
+	<meta name="twitter:image" content="<%= headData.image %>">
+	<meta name="twitter:site" content="<%= headData.twitterSite %>">
+	<meta name="theme-color" content="<%= headData.themeColor %>">
+	<link rel="shortcut icon" href="<%= headData.favicon %>">
+	<link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+	<link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+	<title><%= headData.title %></title>
+	<link rel="canonical" href="https://<%= headData.url %>/">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="site-layout bg-image bg-fixed bg--texture-05">
+<!--
+<div class="button-container">
+	<div class="circle">
+		<div class="arrow"></div>
+	</div>
+</div>
+-->
+	<div class="site-wrapper">
+		<header id="header" class="site-header--landing">
+			<nav class="main-nav">
+				<ul class="main-nav__list">
+					<li><a href="#" data-form="home">Home</a></li>
+					<li class="has-children">
+						<a href="#">Menu</a>
+						<ul class="main-nav__sub">
+							<li class="has-children">
+								<% if (isLogged) { %>
+									<a href="#" data-form="logout">Log Out</a>
+								<% } else { %>
+									<a href="#" data-form="login">Log In</a>
+									<ul class="main-nav__sub">
+										<li><a href="#" data-form="login">Log In</a></li>
+										<li><a href="#" data-form="forgot">Forgotten Info</a></li>
+										<li><a href="#" data-form="verify-phone">Verify Phone</a></li>
+									</ul>
+								<% } %>
+							</li>
+							<% if (!isLogged) { %>
+								<li><a href="#" data-form="register">Sign Up / Register</a></li>
+							<% } %>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<div class="header-logo header-logo--img">
+				<a href="#" data-form="home"><img src="images/logo.png" srcset="images/logo.png" alt="StickPM"></a>
+			</div>
+			<nav class="main-nav">
+				<div class="header-menu-toggle round inneroutterGlow">
+					<div class="header-menu-toggle__inner">
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+					</div>
+				</div>
+				<ul class="main-nav__list">
+					<li class="has-children news">
+						<a href="#">News</a>
+						<ul class="main-nav__sub">
+							<li><a href="#">7/20/24 - No News</a></li>
+						</ul>
+					</li>
+					<li class="has-children">
+						<a href="#" class="sitemap">Site Map</a>
+						<div class="main-nav__megamenu">
+							<div class="row">
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Main Pages</h6>
+									<ul>
+										<li class="active"><a href="/">Home</a></li>
+										<li><a href="/about">About Us</a></li>
+										<li><a href="#">Contact Us</a></li>
+										<li><a href="/terms">Terms & Policy</a></li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Account Pages</h6>
+									<ul>
+										<% if (isLogged) { %>
+											<li><a href="#" data-form="logout">Log Out</a></li>
+										<% } else { %>
+											<li><a href="#" data-form="login">Log In</a></li>
+											<li><a href="#" data-form="forgot">Forgot Info</a></li>
+											<li><a href="#" data-form="register">Sign up / Register</a></li>
+											<li><a href="#" data-form="verify-phone">Verify Phone</a></li>
+										<% } %>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Chatroom Pages</h6>
+									<ul>
+										<li><a href="//chat.<%= headData.url %>/lobby">Chatroom Lobby <span class="badge badge-danger">New</span></a></li>
+										<li><a href="#">Create a Chatroom</a></li>
+										<li><a href="#">Chatroom Settings</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<main class="site-content text-center" id="wrapper">
+			<div id="formContent" class="round innerOutterGlowForms <%= (!type) ? 'hidden' : '' %>">
+                <div id="forms-container">
+                    <form id="loginForm" action="/login" method="POST" enctype="multipart/form-data" class="form login-form <%= (type !== 'login') ? 'hidden' : '' %>">
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <h2 class="h4">Login</h2>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="identifier" name="identifier" placeholder="Your Email, Phone or Username*" required pattern="^[a-zA-Z0-9@.\-+ ]{3,32}$" title="Enter a valid username, email, or phone number">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Your Password" required minlength="4" maxlength="32">
+                        </div>
+						<div class="form-group">
+							<div class="captcha-container">
+								<img id="captchaSvgLogin" width="100%" height="50"/>
+								<input type="text" class="form-control" id="captcha" name="captcha" placeholder="Captcha*" required pattern="^[a-zA-Z0-9]{5,8}$" title="Captcha contains only letters and numbers">
+							</div>
+						</div>
+                        <div class="form-group d-flex justify-content-between align-items-center">
+                            <label class="checkbox checkbox-inline">
+                                <input class="checkbox-input" type="checkbox" name="rememberme" id="rememberme"> Remember me
+                                <span class="checkbox-label">&nbsp;</span>
+                            </label>
+                            <span class="password-reminder"><a href="#" data-form="forgot">Forgot password?</a></span>
+                        </div>
+						<div id="verifyCode2FA" class="hidden">
+							<h2 class="h4">2FA Verify Code</h2>
+							<div class="form-group">
+								<input type="text" class="form-control" id="verification2FACode" name="code" placeholder="Verification Code*" <%= (data?.twoFactorEnabled) ? 'required' : '' %> pattern="^[0-9]{6}$" title="Enter the 6-digit code sent for validation">
+							</div>
+						</div>
+                        <button type="submit" id="submitButtonLogin" class="btn btn-primary btn-block login-form__button">Login to your account!</button>
+                    </form>
+                    <form id="registerForm" action="/register" method="POST" class="form register-form <%= (type !== 'register') ? 'hidden' : '' %>">
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <h2 class="h4">Register now!</h2>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Your Username*" required pattern="^[a-zA-Z0-9]{3,32}$" title="Username must be 3-32 characters long and contain only letters and numbers">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Your Password*" required minlength="4" maxlength="32">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Repeat Password*" required minlength="4" maxlength="32">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Your Email*" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your Phone (optional)" pattern="^\+(?:[0-9] ?){6,14}[0-9]$" title="Enter a valid phone number">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name (optional)" pattern="^[a-zA-Z]{1,32}$" title="First name must contain only alphabetic characters">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name (optional)" pattern="^[a-zA-Z]{1,32}$" title="Last name must contain only alphabetic characters">
+                        </div>
+                        <div class="form-group">
+							<input type="file" class="form-control" id="profilePhotoFile" accept="image/*" placeholder="Profile Photo (optional)">
+							<input type="hidden" id="profilePhoto" name="profilePhoto">
+						</div>
+                        <div class="form-group">
+							<div class="captcha-container">
+								<img id="captchaSvg" width="100%" height="50"/>
+								<input type="text" class="form-control" id="captcha2" name="captcha2" placeholder="Captcha*" required pattern="^[a-zA-Z0-9]{5,8}$" title="Captcha contains only letters and numbers">
+							</div>
+						</div>
+                        <div class="form-group d-sm-flex justify-content-sm-between align-items-sm-center">
+                            <label class="checkbox checkbox-inline">
+                                <input class="checkbox-input" type="checkbox" id="private" name="private" checked> Searchable Profile
+                                <span class="checkbox-label">&nbsp;</span>
+                            </label>
+                        </div>
+                        <div class="form-group d-sm-flex justify-content-sm-between align-items-sm-center">
+                            <label class="checkbox checkbox-inline">
+                                <input class="checkbox-input" type="checkbox" id="terms" name="terms" required> I agree to the <a href="/terms">terms and conditions</a>
+                                <span class="checkbox-label">&nbsp;</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block register-form__button">Create your account!</button>
+                        <div class="register-form__info">You'll receive a confirmation email with a link to activate your account!</div>
+                    </form>
+                    <form id="forgotForm" action="/forgot" method="POST" class="form forgot-form <%= (type !== 'forgot') ? 'hidden' : '' %>">
+                        <h2 class="h4">Forgot Info</h2>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="identifier2" name="identifier2" placeholder="Your Email or Phone*" required pattern="^[a-zA-Z0-9@.\-+ ]{3,32}$" title="Enter a valid email or phone number">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block forgot-form__button">Submit</button>
+                    </form>
+                    <form id="verifyPhoneForm" action="/confirm-phone" method="POST" class="form verify-phone-form <%= (type !== 'verify-phone') ? 'hidden' : '' %>">
+                        <h2 class="h4">Verify Phone</h2>
+                        <input type="hidden" name="userId" value="<%= userId %>">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="verificationCode" name="code" placeholder="Verification Code*" required pattern="^[0-9]{6}$" title="Enter the 6-digit code sent to your phone">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block verify-phone-form__button">Verify</button>
+                    </form>
+                    <form id="resetPasswordForm" action="/reset-password" method="POST" class="form reset-password-form <%= (type !== 'reset-password') ? 'hidden' : '' %>">
+                        <h2 class="h4">Reset Password</h2>
+                        <input type="hidden" name="token" value="<%= token %>">
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="newPassword" name="password" placeholder="New Password*" required minlength="4" maxlength="32">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block reset-password-form__button">Reset Password</button>
+                    </form>
+                </div>
+                <div id="message-container" class="info-box hidden">
+                    <div class="info-box__label">Status</div>
+                    <div class="info-box__content"></div>
+                </div>
+            </div>
+			<div class="site-content__center">
+				<h1 class="text-white landing-title"><span class="subtitle landing-subtitle">Streaming</span>Stick<span class="themefont">PM</span></h1>
+				<a href="//chat.<%= headData.url %>/lobby" class="btn btn-primary btn-lg btn--landing inneroutterGlow">
+					<span class="hcfont">Beta Chatroom!</span>
+					<div class="drops">
+						<div class="drop1"></div>
+						<div class="drop2"></div>
+						<div class="drop3"></div>
+					</div>
+				</a>
+			</div>
+		</main>
+		<footer id="footer" class="footer text-center">
+			<ul class="social-menu social-menu--landing social-menu--landing-glitch">
+				<li>
+					<a href="//discord.gg/HDz93aWA5t" target="_blank">
+						<i class="stickpmglitch glitch-layer glitch-layer--1"></i>
+						<i class="stickpmglitch glitch-layer glitch-layer--2"></i>
+						<span class="link-subtitle">Discord</span>
+						<div class="hcfont">Stick<span class="themefont">PM</span></div>
+					</a>
+				</li>
+			</ul>
+		</footer>
+		<div class="landing-detail landing-detail--left outterMainShadows">
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+		</div>
+		<div class="landing-detail-cover landing-detail-cover--left outterMainShadows">
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+		</div>
+		<div class="landing-detail landing-detail--right outterMainShadows">
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+		</div>
+		<div class="landing-detail-cover landing-detail-cover--right outterMainShadows">
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+			<span>&nbsp;</span>
+		</div>
+		<div class="site-overlay"></div>
+	</div>
+	<div class="preloader-overlay">
+		<div id="js-preloader" class="preloader">
+			<div class="fadeInUp">
+				<div class="pong-loader"></div>
+				<div class="hcfont serverMessage">
+					Load<span class="themefont">ing</span>
+						<span class="loading-dot">.</span>
+						<span class="loading-dot">.</span>
+						<span class="loading-dot">.</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="stickpm-custom-cursor-wrap">
+		<div id="stickpm-custom-cursor"></div>
+	</div>
+	<script>
+		const elements = {
+			profilePhotoFileInput: document.getElementById('profilePhotoFile'),
+        	profilePhotoHiddenInput: document.getElementById('profilePhoto'),
+			submitButtonLogin: document.getElementById('submitButtonLogin'),
+			customCursor: document.getElementById('stickpm-custom-cursor'),
+			messageContainer: document.getElementById('message-container'),
+			preloaderOverlay: document.querySelector('.preloader-overlay'),
+			indexContent: document.querySelector('.site-content__center'),
+			messageContent: document.querySelector('.info-box__content'),
+            svgcaPatchaLogin: document.getElementById('captchaSvgLogin'),
+			messageLabel: document.querySelector('.info-box__label'),
+			cursor: document.getElementById('stickpm-custom-cursor'),
+			verifyCode2FA: document.getElementById('verifyCode2FA'),
+			formContent: document.getElementById('formContent'),
+			formLinks: document.querySelectorAll('[data-form]'),
+			siteLayout: document.querySelector('.site-layout'),
+            svgcaPatcha: document.getElementById('captchaSvg'),
+			forms: document.querySelectorAll('.form'),
+			body: document.body
+		};
+		document.addEventListener('DOMContentLoaded', function() {
+			const renderCaptcha = () => {
+				elements.svgcaPatcha.src = '/captcha.svg?' + Date.now();
+				elements.svgcaPatchaLogin.src = '/captcha.svg?' + Date.now();
+
+			};
+			elements.svgcaPatcha.addEventListener('click', () => {
+				renderCaptcha();
+			});
+			elements.svgcaPatchaLogin.addEventListener('click', () => {
+				renderCaptcha();
+			});
+			renderCaptcha();
+			const uiTheme = {
+				cursor: () => {
+					let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+					document.addEventListener('mousemove', function(event) {
+						cursorX = event.clientX || event.pageX;
+						cursorY = event.clientY || event.pageY;
+					});
+					if (!elements.cursor) {
+						return;
+					}
+					let targetX = cursorX, targetY = cursorY, deltaX, deltaY;
+					(function animateCursor() {
+						requestAnimationFrame(animateCursor);
+						if (targetX && targetY) {
+							deltaX = 0.15 * (cursorX - targetX);
+							deltaY = 0.15 * (cursorY - targetY);
+							if (Math.abs(deltaX) + Math.abs(deltaY) < 0.1) {
+								targetX = cursorX;
+								targetY = cursorY;
+							} else {
+								targetX += deltaX;
+								targetY += deltaY;
+							}
+						} else {
+							targetX = cursorX;
+							targetY = cursorY;
+						}
+						elements.cursor.style.transform = 'translate(' + targetX + 'px, ' + targetY + 'px)';
+					})();
+				}
+			};		
+			uiTheme.cursor();
+			elements.formLinks.forEach(link => {
+				link.addEventListener('click', function(event) {
+					event.preventDefault();
+					const formType = this.getAttribute('data-form');
+					elements.forms.forEach(form => form.classList.add('hidden'));
+					if (formType === 'home') {
+						const allHidden = Array.from(elements.forms).every(form => form.classList.contains('hidden')) &&
+							elements.formContent.classList.contains('hidden') &&
+							elements.messageContainer.classList.contains('hidden');
+						if (allHidden) window.location.href = '/';
+						else {
+							elements.formContent.classList.add('hidden');
+							elements.indexContent.classList.remove('hidden');
+							elements.messageContainer.classList.add('hidden');
+						}
+					} else if (formType === 'logout') window.location.href = '/logout';
+					else {
+						document.getElementById(`${formType}Form`).classList.remove('hidden');
+						elements.indexContent.classList.add('hidden');
+						elements.formContent.classList.remove('hidden');
+						elements.messageContainer.classList.add('hidden');
+						elements.messageContent.innerText = '';
+					}
+				});
+			});
+			let tempTimeout;
+			elements.profilePhotoFileInput.addEventListener('change', function(event) {
+				const file = event.target.files[0];
+				if (file) {
+					const maxSizeInBytes = 5 * 1024 * 1024;
+					if (file.size > maxSizeInBytes) {
+						alert('File size must be less than 5MB.');
+						elements.profilePhotoFileInput.value = '';
+						elements.profilePhotoHiddenInput.value = '';
+						return;
+					}
+					if (!file.type.startsWith('image/')) {
+						alert('Only image files are allowed.');
+						elements.profilePhotoFileInput.value = '';
+						elements.profilePhotoHiddenInput.value = '';
+						return;
+					}
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						elements.profilePhotoHiddenInput.value = e.target.result;
+					};
+					reader.readAsDataURL(file);
+				} else elements.profilePhotoHiddenInput.value = '';
+			});
+			elements.forms.forEach(form => {
+				form.addEventListener('submit', function(event) {
+					event.preventDefault();
+					if (tempTimeout) clearTimeout(tempTimeout);
+					const formData = new FormData(form);
+					const action = form.getAttribute('action');
+					const formType = form.getAttribute('id'); 
+					fetch(action, {
+						method: 'POST',
+						body: formData,
+						headers: { 'Accept': 'application/json' }
+					})
+					.then(response => response.json())
+					.then(data => {
+						form.querySelectorAll('.form-control').forEach(input => {
+							input.classList.remove('has-error', 'has-success');
+						});
+						if (data.success) {
+							const check2FA = <%= data?.twoFactorEnabled || false %>;
+							if (formType === 'loginForm' && check2FA){
+								if (data.success === 'waiting') {
+									elements.verifyCode2FA.classList.remove('hidden');
+									elements.submitButtonLogin.innerText = 'Submit & Validate';
+									elements.submitButtonLogin.disabled = false;
+								} else if (elements.verifyCode2FA.classList.contains('hidden')) {
+									elements.verifyCode2FA.classList.add('hidden');
+									elements.submitButtonLogin.innerText = 'Login to your account!';
+									elements.submitButtonLogin.disabled = false;
+								}
+							}
+							form.querySelectorAll('.form-control').forEach(input => {
+								if (input.name !== 'captcha2') input.classList.add('has-success');
+								if (input.name !== 'code') input.classList.add('has-success');
+							});
+							elements.messageLabel.textContent = 'Success';
+							elements.messageContent.textContent = data.message;
+							elements.messageContainer.classList.remove('hidden');
+							tempTimeout = setTimeout(() => {
+								form.classList.add('hidden');
+								elements.messageContainer.classList.add('hidden');
+								elements.indexContent.classList.remove('hidden');
+								elements.formContent.classList.add('hidden');
+							}, 15000);
+
+						} else {
+							if (data.errors) {
+								data.errors.forEach(error => {
+									const inputElement = form.querySelector(`[name="${error.path}"]`);
+									if (inputElement) {
+										inputElement.classList.add('has-error');
+										elements.messageLabel.textContent = 'Error';
+										elements.messageContent.textContent = error.msg || 'An error occurred. Please try again.';
+										elements.messageContainer.classList.remove('hidden');
+										const errorContainer = inputElement.nextElementSibling;
+										if (errorContainer) {
+											errorContainer.textContent = error.msg;
+										}
+									}
+								});
+							}
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						elements.messageLabel.textContent = 'Error';
+						elements.messageContent.textContent = 'An unexpected error occurred. Please try again.';
+						elements.messageContainer.classList.remove('hidden');
+					});
+				});
+			});
+		});
+		window.addEventListener('load', function() {
+			if (elements.preloaderOverlay) {
+				elements.preloaderOverlay.style.transform = 'translateY(100%)';
+				elements.siteLayout.classList.replace('site-layout', 'site-layout--landing');
+			}
+		});
+	</script>
+</body>
+</html>

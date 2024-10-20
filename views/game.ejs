@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+	* StickPM Project
+	* © 2024 BadNintendo
+	* All rights reserved.
+	* Unauthorized copying of this file, via any medium is strictly prohibited.
+	* 
+	* USAGE:
+	* This software is provided 'as-is', without any express or implied
+	* warranty. In no event will the authors be held liable for any damages
+	* arising from the use of this software.
+	* 
+	* You are permitted to use this software for personal and commercial
+	* applications, provided the following conditions are met:
+	* 1. The origin of this software must not be misrepresented; you must
+	*	not claim that you wrote the original software.
+	* 2. Altered source versions must be plainly marked as such, and must
+	*	not be misrepresented as being the original software.
+	* 3. This notice may not be removed or altered from any source
+	*	distribution.
+	*
+	* Need To-Do:
+	* 1. Finish mafia logic for canvas
+	-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Room</title>
+    <style>
+		body {
+			font-family:           'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color:      #121212;
+			color:                 #f4f4f4;
+			margin:                0;
+			padding:               0;
+			display:               flex;
+			justify-content:       center;
+			align-items:           center;
+			height:                100vh;
+		}
+		.container {
+			max-width:            1000px;
+			width:                100%;
+			padding:              20px;
+			background:           #1e1e1e;
+			box-shadow:           0 0 10px rgba(0, 0, 0, 0.5);
+			border-radius:        10px;
+		}
+		.game-board {
+			display:              flex;
+			justify-content:      center;
+			align-items:          center;
+			flex-direction:       column;
+			position:             relative;
+		}
+		.game-board canvas {
+			border:               2px solid #3a3a3a;
+			margin-bottom:        20px;
+			border-radius:        10px;
+		}
+		.game-info {
+			margin-top:           20px;
+			text-align:           center;
+			font-size:            1.2em;
+		}
+		.game-actions {
+			display:              flex;
+			justify-content:      center;
+			gap:                  10px;
+			flex-wrap:            wrap;
+		}
+		.game-actions button {
+			padding:              10px 20px;
+			background:           #3a3a3a;
+			border:               none;
+			border-radius:        5px;
+			cursor:               pointer;
+			color:                #f4f4f4;
+			font-size:            1em;
+			transition:           background 0.3s;
+		}
+		.game-actions button:hover {
+			background:           #5a5a5a;
+		}
+		.game-actions button:disabled {
+			background:           #2a2a2a;
+			cursor:               not-allowed;
+		}
+		.notification {
+			background:           #ff9800;
+			color:                #000;
+			padding:              10px;
+			border-radius:        5px;
+			margin-top:           10px;
+			text-align:           center;
+		}
+		.status {
+			font-weight:          bold;
+			color:                #4caf50;
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Room: <%= roomId %></h1>
+        <div id="gameBoard" class="game-board"></div>
+        <div id="gameInfo" class="game-info">Waiting for game to start...</div>
+        <div id="gameActions" class="game-actions"></div>
+		<div id="mafia-controls" style="display: none;">
+			<button id="vote-button">Vote</button>
+			<button id="night-action-button">Night Action</button>
+		</div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+		const socket = io('/games');
+		const roomId = '<%= roomId %>';
+		const gameType = '<%= game %>';
+		const isSpectator = '<%= isSpectator %>' === 'true';
+		
+		const elements = {
+			canvas: document.querySelector('.game-board canvas'),
+			gameActions: document.getElementById('gameActions'),
+			gameBoard: document.getElementById('gameBoard'),
+			gameInfo: document.getElementById('gameInfo')
+		};
+
+		const initializeSocketEvents = () => {
+			if (isSpectator) {
+				socket.emit('game spectate', { roomId, gameType });
+			} else {
+				socket.emit('game start', { gameType });
+			}
+
+			socket.on('game spectator', (data) => {
+				console.log(`Spectator joined: ${data.username}`);
+				elements.gameInfo.textContent = `Watching game: ${data.gameType}`; //maybe add a scroll game log for all moves and details of spectators
+			});
+
+			socket.on('game started', (data) => {
+				setupGameBoard(data.gameType);
+			});
+
+			socket.on('game update', (data) => {
+				updateGameBoard(data);
+			});
+
+			socket.on('game leave', (data) => {
+				if (data.player) {
+					elements.gameInfo.textContent = `${data.player} player has left the game!`;
+					elements.gameInfo.classList.remove('status');
+				}
+			});
+			
+			socket.on('mafia update', ({ result }) => {
+				console.log('Mafia game update:', result);
+			});
+
+			socket.on('mafia night update', ({ result }) => {
+				console.log('Mafia night action update:', result);
+			});
+		};
+		
+		document.getElementById('vote-button').addEventListener('click', () => {
+			const targetPlayer = prompt('Enter the player to vote out:');
+			socket.emit('mafia action', { action: 'vote', data: { targetPlayer } });
+		});
+
+		document.getElementById('night-action-button').addEventListener('click', () => {
+			const actionType = prompt('Enter night action type:');
+			const targetPlayer = prompt('Enter the player for night action:');
+			socket.emit('mafia action', { action: 'nightAction', data: { actionType, targetPlayer } });
+		});
+
+		const setupGameBoard = (gameType) => {
+			elements.gameBoard.innerHTML = '';
+			elements.gameActions.innerHTML = '';
+			elements.gameInfo.textContent = `Playing ${gameType}`;
+			elements.gameInfo.classList.add('status');
+
+			switch (gameType) {
+				case 'chess':
+					setupChessBoard(elements.gameBoard, elements.gameActions);
+					break;
+				case 'battleship':
+					setupBattleshipBoard(elements.gameBoard, elements.gameActions);
+					break;
+				case 'game21':
+					setupGame21Board(elements.gameBoard, elements.gameActions);
+					break;
+				case 'poker':
+					setupPokerBoard(elements.gameBoard, elements.gameActions);
+					break;
+				case 'connect4':
+                    setupConnect4Board(elements.gameBoard, elements.gameActions);
+                    break;
+				default:
+					console.log(`Unknown game type: ${gameType}`);
+			}
+		};
+
+		const updateGameBoard = (data) => {
+			const gameType = data.gameType;
+			switch (gameType) {
+				case 'chess':
+					updateChessBoard(data);
+					break;
+				case 'battleship':
+					updateBattleshipBoard(data);
+					break;
+				case 'game21':
+					updateGame21Board(data);
+					break;
+				case 'poker':
+					updatePokerBoard(data);
+					break;
+				case 'connect4':
+                    updateConnect4Board(data);
+                    break;
+				default:
+					console.log(`Unknown game type: ${gameType}`);
+			}
+		};
+
+		const setupConnect4Board = (gameBoard, gameActions) => {
+            const connect4Canvas = document.createElement('canvas');
+            connect4Canvas.width = 700;
+            connect4Canvas.height = 600;
+            gameBoard.appendChild(connect4Canvas);
+            drawConnect4Board(connect4Canvas);
+            if (!isSpectator) {
+				connect4Canvas.addEventListener('click', (event) => {
+					const column = Math.floor(event.offsetX / (connect4Canvas.width / 7));
+					socket.emit('game action', { action: 'dropDisc', data: { column } });
+				});
+			}
+        };
+
+        const updateConnect4Board = (data) => {
+            drawConnect4Board(elements.canvas, data.board);
+        };
+
+        const drawConnect4Board = (canvas, board = null) => {
+            const ctx = canvas.getContext('2d');
+            const cols = 7, rows = 6;
+            const cellSize = canvas.width / cols;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00008b';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let col = 0; col < cols; col++) {
+                for (let row = 0; row < rows; row++) {
+                    ctx.beginPath();
+                    ctx.arc(
+                        col * cellSize + cellSize / 2,
+                        row * cellSize + cellSize / 2,
+                        cellSize / 2 - 5,
+                        0,
+                        2 * Math.PI
+                    );
+                    ctx.fillStyle = '#f4f4f4';
+                    if (board) {
+                        if (board[row][col] === 'R') ctx.fillStyle = '#ff0000';
+                        if (board[row][col] === 'Y') ctx.fillStyle = '#ffff00';
+                    }
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+        };
+
+		const setupChessBoard = (gameBoard, gameActions) => {
+			const chessCanvas = document.createElement('canvas');
+			chessCanvas.width = 400;
+			chessCanvas.height = 400;
+			gameBoard.appendChild(chessCanvas);
+			drawChessBoard(chessCanvas);
+			if (!isSpectator) {
+				const moveButton = document.createElement('button');
+				moveButton.textContent = 'Move';
+				moveButton.onclick = () => {
+					const from = prompt('Enter from position (e.g., e2):');
+					const to = prompt('Enter to position (e.g., e4):');
+					socket.emit('game action', { action: 'move', data: { from, to } });
+				};
+				gameActions.appendChild(moveButton);
+			}
+		};
+
+		const updateChessBoard = (data) => {
+			drawChessBoard(elements.canvas, data.board);
+		};
+
+		const drawChessBoard = (canvas, board = null) => {
+			const ctx = canvas.getContext('2d');
+			const size = canvas.width / 8;
+			for (let i = 0; i < 8; i++) {
+				for (let j = 0; j < 8; j++) {
+					ctx.fillStyle = (i + j) % 2 === 0 ? '#f4f4f4' : '#3a3a3a';
+					ctx.fillRect(i * size, j * size, size, size);
+				}
+			}
+			if (board) {
+				board.forEach((row, i) => {
+					row.forEach((piece, j) => {
+						if (piece) {
+							ctx.fillStyle = '#000';
+							ctx.font = `${size / 2}px Arial`;
+							ctx.textAlign = 'center';
+							ctx.textBaseline = 'middle';
+							ctx.fillText(piece, i * size + size / 2, j * size + size / 2);
+						}
+					});
+				});
+			}
+		};
+
+		const setupBattleshipBoard = (gameBoard, gameActions) => {
+			const battleshipCanvas = document.createElement('canvas');
+			battleshipCanvas.width = 400;
+			battleshipCanvas.height = 400;
+			gameBoard.appendChild(battleshipCanvas);
+			drawBattleshipBoard(battleshipCanvas);
+			if (!isSpectator) {
+				const placeShipButton = document.createElement('button');
+				placeShipButton.textContent = 'Place Ship';
+				placeShipButton.onclick = () => {
+					const x = prompt('Enter X coordinate:');
+					const y = prompt('Enter Y coordinate:');
+					const size = prompt('Enter ship size:');
+					const orientation = prompt('Enter orientation (horizontal/vertical):');
+					socket.emit('game action', { action: 'placeShip', data: { x, y, size, orientation } });
+				};
+				gameActions.appendChild(placeShipButton);
+
+				const attackButton = document.createElement('button');
+				attackButton.textContent = 'Attack';
+				attackButton.onclick = () => {
+					const x = prompt('Enter X coordinate:');
+					const y = prompt('Enter Y coordinate:');
+					socket.emit('game action', { action: 'attack', data: { x, y } });
+				};
+				gameActions.appendChild(attackButton);
+			}
+		};
+
+		const updateBattleshipBoard = (data) => {
+			drawBattleshipBoard(elements.canvas, data.board);
+		};
+
+		const drawBattleshipBoard = (canvas, board = null) => {
+			const ctx = canvas.getContext('2d');
+			const size = canvas.width / 10;
+			for (let i = 0; i < 10; i++) {
+				for (let j = 0; j < 10; j++) {
+					ctx.fillStyle = '#1e90ff';
+					ctx.fillRect(i * size, j * size, size, size);
+					ctx.strokeStyle = '#fff';
+					ctx.strokeRect(i * size, j * size, size, size);
+				}
+			}
+			if (board) {
+				board.forEach((row, i) => {
+					row.forEach((cell, j) => {
+						if (cell === 'S') {
+							ctx.fillStyle = '#696969';
+							ctx.fillRect(i * size, j * size, size, size);
+						} else if (cell === 'H') {
+							ctx.fillStyle = '#ff4500';
+							ctx.fillRect(i * size, j * size, size, size);
+						} else if (cell === 'M') {
+							ctx.fillStyle = '#1e90ff';
+							ctx.fillRect(i * size, j * size, size, size);
+						}
+					});
+				});
+			}
+		};
+
+		const setupGame21Board = (gameBoard, gameActions) => {
+			const game21Canvas = document.createElement('canvas');
+			game21Canvas.width = 400;
+			game21Canvas.height = 200;
+			gameBoard.appendChild(game21Canvas);
+			drawGame21Board(game21Canvas);
+			if (!isSpectator) {
+				const hitButton = document.createElement('button');
+				hitButton.textContent = 'Hit';
+				hitButton.onclick = () => {
+					socket.emit('game action', { action: 'hit' });
+				};
+				gameActions.appendChild(hitButton);
+				const standButton = document.createElement('button');
+				standButton.textContent = 'Stand';
+				standButton.onclick = () => {
+					socket.emit('game action', { action: 'stand' });
+				};
+				gameActions.appendChild(standButton);
+			}
+		};
+
+		const updateGame21Board = (data) => {
+			drawGame21Board(elements.canvas, data);
+		};
+
+		const drawGame21Board = (canvas, data = null) => {
+			const ctx = canvas.getContext('2d');
+			ctx.fillStyle = '#008000';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = '#fff';
+			ctx.font = '30px Arial';
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+			if (data) {
+				ctx.fillText(`Player Hand: ${data.playerHand} (${data.playerScore})`, canvas.width / 2, canvas.height / 2 - 20);
+				ctx.fillText(`Dealer Hand: ${data.dealerHand} (${data.dealerScore})`, canvas.width / 2, canvas.height / 2 + 20);
+			} else {
+				ctx.fillText('Your cards will appear here.', canvas.width / 2, canvas.height / 2);
+			}
+		};
+
+		const setupPokerBoard = (gameBoard, gameActions) => {
+			const pokerCanvas = document.createElement('canvas');
+			pokerCanvas.width = 400;
+			pokerCanvas.height = 400;
+			gameBoard.appendChild(pokerCanvas);
+			drawPokerBoard(pokerCanvas);
+			if (!isSpectator) {
+				const betButton = document.createElement('button');
+				betButton.textContent = 'Bet';
+				betButton.onclick = () => {
+					const amount = prompt('Enter bet amount:');
+					socket.emit('game action', { action: 'bet', data: { amount } });
+				};
+				gameActions.appendChild(betButton);
+				const foldButton = document.createElement('button');
+				foldButton.textContent = 'Fold';
+				foldButton.onclick = () => {
+					socket.emit('game action', { action: 'fold' });
+				};
+				gameActions.appendChild(foldButton);
+			}
+		};
+
+		const updatePokerBoard = (data) => {
+			drawPokerBoard(elements.canvas, data);
+		};
+
+		const drawPokerBoard = (canvas, data = null) => {
+			const ctx = canvas.getContext('2d');
+			ctx.fillStyle = '#008000';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			if (data) {
+				ctx.fillStyle = '#fff';
+				ctx.font = '20px Arial';
+				ctx.textAlign = 'center';
+				ctx.textBaseline = 'middle';
+				ctx.fillText(`Player Hand: ${data.playerHand}`, canvas.width / 2, canvas.height / 2 - 20);
+				ctx.fillText(`Community Cards: ${data.communityCards}`, canvas.width / 2, canvas.height / 2 + 20);
+			}
+		};
+
+		initializeSocketEvents();
+    </script>
+</body>
+</html>

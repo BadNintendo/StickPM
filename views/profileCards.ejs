@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+ * StickPM Project
+    * © 2024 BadNintendo
+    * All rights reserved.
+    * Unauthorized copying of this file, via any medium, is strictly prohibited.
+    *
+    * USAGE:
+    * This software is provided 'as-is', without any express or implied
+    * warranty. In no event will the authors be held liable for any damages
+    * arising from the use of this software.
+    * 
+    * You are permitted to use this software for personal and commercial
+    * applications, provided the following conditions are met:
+    * 1. The origin of this software must not be misrepresented; you must
+    *    not claim that you wrote the original software.
+    * 2. Altered source versions must be plainly marked as such, and must
+    *    not be misrepresented as being the original software.
+    * 3. This notice may not be removed or altered from any source
+    *    distribution.
+	*
+	* Need To-Do:
+	* 1. Add another privacy layer if hide personal data is selected to mask all incase streaming or other means
+    -->
+	<meta charset="<%= headData.charset %>">
+	<meta name="viewport" content="<%= headData.viewport %>">
+	<meta name="description" content="<%= headData.description %>">
+	<meta name="author" content="<%= headData.author %>">
+	<meta name="keywords" content="<%= headData.keywords %>">
+	<meta name="robots" content="<%= headData.robots %>">
+	<meta property="og:url" content="<%= headData.url %>">
+	<meta property="og:title" content="<%= headData.title %>">
+	<meta property="og:description" content="<%= headData.description %>">
+	<meta property="og:image" content="<%= headData.image %>">
+	<meta property="og:rich_attachment" content="true">
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="<%= headData.url %>">
+	<meta name="twitter:title" content="<%= headData.title %>">
+	<meta name="twitter:description" content="<%= headData.description %>">
+	<meta name="twitter:image" content="<%= headData.image %>">
+	<meta name="twitter:site" content="<%= headData.twitterSite %>">
+	<meta name="theme-color" content="<%= headData.themeColor %>">
+	<link rel="shortcut icon" href="<%= headData.favicon %>">
+	<link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+	<link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+	<title><%= headData.title %></title>
+	<link rel="canonical" href="<%= headData.url %>/">
+	<link rel="stylesheet" href="../css/style.css">
+    <%- //headData.style %>
+	<style>
+main {
+    width: max-content;
+    position: relative;
+    display: flex;
+    height: calc(100vh - 100px);
+    min-width: 100%;
+}
+
+.profiles-container {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-auto-columns: calc(50vh - 72px / 2);
+    grid-auto-flow: column;
+}
+
+.profile {
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    position: relative;
+}
+
+.profile__thumbnail {
+    position: relative;
+	overflow: hidden;
+}
+
+.profile__thumbnail:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.profile__thumbnail img {
+    width: 100%;
+    border-style: none;
+}
+
+.profile__role {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fc0;
+}
+
+.profile__role a,
+.profile__meta a {
+    color: inherit;
+    transition: all .3s ease;
+    text-decoration: none;
+}
+
+.profile__name {
+    margin-bottom: 1.3vh;
+    font-size: 4.1vh;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: Rajdhani, sans-serif;
+    font-weight: 700;
+    letter-spacing: -.06em;
+}
+
+.profile__meta {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.profile__body {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    transition: transform .7s ease;
+	padding: 32px 40px;
+}
+
+.profile:hover .profile__body {
+    transform: translateY(0);
+}
+
+.profile__body {
+    transform: translateY(193px);
+}
+
+.profile__excerpt {
+    height: 120px;
+    color: #c6cbea;
+    transition: opacity .5s ease;
+}
+.main-nav .header-menu-toggle {
+    position: absolute;
+    top: 0;
+    right: 45px;
+}
+.pagination-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination li {
+  display: inline;
+}
+
+.pagination li a,
+.pagination li span.dots {
+  color: #fff;
+  background-color: #333;
+  padding: 10px 15px;
+  margin: 0 5px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  text-shadow: 5px 5px 4px black;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination li a:hover {
+  background-color: #e67e00;
+  color: #fff;
+}
+
+.pagination li a.active {
+  background-color: #e67e00;
+  color: #fff;
+}
+
+.pagination li .arrow {
+  font-size: 18px;
+  padding: 10px;
+}
+
+.pagination li .dots {
+  color: #fff;
+}
+
+</style>
+</head>
+<body class="site-layout bg-image bg-fixed bg--texture-05">
+	<div class="preloader-overlay">
+        <div id="js-preloader" class="preloader">
+            <div class="fadeInUp">
+                <div class="pong-loader"></div>
+                <div class="hcfont serverMessage">
+                    Load<span class="themefont">ing Users</span>
+                    <span class="loading-dot">.</span>
+                    <span class="loading-dot">.</span>
+                    <span class="loading-dot">.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="stickpm-custom-cursor-wrap">
+        <div id="stickpm-custom-cursor"></div>
+    </div>
+    <div class="site-wrapper">
+        <header id="header" class="site-header--landing">
+			<nav class="main-nav">
+				<h1>Profile Views</h1>
+				<div class="pagination-container">
+				<ul class="pagination">
+					<li><a href="#" class="arrow">&lt;</a></li>
+					<li><a href="#" class="page active">01</a></li>
+					<li><a href="#" class="page">02</a></li>
+					<li><span class="dots">...</span></li>
+					<li><a href="#" class="page">08</a></li>
+					<li><a href="#" class="arrow">&gt;</a></li>
+				</ul>
+			</div>
+			</nav>
+			<div class="header-logo header-logo--img">
+				<a href="#" data-form="home"><img src="../images/logo.png" srcset="../images/logo.png" alt="StickPM"></a>
+			</div>
+			<nav class="main-nav">
+				<div class="header-menu-toggle round inneroutterGlow">
+					<div class="header-menu-toggle__inner">
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+					</div>
+				</div>
+				<ul class="main-nav__list">
+					<li><a href="#" data-form="home">Home</a></li>
+					<li class="has-children">
+						<a href="#" class="sitemap">Site Map</a>
+						<div class="main-nav__megamenu">
+							<div class="row">
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Main Pages</h6>
+									<ul>
+										<li class="active"><a href="/">Home</a></li>
+										<li><a href="/about">About Us</a></li>
+										<li><a href="#">Contact Us</a></li>
+										<li><a href="/terms">Terms & Policy</a></li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Account Pages</h6>
+									<ul>
+										<li><a href="/logout">Log Out</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<!--<main>
+            <div class="profiles-container">
+                <% profiles.forEach(profile => { %>
+                    <div class="profile-card">
+                        <div class="profile-photo <%= profile.isVip ? 'vip' : '' %>">
+                            <img src="<%= profile.profilePhoto %>" alt="<%= profile.username %>'s Avatar">
+                            <div class="watermark">StickPM.com</div>
+                        </div>
+                        <div class="profile-info">
+                            <p class="username"><%= profile.username %></p>
+                            <p class="bio"><%= profile.bio %></p>
+                            <p class="join-date">Joined: <%= profile.joinDate %></p>
+                            <p class="followers">Followers: <%= profile.followingCount %></p>
+                            <p class="following"><%= profile.isFollowing ? 'Following' : '' %></p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </main>-->
+		<main>
+			<div class="profiles-container">
+				<% profiles.forEach(profile => { %>
+				<div class="profile <%= profile.isVip ? 'vip' : '' %>"> <!-- Add class vip for border coloring -->
+					<div class="profile__thumbnail">
+						<img src="<%= profile.profilePhoto %>" alt="<%= profile.username %>'s Avatar">
+					</div>
+					<div class="profile__body <%= profile.isFollowing ? 'Following' : '' %>"> <!-- Add class following for a star icon top right -->
+						<div class="profile__header">
+							<ul class="list-unstyled">
+								<li class="profile__role">
+									<a href="#">Role</a>
+								</li>
+							</ul>
+							<h2 class="profile__name">
+								<a href="/profile/<%= profile.username %>"><%= profile.username %></a>
+							</h2>
+							<ul class="list-unstyled">
+								<li class="profile__meta">
+									<a href="#"><%= profile.joinDate %></a>
+								</li>
+							</ul>
+						</div>
+						<div class="profile__excerpt">
+							Followers: <%= profile.followingCount %><br />
+							<%= profile.bio %>
+						</div>
+					</div>
+				</div>
+                <% }) %>
+			</div>
+		</main>
+    </div>
+    <script>
+        const elements = {
+            customCursor: document.getElementById('stickpm-custom-cursor'),
+            preloaderOverlay: document.querySelector('.preloader-overlay'),
+            cursor: document.getElementById('stickpm-custom-cursor'),
+			siteLayout: document.querySelector('.site-layout'),
+            body: document.body
+        };
+		document.addEventListener('DOMContentLoaded', function() {
+			const uiTheme = {
+				cursor: () => {
+					let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+					document.addEventListener('mousemove', function(event) {
+						cursorX = event.clientX || event.pageX;
+						cursorY = event.clientY || event.pageY;
+					});
+					if (!elements.cursor) {
+						return;
+					}
+					let targetX = cursorX, targetY = cursorY, deltaX, deltaY;
+					(function animateCursor() {
+						requestAnimationFrame(animateCursor);
+						if (targetX && targetY) {
+							deltaX = 0.15 * (cursorX - targetX);
+							deltaY = 0.15 * (cursorY - targetY);
+							if (Math.abs(deltaX) + Math.abs(deltaY) < 0.1) {
+								targetX = cursorX;
+								targetY = cursorY;
+							} else {
+								targetX += deltaX;
+								targetY += deltaY;
+							}
+						} else {
+							targetX = cursorX;
+							targetY = cursorY;
+						}
+						elements.cursor.style.transform = 'translate(' + targetX + 'px, ' + targetY + 'px)';
+					})();
+				}
+			};		
+			uiTheme.cursor();
+        });
+		window.addEventListener('load', function() {
+			if (elements.preloaderOverlay) {
+				elements.preloaderOverlay.style.transform = 'translateY(100%)';
+				elements.siteLayout.classList.replace('site-layout', 'site-layout--landing');
+			}
+		});
+	</script>
+</body>
+</html>

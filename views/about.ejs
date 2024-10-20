@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--
+		*  ██╗██╗                                                                                           ██╗██╗
+		*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+		*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+		*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+		*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+		*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+		*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+		*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+		* StickPM Project
+		* © 2024 BadNintendo
+		* All rights reserved.
+		* Unauthorized copying of this file, via any medium is strictly prohibited.
+		* 
+		* USAGE:
+		* This software is provided 'as-is', without any express or implied
+		* warranty. In no event will the authors be held liable for any damages
+		* arising from the use of this software.
+		* 
+		* You are permitted to use this software for personal and commercial
+		* applications, provided the following conditions are met:
+		* 1. The origin of this software must not be misrepresented; you must
+		*	not claim that you wrote the original software.
+		* 2. Altered source versions must be plainly marked as such, and must
+		*	not be misrepresented as being the original software.
+		* 3. This notice may not be removed or altered from any source
+		*	distribution.
+		-->
+        <meta charset="<%= headData.charset %>">
+        <meta name="viewport" content="<%= headData.viewport %>">
+        <meta name="description" content="<%= headData.description %>">
+        <meta name="author" content="<%= headData.author %>">
+        <meta name="keywords" content="<%= headData.keywords %>">
+        <meta name="robots" content="<%= headData.robots %>">
+        <meta property="og:url" content="<%= headData.url %>">
+        <meta property="og:title" content="<%= headData.title %>">
+        <meta property="og:description" content="<%= headData.description %>">
+        <meta property="og:image" content="<%= headData.image %>">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="<%= headData.url %>">
+        <meta name="twitter:title" content="<%= headData.title %>">
+        <meta name="twitter:description" content="<%= headData.description %>">
+        <meta name="twitter:image" content="<%= headData.image %>">
+        <meta name="twitter:site" content="<%= headData.twitterSite %>">
+        <meta name="theme-color" content="<%= headData.themeColor %>">
+        <link rel="shortcut icon" href="<%= headData.favicon %>">
+        <link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+        <link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+        <title><%= headData.title %></title>
+        <%- headData.style %>
+	</head>
+	<body>
+		<header>
+            <h1>About StickPM - Your Gateway to Real-Time Chat & Streaming</h1>
+        </header>
+        <main>
+            <div class="background-container">
+                <div class="background-image"></div>
+                <div class="background-image rotated"></div>
+            </div>
+            <section class="overview">
+                <h2>What is StickPM?</h2>
+                <p><strong>StickPM</strong> is an innovative platform where users can connect, chat, and stream in real-time. Whether you're streaming live video, chatting with friends, or playing interactive games, StickPM is built to enhance your online experience. The platform offers customizable profiles, chatroom moderation tools, and interactive features that make every interaction engaging and secure.</p>
+            </section>
+            <section class="user-experience">
+                <h2>The StickPM Experience</h2>
+                <p>StickPM offers an engaging experience for users, combining ease of use with powerful tools for live interaction. Key features include:</p>
+                <ul>
+                    <li>
+                        <strong>Seamless Streaming</strong>
+                        <p>Start a live broadcast with just one click. Using video options and push-to-talk capabilities to keep the conversation dynamic, ensuring clear communication without interruptions.</p>
+                        <p><em>How It Works:</em> Choose your camera and microphone, preview your setup, and start streaming. As you speak, your audio input is managed automatically through push-to-talk functionality or continuous broadcasting, depending on your preferences.</p>
+                    </li>
+                    <li>
+                        <strong>Interactive Chatroom</strong>
+                        <p>Engage in real-time text chat with other users, where conversations are never dull. With emoji support, whisper messages, and tagged mentions, you can personalize interactions. The upside to interactions there is mini games related only exclusively to chatrooms with games enabled.</p>
+                        <p><em>How It Works:</em> Use the chat interface to send messages, reactions, pokes, private whispers, game invites, follow, or block. Emojis can be quickly accessed through the emoji picker, and mentions help you tag specific users easily. Game can have spectators typically if all are members playing, other members may be able to watch if game is listed publicly.</p>
+                    </li>
+                    <li>
+                        <strong>Customizable User Profiles</strong>
+                        <p>Build a profile that reflects your identity. Customize your avatar, bio, status activity, limit interactions, public visibility, games, and your block list, following, and who followed you. Profiles are the heart of StickPM, giving users control over their public image and interactions within rooms so we take privacy seriously all personal data will not be shared with others only basic information like username, avatar, bio's, and other data.</p>
+                        <p><em>How It Works:</em> Click on your avatar to access your profile modal, where you can change your status (Online, Busy, Do Not Disturb), upload a new avatar, and adjust settings to fit your personality. You can also visit your own profile page and edit information while logged in as a member. While some information may not be shown in your chatroom profile all information can be found on profile page.</p>
+                    </li>
+                    <li>
+                        <strong>Owner and Moderation Tools</strong>
+                        <p>Room owners and moderators can easily manage their rooms with powerful controls. Mute, kick, or ban disruptive users in real time, ensuring that the environment remains respectful and enjoyable for everyone. Extra features room owners have are customizble roles with responsibilities, assign one extra super role or many other customizable roles with assigned colors. </p>
+                        <p><em>How It Works:</em> Access the user moderation panel through the user list. Hover over any username to manage their permissions or remove them from the room. It includes interactions clearly marked and seperated for less misrepresented actions.</p>
+                    </li>
+                    <li>
+                        <strong>Flexible Themes & Layouts</strong>
+                        <p>StickPM allows you to switch between light and dark themes, adjust font sizes, and auto-hide member lists, ensuring the user interface is customizable to your liking. Match your theme to your device or manually adjust the settings at any time.</p>
+                        <p><em>How It Works:</em> Use the settings panel to toggle between light and dark modes, adjust chat font sizes, and enable auto-hide for the sidebar to streamline the chat interface.</p>
+                    </li>
+                    <li>
+                        <strong>VIP Rooms & Virtual Credits</strong>
+                        <p>Upgrade your chatroom experience with VIP status for enhanced features such as increasing & decreasing stream capacity [1-24], high-quality streams and broadcast in HD options for streamers, and other custom room settings. Earn or donate virtual credits to support rooms, show appreciation to broadcasters, or unlock premium features. Vip rooms within a a given grace period will be updated to include a turn/stun server with limited confined access exclusively to vip rooms and or room to improve quality and latency of network quality allowed.</p>
+                        <p><em>How It Works:</em> VIP rooms can be created by contributing credits. Users can donate credits to rooms using the “Credit Room” button in the chat interface, which enhances the room's features and helps support the owner.</p>
+                    </li>
+                    <li>
+                        <strong>Push-to-Talk</strong>
+                        <p>Keep your conversations smooth and free of noise distractions by enabling Push-to-Talk (PTT). This feature lets you speak when ready by holding a key or button, making the chat environment more controlled and less noisy. Push to talk is only avalible to streamers to ensure proper moderation of audio.</p>
+                        <p><em>How It Works:</em> Activate push-to-talk by holding the "Caps Lock" or "Alt" key, or use the on-screen button. This ensures that your voice is only transmitted when you are ready to speak, keeping the focus on the conversation. Customizable push to talk will be in settings for members only.</p>
+                    </li>
+                    <li>
+                        <strong>Real-Time Notifications</strong>
+                        <p>Stay informed with in-app chat notifications. Receive updates when you're mentioned in chat, when you receive a private message, or when new broadcasts start (in chat or in email). Notifications ensure that you never miss important interactions. Some notifcations are only visual within the chatrooms you are currently present in. Others will only be related to your preferences in settings.</p>
+                        <p><em>How It Works:</em> Turn notifications on or off using the settings panel or profile page while logged in. Members can control the types of alerts you receive and customize the sound and visual settings for each notification.</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="join-community">
+                <h2>Why Choose StickPM?</h2>
+                <p>StickPM combines ease of use with powerful tools for creating dynamic, interactive online communities. Explore our key features:</p>
+                <ul>
+                    <li><strong>Real-Time Chatrooms</strong>
+                        <p>StickPM's chatrooms are the heart of the platform. Engage with others through real-time text chat, whispers, polls, and reactions, all while streaming or gaming. Interact with ease using mentions, emoji reactions, and private whispers for more personal conversations.</p>
+                        <p><em>Tip:</em> Use mentions with <code>@username</code> to grab someone's attention, or send a whisper to communicate privately in any chatroom.</p>
+                    </li>
+                    <li><strong>Live Streaming & Push-to-Talk</strong>
+                        <p>Go live with StickPM's easy-to-use streaming options. Whether it's video or audio, start broadcasting with a click. Push-to-talk functionality ensures you control when your voice is heard, perfect for maintaining order in chatrooms with multiple users.</p>
+                        <p><em>Tip:</em> Enable push-to-talk when you want to manage who speaks in a group stream. This helps keep conversations organized.</p>
+                    </li>
+                    <li><strong>Interactive Games</strong>
+                        <p>Play games like chess, poker, and Connect4 within StickPM's chatrooms. Challenge friends or spectate live matches, all while chatting with other users in real-time.</p>
+                        <p><em>Tip:</em> Use the game invite feature to challenge a friend to a game or watch the action unfold as a spectator.</p>
+                    </li>
+                    <li><strong>User Moderation & Role Management</strong>
+                        <p>Room owners and moderators can manage participants with StickPM's comprehensive moderation tools. Mute, kick, or ban disruptive users, and assign roles such as moderator or VIP for streamlined room management.</p>
+                        <p><em>Tip:</em> Assign roles like VIP or Moderator to trusted members of your room, giving them specific permissions to help manage the space.</p>
+                    </li>
+                    <li><strong>Security & Two-Factor Authentication (2FA)</strong>
+                        <p>StickPM takes user security seriously. Our platform offers encrypted data transmission, privacy settings, and while 2FA enabled to keep your account safe and limited to 6 hours login time. No one have access to detailed logs, ensuring transparency in every interaction room related there is a few exceptions.</p>
+                        <p><em>Tip:</em> Activate 2FA from your profile settings for an extra layer of security on your account. Be sure to check email if used or phone for that 2FA validation code.</p>
+                    </li>
+                    <li><strong>Customizable Profiles</strong>
+                        <p>Create a profile that stands out. StickPM allows you to personalize your profile with avatars, bios, and privacy settings. Manage your followers, room activity, and stream history all in one place. Avatars before approved by stickpm team member will flash and only be visable to you if uploaded within a chatroom.</p>
+                        <p><em>Tip:</em> Customize your avatar and bio to reflect your personality. Control who can view your profile and follow your activities.</p>
+                    </li>
+                    <li><strong>Room Credits & VIP Features</strong>
+                        <p>Use StickPM's virtual credit system to enhance your room's features. VIP rooms get expanded stream capacities, high-definition streaming, and advanced moderation tools to create the ultimate interactive space.</p>
+                        <p><em>Tip:</em> Donate credits to rooms you enjoy or use them to unlock VIP features for your own room. VIP rooms get exclusive perks like HD streaming and more moderation options.</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="community-features">
+                <h2>Building Communities</h2>
+                <p>StickPM is designed for community-building. Follow broadcasters, participate in live polls, and engage with reactions to keep conversations lively and fun.</p>
+                <ul>
+                    <li><strong>Follower System</strong>: Stay updated with your favorite broadcasters by following their profiles and getting notifications about new streams.</li>
+                    <li><strong>Whisper Messages</strong>: Send private messages directly within chatrooms for one-on-one conversations.</li>
+                    <li><strong>Role Assignments</strong>: Assign roles like Moderator or VIP to manage room interactions and set permissions.</li>
+                    <li><strong>Polls & Reactions</strong>: Run live polls to engage your audience and get instant feedback, or use reactions like emojis to interact with streamers and fellow viewers.</li>
+                </ul>
+            </section>
+            <section class="security-privacy">
+                <h2>Security & Privacy</h2>
+                <p>StickPM takes your privacy and security seriously. Our platform uses industry-standard encryption and data protection protocols to safeguard your personal information and interactions.</p>
+                <p><em>How It Works:</em> Profiles, streams, and chat messages are encrypted and can be set to public or private. Moderators and owners can manage room privacy, ensuring that only approved members can join streams and conversations. Profiles never show personal data to anyone other than account holder, password is encrypted one way cannot be decrypted.</p>
+            </section>
+            <section class="get-started">
+                <h2>Join StickPM Today!</h2>
+                <p>Ready to experience StickPM? Sign up today, customize your profile, and start interacting with others in real-time through live streaming and chatrooms. Whether you're looking to broadcast, spectate, or simply chat, StickPM offers an engaging and easy-to-use platform for all your social needs.</p>
+                <p>Need help? Our support team is here for you. Reach out to us at <a href="mailto:<%= email %>"><%= email %></a> for assistance.</p>
+            </section>
+        </main>
+    </body>
+</html>

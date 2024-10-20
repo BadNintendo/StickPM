@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+ * StickPM Project
+    * © 2024 BadNintendo
+    * All rights reserved.
+    * Unauthorized copying of this file, via any medium, is strictly prohibited.
+    *
+    * USAGE:
+    * This software is provided 'as-is', without any express or implied
+    * warranty. In no event will the authors be held liable for any damages
+    * arising from the use of this software.
+    * 
+    * You are permitted to use this software for personal and commercial
+    * applications, provided the following conditions are met:
+    * 1. The origin of this software must not be misrepresented; you must
+    *    not claim that you wrote the original software.
+    * 2. Altered source versions must be plainly marked as such, and must
+    *    not be misrepresented as being the original software.
+    * 3. This notice may not be removed or altered from any source
+    *    distribution.
+	*
+	* Need To-Do:
+	* 1. Add another privacy layer if hide personal data is selected to mask all incase streaming or other means
+    -->
+	<meta charset="<%= headData.charset %>">
+	<meta name="viewport" content="<%= headData.viewport %>">
+	<meta name="description" content="<%= headData.description %>">
+	<meta name="author" content="<%= headData.author %>">
+	<meta name="keywords" content="<%= headData.keywords %>">
+	<meta name="robots" content="<%= headData.robots %>">
+	<meta property="og:url" content="<%= headData.url %>">
+	<meta property="og:title" content="<%= headData.title %>">
+	<meta property="og:description" content="<%= headData.description %>">
+	<meta property="og:image" content="<%= headData.image %>">
+	<meta property="og:rich_attachment" content="true">
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="<%= headData.url %>">
+	<meta name="twitter:title" content="<%= headData.title %>">
+	<meta name="twitter:description" content="<%= headData.description %>">
+	<meta name="twitter:image" content="<%= headData.image %>">
+	<meta name="twitter:site" content="<%= headData.twitterSite %>">
+	<meta name="theme-color" content="<%= headData.themeColor %>">
+	<link rel="shortcut icon" href="<%= headData.favicon %>">
+	<link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+	<link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+	<title><%= headData.title %></title>
+	<link rel="canonical" href="https://<%= headData.url %>/">
+	<link rel="stylesheet" href="/css/style.css">
+    <%- headData.style %>
+</head>
+<body class="site-layout bg-image bg-fixed bg--texture-05">
+    <div class="site-wrapper">
+        <header id="header" class="site-header--landing">
+			<nav class="main-nav">
+				<ul class="main-nav__list">
+					<li><a href="#" data-form="home">Home</a></li>
+				</ul>
+			</nav>
+			<div class="header-logo header-logo--img">
+				<a href="#" data-form="home"><img src="../images/logo.png" srcset="../images/logo.png" alt="StickPM"></a>
+			</div>
+			<nav class="main-nav">
+				<div class="header-menu-toggle round inneroutterGlow">
+					<div class="header-menu-toggle__inner">
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+					</div>
+				</div>
+				<ul class="main-nav__list">
+					<li class="has-children">
+						<a href="#" class="sitemap">Site Map</a>
+						<div class="main-nav__megamenu">
+							<div class="row">
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Main Pages</h6>
+									<ul>
+										<li class="active"><a href="/">Home</a></li>
+										<li><a href="/about">About Us</a></li>
+										<li><a href="#">Contact Us</a></li>
+										<li><a href="/terms">Terms & Policy</a></li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Account Pages</h6>
+									<ul>
+										<li><a href="/logout">Log Out</a></li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Chatroom Pages</h6>
+									<ul>
+										<li><a href="//<%= headData.url %>/lobby">Chatroom Lobby <span class="badge badge-danger">New</span></a></li>
+										<li><a href="#">Create a Chatroom</a></li>
+										<li><a href="#">Chatroom Settings</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<main>
+            <h1>Profile Views</h1>
+            <div class="profiles-container">
+                <% profiles.forEach(profile => { %>
+                    <div class="profile-card">
+                        <div class="profile-photo <%= profile.isVip ? 'vip' : '' %>">
+                            <img src="<%= profile.profilePhoto %>" alt="<%= profile.username %>'s Avatar">
+                            <div class="watermark">StickPM.com</div>
+                        </div>
+                        <div class="profile-info">
+                            <p class="username"><%= profile.username %></p>
+                            <p class="bio"><%= profile.bio %></p>
+                            <p class="join-date">Joined: <%= profile.joinDate %></p>
+                            <p class="followers">Followers: <%= profile.followingCount %></p>
+                            <p class="following"><%= profile.isFollowing ? 'Following' : '' %></p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </main>
+    </div>
+	<div class="preloader-overlay">
+        <div id="js-preloader" class="preloader">
+            <div class="fadeInUp">
+                <div class="pong-loader"></div>
+                <div class="hcfont serverMessage">
+                    Load<span class="themefont">ing Users</span>
+                    <span class="loading-dot">.</span>
+                    <span class="loading-dot">.</span>
+                    <span class="loading-dot">.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="stickpm-custom-cursor-wrap">
+        <div id="stickpm-custom-cursor"></div>
+    </div>
+    <script>
+        const elements = {
+            customCursor: document.getElementById('stickpm-custom-cursor'),
+            preloaderOverlay: document.querySelector('.preloader-overlay'),
+            cursor: document.getElementById('stickpm-custom-cursor'),
+			siteLayout: document.querySelector('.site-layout'),
+            body: document.body
+        };
+		document.addEventListener('DOMContentLoaded', function() {
+			let tempTimeout;
+			const renderCaptcha = (captcha) => {
+				const chars = captcha.split('');
+				const namespace = 'http://www.w3.org/2000/svg';
+				elements.svgcaPatcha.innerHTML = '';
+				chars.forEach((char, index) => {
+					const text = document.createElementNS(namespace, 'text');
+					text.setAttribute('x', 20 * index + 10);
+					text.setAttribute('y', 35);
+					text.setAttribute('font-size', '30');
+					text.setAttribute('font-family', 'Arial');
+					text.setAttribute('fill', getRandomColor());
+					text.setAttribute('transform', `rotate(${getRandomInt(-20, 20)}, ${20 * index + 10}, 35)`);
+					text.textContent = char;
+					elements.svgcaPatcha.appendChild(text);
+				});
+				addNoise(elements.svgcaPatcha, namespace);
+			};
+			const getRandomColor = () => {
+				const letters = '89ABCDEF';
+				let color = '#';
+				for (let i = 0; i < 6; i++) {
+					color += letters[Math.floor(Math.random() * letters.length)];
+				}
+				return color;
+			};
+			const getRandomInt = (min, max) => {
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			};
+			const addNoise = (svg, namespace) => {
+				for (let i = 0; i < 15; i++) {
+					const circle = document.createElementNS(namespace, 'circle');
+					circle.setAttribute('cx', getRandomInt(0, 150));
+					circle.setAttribute('cy', getRandomInt(0, 50));
+					circle.setAttribute('r', getRandomInt(1, 3));
+					circle.setAttribute('fill', getRandomColor());
+					svg.appendChild(circle);
+				}
+			};
+			renderCaptcha('<%= captcha %>');
+			const uiTheme = {
+				cursor: () => {
+					let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+					document.addEventListener('mousemove', function(event) {
+						cursorX = event.clientX || event.pageX;
+						cursorY = event.clientY || event.pageY;
+					});
+					if (!elements.cursor) {
+						return;
+					}
+					let targetX = cursorX, targetY = cursorY, deltaX, deltaY;
+					(function animateCursor() {
+						requestAnimationFrame(animateCursor);
+						if (targetX && targetY) {
+							deltaX = 0.15 * (cursorX - targetX);
+							deltaY = 0.15 * (cursorY - targetY);
+							if (Math.abs(deltaX) + Math.abs(deltaY) < 0.1) {
+								targetX = cursorX;
+								targetY = cursorY;
+							} else {
+								targetX += deltaX;
+								targetY += deltaY;
+							}
+						} else {
+							targetX = cursorX;
+							targetY = cursorY;
+						}
+						elements.cursor.style.transform = 'translate(' + targetX + 'px, ' + targetY + 'px)';
+					})();
+				}
+			};		
+			uiTheme.cursor();
+        });
+		window.addEventListener('load', function() {
+			if (elements.preloaderOverlay) {
+				elements.preloaderOverlay.style.transform = 'translateY(100%)';
+				elements.siteLayout.classList.replace('site-layout', 'site-layout--landing');
+			}
+		});
+	</script>
+</body>
+</html>

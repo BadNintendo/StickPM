@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	*  ██╗██╗                                                                                           ██╗██╗
+	*  ██║╚═╝  ███████╗████████╗██╗ ██████╗██╗  ██╗██████╗ ███╗   ███╗     ██████╗ ██████╗ ███╗   ███╗  ╚═╝██║
+	*  ██║     ██╔════╝╚══██╔══╝██║██╔════╝██║ ██╔╝██╔══██╗████╗ ████║    ██╔════╝██╔═══██╗████╗ ████║     ██║
+	*  ██║     ███████╗   ██║   ██║██║     █████╔╝ ██████╔╝██╔████╔██║    ██║     ██║   ██║██╔████╔██║     ██║
+	*  ██║     ╚════██║   ██║   ██║██║     ██╔═██╗ ██╔═══╝ ██║╚██╔╝██║    ██║     ██║   ██║██║╚██╔╝██║     ██║
+	*  ██║     ███████║   ██║   ██║╚██████╗██║  ██╗██║     ██║ ╚═╝ ██║ ██╗╚██████╗╚██████╔╝██║ ╚═╝ ██║     ██║
+	*  ██║██╗  ╚══════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ██╗██║
+	*  ╚═╝╚═╝                                                                                           ╚═╝╚═╝
+ * StickPM Project
+    * © 2024 BadNintendo
+    * All rights reserved.
+    * Unauthorized copying of this file, via any medium, is strictly prohibited.
+    *
+    * USAGE:
+    * This software is provided 'as-is', without any express or implied
+    * warranty. In no event will the authors be held liable for any damages
+    * arising from the use of this software.
+    * 
+    * You are permitted to use this software for personal and commercial
+    * applications, provided the following conditions are met:
+    * 1. The origin of this software must not be misrepresented; you must
+    *    not claim that you wrote the original software.
+    * 2. Altered source versions must be plainly marked as such, and must
+    *    not be misrepresented as being the original software.
+    * 3. This notice may not be removed or altered from any source
+    *    distribution.
+	*
+	* Need To-Do:
+	* 1. Add another privacy layer if hide personal data is selected to mask all incase streaming or other means
+    -->
+	<meta charset="<%= headData.charset %>">
+	<meta name="viewport" content="<%= headData.viewport %>">
+	<meta name="description" content="<%= headData.description %>">
+	<meta name="author" content="<%= headData.author %>">
+	<meta name="keywords" content="<%= headData.keywords %>">
+	<meta name="robots" content="<%= headData.robots %>">
+	<meta property="og:url" content="<%= headData.url %>">
+	<meta property="og:title" content="<%= headData.title %>">
+	<meta property="og:description" content="<%= headData.description %>">
+	<meta property="og:image" content="<%= headData.image %>">
+	<meta property="og:rich_attachment" content="true">
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="<%= headData.url %>">
+	<meta name="twitter:title" content="<%= headData.title %>">
+	<meta name="twitter:description" content="<%= headData.description %>">
+	<meta name="twitter:image" content="<%= headData.image %>">
+	<meta name="twitter:site" content="<%= headData.twitterSite %>">
+	<meta name="theme-color" content="<%= headData.themeColor %>">
+	<link rel="shortcut icon" href="<%= headData.favicon %>">
+	<link rel="apple-touch-icon" sizes="120x120" href="<%= headData.image %>">
+	<link rel="apple-touch-icon" sizes="152x152" href="<%= headData.image %>">
+	<title><%= headData.title %></title>
+	<link rel="canonical" href="https://<%= headData.url %>/">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="site-layout bg-image bg-fixed bg--texture-05">
+    <div class="site-wrapper">
+        <header id="header" class="site-header--landing">
+			<nav class="main-nav">
+				<ul class="main-nav__list">
+					<li><a href="#" data-form="home">Home</a></li>
+				</ul>
+			</nav>
+			<div class="header-logo header-logo--img">
+				<a href="#" data-form="home"><img src="../images/logo.png" srcset="../images/logo.png" alt="StickPM"></a>
+			</div>
+			<nav class="main-nav">
+				<div class="header-menu-toggle round inneroutterGlow">
+					<div class="header-menu-toggle__inner">
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+						<span>&nbsp;</span>
+					</div>
+				</div>
+				<ul class="main-nav__list">
+					<li class="has-children">
+						<a href="#" class="sitemap">Site Map</a>
+						<div class="main-nav__megamenu">
+							<div class="row">
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Main Pages</h6>
+									<ul>
+										<li class="active"><a href="/">Home</a></li>
+										<li><a href="/about">About Us</a></li>
+										<li><a href="#">Contact Us</a></li>
+										<li><a href="/terms">Terms & Policy</a></li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Account Pages</h6>
+									<ul>
+										<li><a href="/logout">Log Out</a></li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<h6 class="main-nav__title">Chatroom Pages</h6>
+									<ul>
+										<li><a href="//<%= headData.url %>/lobby">Chatroom Lobby <span class="badge badge-danger">New</span></a></li>
+										<li><a href="#">Create a Chatroom</a></li>
+										<li><a href="#">Chatroom Settings</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</nav>
+		</header>
+        <!--
+		Need To-Do:
+		1. On post waiting for sms or email validation only thing happening is highlighting of code that will appear in the form validations after submition.
+		2. Style the waiting form code to a mutual color like blue with waiting clearly positioned top left hovering with message under or to right
+		5. Add following is sorted and validated if in database object array [ { id, username } ]
+        -->
+
+		<main class="profile-content">
+			<section class="profile-info">
+				<% if (profile?.self) { %>
+					<div class="profile-edit hidden">
+						<h3>Edit Your Profile</h3>
+						<form id="editProfileForm" method="POST">
+							<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+							<div class="form-group">
+								<label for="username">Username</label>
+								<input type="text" class="form-control" id="username" name="username" value="<%= profile.username %>" 
+									minlength="3" maxlength="32" required
+									pattern="^[a-zA-Z0-9]+$"
+									title="Username must contain only letters and numbers."
+									placeholder="Enter username">
+							</div>
+							<div class="form-group">
+								<label for="firstName">First Name</label>
+								<input type="text" class="form-control" id="firstName" name="firstName" value="<%= profile.firstName %>"
+									pattern="^[a-zA-Z]{1,32}$"
+									title="First name should only contain alphabetic characters."
+									placeholder="Enter first name">
+							</div>
+							<div class="form-group">
+								<label for="lastName">Last Name</label>
+								<input type="text" class="form-control" id="lastName" name="lastName" value="<%= profile.lastName %>"
+									pattern="^[a-zA-Z]{1,32}$"
+									title="Last name should only contain alphabetic characters."
+									placeholder="Enter last name">
+							</div>
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="email" class="form-control" id="email" name="email" value="<%= profile.email %>"
+									placeholder="Enter your email" required>
+							</div>
+							<div class="form-group">
+								<label for="phone">Phone</label>
+								<input type="tel" class="form-control" id="phone" name="phone" value="<%= profile.phone %>"
+									pattern="^\+?[0-9]{10,15}$"
+									title="Phone number must contain 10 to 15 digits."
+									placeholder="Enter phone number">
+							</div>
+							<div class="form-group">
+								<label for="password">New Password (leave blank if unchanged)</label>
+								<input type="password" class="form-control" id="password" name="password" minlength="4" maxlength="32"
+									placeholder="Enter new password">
+							</div>
+							<div class="form-group">
+								<label for="repeatPassword">Confirm New Password</label>
+								<input type="password" class="form-control" id="repeatPassword" name="repeatPassword" minlength="4" maxlength="32"
+									placeholder="Re-enter new password"
+									oninput="this.setCustomValidity(this.value !== document.getElementById('password').value ? 'Passwords do not match' : '')">
+							</div>
+							<div class="form-group">
+								<input type="file" class="form-control" id="profilePhotoFile" accept="image/*" placeholder="Profile Photo (optional)">
+								<input type="hidden" id="profilePhoto" name="profilePhoto">
+							</div>
+							<div class="form-group">
+								<label for="bio">Biography</label>
+								<textarea id="bio" name="bio" maxlength="500"
+										placeholder="Write something about yourself..."><%= profile.bio %></textarea>
+							</div>
+							<div class="form-group d-sm-flex justify-content-sm-between align-items-sm-center">
+								<label class="checkbox checkbox-inline">
+									<input class="checkbox-input" type="checkbox" id="private" name="private" <%= !profile.privacy ? 'checked' : '' %>> Searchable Profile
+									<span class="checkbox-label">&nbsp;</span>
+								</label>
+							</div>
+							<div class="form-group">
+								<div class="captcha-container">
+									<img id="captchaSvg" width="100%" height="50"/>
+									<input type="text" class="form-control" id="captcha2" name="captcha2" 
+										pattern="^[a-zA-Z0-9]{5,8}$" 
+										title="Captcha contains only letters and numbers"
+										placeholder="Captcha*" required>
+								</div>
+							</div>
+							<div class="form-group d-sm-flex justify-content-sm-between align-items-sm-center">
+								<label class="checkbox checkbox-inline">
+									<input class="checkbox-input" type="checkbox" id="terms" name="terms" required> I agree to the <a href="/terms">terms and conditions</a>
+									<span class="checkbox-label">&nbsp;</span>
+								</label>
+							</div>
+							<div id="verifyCode" <%= (!profile.code) ? `class="hidden"` : '' %>>
+								<h2 class="h4">Verify Code</h2>
+								<div class="form-group">
+									<input type="text" class="form-control" id="verificationCode" name="code" placeholder="Verification Code*" required pattern="^[0-9]{6}$" title="Enter the 6-digit code sent for validation">
+								</div>
+							</div>
+							<button type="submit" class="btn btn-primary" id="submitButton">Save Changes</button>
+						</form>
+					</div>
+					<div id="message-container" class="info-box hidden">
+						<div class="info-box__label">Status</div>
+						<div class="info-box__content"></div>
+					</div>
+				<% } %>
+			</section>
+		</main>
+        <main class="site-content profile text-center" id="wrapper">
+            <div class="site-content__inner profile">
+                <div class="site-content__holder">
+                    <figure class="page-thumbnail page-thumbnail--default">
+                        <img src="<%= profile.profilePhoto || '../images/stickpmbg.png' %>" alt="<%= profile.username || 'Profile Avatar' %>">
+                    </figure>
+                    <div class="stickpm-member stickpm-member--single">
+                        <div class="stickpm-member__body">
+							<% if (profile?.self) { %>
+								<div class="StickPMsvg edit" id="editProfile" title="Edit Profile"></div>
+							<% } %>
+                            <div class="stickpm-member__position">Role: <%= profile.role || 'Default' %></div>
+                            <h2 class="stickpm-member__title h3"><%= profile.username || 'Username' %></h2>
+                            <ul class="stickpm-member__meta list-unstyled"><!--Add total followers count-->
+                                <li class="stickpm-member__meta-item"><span>Games</span> <%= profile.game ? 'Yes' : 'No' || 'No' %></li>
+                                <li class="stickpm-member__meta-item"><span>Joined</span> <%= profile.joinDate || 'Unknown' %></li>
+                                <li class="stickpm-member__meta-item"><span>Verified</span> <%= profile.verified ? 'Yes' : 'No' || 'No' %></li>
+                            </ul>
+							<% if (profile?.self) { %>
+								<ul class="stickpm-member__meta list-unstyled center">
+									<li class="stickpm-member__meta-item"><span>Credits: </span> <%= profile?.credits?.amount || 0 %></li>
+								</ul>
+							<% } %>
+                            <div class="stickpm-member__content">
+                                <h5>Biography</h5>
+                                <p><%= profile.bio || 'No biography available.' %></p>
+                                <div class="spacer-sm"></div>
+                               <h5>Owns Chatrooms</h5>
+                                <ul class="list">
+                                    <% if (profile.chatrooms && profile.chatrooms.length) { %>
+                                        <% profile.chatrooms.forEach(room => { %>
+                                            <li><a href="/room/<%= room %>"><strong><%= room %></strong></a></li>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <li>No chatrooms listed.</li>
+                                    <% } %>
+                                </ul>
+                            </div>
+                            <ul class="social-menu social-menu--links">
+                                <!-- Add social links dynamically if available -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+	<div class="preloader-overlay">
+        <div id="js-preloader" class="preloader">
+            <div class="fadeInUp">
+                <div class="pong-loader"></div>
+                <div class="hcfont serverMessage">
+                    Profile Load<span class="themefont">ing</span>
+                    <span class="loading-dot">.</span>
+                    <span class="loading-dot">.</span>
+                    <span class="loading-dot">.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="stickpm-custom-cursor-wrap">
+        <div id="stickpm-custom-cursor"></div>
+    </div>
+    <script>
+        const elements = {
+			verificationCodeInput: document.getElementById('verificationCode'),
+			profilePhotoFileInput: document.getElementById('profilePhotoFile'),
+        	profilePhotoHiddenInput: document.getElementById('profilePhoto'),
+			messageContainer: document.getElementById('message-container'),
+            customCursor: document.getElementById('stickpm-custom-cursor'),
+            preloaderOverlay: document.querySelector('.preloader-overlay'),
+            indexContent: document.querySelector('.site-content__center'),
+			messageContent: document.querySelector('.info-box__content'),
+			verifyCodeContainer: document.getElementById('verifyCode'),
+			messageLabel: document.querySelector('.info-box__label'),
+			displayEditForm: document.querySelector('.profile-edit'),
+            cursor: document.getElementById('stickpm-custom-cursor'),
+			profileForm: document.getElementById('editProfileForm'),
+			submitButton: document.getElementById('submitButton'),
+			siteLayout: document.querySelector('.site-layout'),
+            svgcaPatcha: document.getElementById('captchaSvg'),
+            body: document.body
+        };
+		document.addEventListener('DOMContentLoaded', function() {
+			let tempTimeout;
+			const renderCaptcha = () => elements.svgcaPatcha.src = '/captcha.svg?' + Date.now();
+			document.getElementById('editProfile')?.addEventListener('click', () => {
+				elements.displayEditForm.classList.toggle('hidden');
+				renderCaptcha();
+			});
+			const uiTheme = {
+				cursor: () => {
+					let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+					document.addEventListener('mousemove', function(event) {
+						cursorX = event.clientX || event.pageX;
+						cursorY = event.clientY || event.pageY;
+					});
+					if (!elements.cursor) {
+						return;
+					}
+					let targetX = cursorX, targetY = cursorY, deltaX, deltaY;
+					(function animateCursor() {
+						requestAnimationFrame(animateCursor);
+						if (targetX && targetY) {
+							deltaX = 0.15 * (cursorX - targetX);
+							deltaY = 0.15 * (cursorY - targetY);
+							if (Math.abs(deltaX) + Math.abs(deltaY) < 0.1) {
+								targetX = cursorX;
+								targetY = cursorY;
+							} else {
+								targetX += deltaX;
+								targetY += deltaY;
+							}
+						} else {
+							targetX = cursorX;
+							targetY = cursorY;
+						}
+						elements.cursor.style.transform = 'translate(' + targetX + 'px, ' + targetY + 'px)';
+					})();
+				}
+			};		
+			uiTheme.cursor();
+        });
+		if (elements.profileForm) {
+			elements.profilePhotoFileInput.addEventListener('change', function(event) {
+				const file = event.target.files[0];
+				if (file) {
+					const maxSizeInBytes = 5 * 1024 * 1024;
+					if (file.size > maxSizeInBytes) {
+						alert('File size must be less than 5MB.');
+						elements.profilePhotoFileInput.value = '';
+						elements.profilePhotoHiddenInput.value = '';
+						return;
+					}
+					if (!file.type.startsWith('image/')) {
+						alert('Only image files are allowed.');
+						elements.profilePhotoFileInput.value = '';
+						elements.profilePhotoHiddenInput.value = '';
+						return;
+					}
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						elements.profilePhotoHiddenInput.value = e.target.result;
+					};
+					reader.readAsDataURL(file);
+				} else elements.profilePhotoHiddenInput.value = '';
+			});
+			elements.profileForm.addEventListener('submit', function (event) {
+				event.preventDefault();
+				if (tempTimeout) clearTimeout(tempTimeout);
+				const formData = new FormData(elements.profileForm);
+				const action = elements.profileForm.getAttribute('action') || "<%= `/${profile.id}` %>";
+				if (!elements.verifyCodeContainer.classList.contains('hidden')) {
+					const verificationCode = elements.verificationCodeInput.value.trim();
+					if (!verificationCode) {
+						elements.messageLabel.innerText = 'Error';
+						elements.messageContent.innerText = 'Verification code is required.';
+						elements.messageContainer.classList.remove('hidden');
+						return;
+					}
+					formData.append('code', verificationCode);
+				}
+				elements.submitButton.disabled = true;
+            	elements.submitButton.innerText = 'Submitting...';
+				fetch(action, {
+					method: 'POST',
+					body: formData
+				})
+				.then(response => {
+					if (response.ok) return response.json();
+					else {
+						return response.text().then(text => {
+							throw new Error(`Server returned ${response.status} - ${response.statusText}: ${text}`);
+						});
+					}
+				})
+				.then(data => {
+					console.log(data);
+					resetFormStyles(elements.profileForm);
+					if (data.success) {
+						handleSuccess(data.message);
+						if (data.success === 'waiting') {
+							elements.verifyCodeContainer.classList.remove('hidden');
+							elements.submitButton.innerText = 'Submit & Validate';
+                            elements.submitButton.disabled = false;
+						}
+						else {
+							elements.profileForm.classList.add('hidden');
+							elements.submitButton.innerText = 'Confirm & Save';
+							tempTimeout = setTimeout(() => {
+								elements.messageContainer.classList.add('hidden');
+							}, 15000);
+						}
+					} else {
+						handleErrors(elements.profileForm, data.errors);
+						handleErrorMessage(data.message);
+						elements.submitButton.disabled = false;
+                    	elements.submitButton.innerText = 'Submit & Validate';
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					handleErrorMessage('An error occurred. Please try again.');
+					elements.submitButton.disabled = false;
+                    elements.submitButton.innerText = 'Submit & Validate';
+				});
+			});
+		}
+		const resetFormStyles = (form) => {
+			form.querySelectorAll('.form-control').forEach(input => {
+				input.classList.remove('has-error', 'has-success');
+			});
+		};
+		const handleSuccess = (message) => {
+			elements.messageLabel.innerText = 'Success';
+			elements.messageContent.innerText = message;
+			elements.messageContainer.classList.remove('hidden');
+		};
+		const handleErrorMessage = (message) => {
+			elements.messageLabel.innerText = 'Error';
+			elements.messageContent.innerText = message;
+			elements.messageContainer.classList.remove('hidden');
+		};
+		const handleErrors = (form, errors = []) => {
+			errors.forEach(error => {
+				const input = form.querySelector(`[name="${error.param}"]`);
+				if (input) input.classList.add('has-error');
+			});
+		};
+		window.addEventListener('load', function() {
+			if (elements.preloaderOverlay) {
+				elements.preloaderOverlay.style.transform = 'translateY(100%)';
+				elements.siteLayout.classList.replace('site-layout', 'site-layout--landing');
+			}
+		});
+	</script>
+</body>
+</html>

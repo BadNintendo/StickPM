@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Locked</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="centered-box">
+        <h2>Room Locked</h2>
+        <p><%= message %></p>
+        <form action="/room/<%= roomId %>/enter" method="POST">
+            <input type="password" name="password" placeholder="Enter password" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
