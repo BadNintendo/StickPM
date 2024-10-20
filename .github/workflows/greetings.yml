@@ -1,0 +1,32 @@
+name: Greetings
+
+on: [pull_request_target, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: |
+          👋 **Welcome to StickPM!** 🎉
+
+          Thank you for opening an issue! We really appreciate your interest in contributing to StickPM. Our project is built by the community, and every bit of feedback helps us grow and improve.
+
+          We'll review your issue soon, and if you have any more details or updates, feel free to add them here. Stick around for updates, and thanks for being part of the journey!
+
+          **StickPM Team**
+        pr-message: |
+          👋 **Welcome to StickPM and thank you for your contribution!** 🎉
+
+          Your first pull request is greatly appreciated! We truly value contributions from developers like you, and we’ll be sure to review your changes shortly. 
+
+          If everything checks out, we’ll be happy to merge your PR into the project. In the meantime, feel free to keep contributing or ask any questions!
+
+          **Thanks again for supporting StickPM** — we couldn’t do this without people like you. 😊
+
+          **StickPM Team**
