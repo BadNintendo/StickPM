@@ -1,3 +1,5 @@
+## NodeJS based project using WebRTC SFU & Websockets - StickPM
+
 ## Server-Side Logic
 
 ### Initialization and Configuration
@@ -74,3 +76,5 @@ The server exports numerous functions to handle specific operations such as addi
 - **User Interface**: Responsive and interactive UI components, user-friendly controls for chat and video streams.
 - **Media Handling**: Select and manage media devices for video and audio, implement push-to-talk for efficient communication.
 - **Dynamic Updates**: Real-time updates for user list and streamers, notifications for user actions and events.
+
+##Context email: contact.stickpm@gmail.com
