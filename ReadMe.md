@@ -77,4 +77,6 @@ The server exports numerous functions to handle specific operations such as addi
 - **Media Handling**: Select and manage media devices for video and audio, implement push-to-talk for efficient communication.
 - **Dynamic Updates**: Real-time updates for user list and streamers, notifications for user actions and events.
 
-##Context email: contact.stickpm@gmail.com
+### Contact email: contact.stickpm@gmail.com
+
+Website https://chat.stickpm.com/
