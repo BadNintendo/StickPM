@@ -87,6 +87,7 @@ const allowedDomains = [
 ];
 
 /** Array of allowed sub domains.
+ * Subdomain for chat is allowed both with and without subdomain request for now
  * @type {Array<string>}
  */
 const allowedSubDomains = ['chat'];
@@ -465,7 +466,8 @@ const logRequestDetails = (req, res, next) => {
  */
 const domainCheckMiddleware = (req, res, next) => {
     const host = req.hostname || req.headers.host.split(':')[0];
-    const domainParts = host.split('.');
+    if (host=== 'localhost') return next();
+	const domainParts = host.split('.');
     if (domainParts.length < 2)  return res.status(403).send('Access Forbidden: Invalid domain.');
     const baseDomain = domainParts.slice(-2).join('.');
     const subDomain = domainParts.length > 2 ? domainParts.slice(0, -2).join('.') : '';
@@ -483,6 +485,7 @@ const domainCheckMiddleware = (req, res, next) => {
 
 let foundDomain;
 const enforceHttps = (req, res, next) => {
+	if(req.hostname === 'localhost') next();
 	if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
 		const hostname = getBaseDomain(req.hostname);
         if(allowedDomains.includes(hostname)) foundDomain = hostname;
@@ -786,10 +789,10 @@ const sessionMiddleware = session({
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
-		httpOnly: true,
+		httpOnly: true, //may need to adjust to port 80 with localhost only
 		maxAge: 6 * 60 * 60 * 1000,
 		sameSite: 'lax',
-		secure: true,
+		secure: true,  //100% need to edit if you arent using https
 		domain: '.stickpm.com'
 	},
 	name: 'stickpm.sid'
@@ -880,6 +883,7 @@ const hasRole = (role) => { //validate user has role in database.js
 const requireSubdomain = (subdomain) => {
     return function (req, res, next) {
 		const subdomains = req.subdomains;
+		if (req.hostname === 'localhost' || req.hostname === '127.0.0.1' && subdomains === 'chat') return next();
 		const isAllowedSubdomain = subdomains && subdomains.some(subdomain => allowedSubDomains.includes(subdomain));
 		if (isAllowedSubdomain) return next();
 		else return next('route');
@@ -938,8 +942,8 @@ const applyMiddlewares = (app) => {
 	app.use(helmet.contentSecurityPolicy({
 		directives: {
 			defaultSrc: ["'self'"],
-			scriptSrc: ["'self'", "'unsafe-inline'"],
-			styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+			scriptSrc: ["'self'", "'unsafe-inline'"], // will make safe inline later
+			styleSrc: ["'self'", 'https:', "'unsafe-inline'"], //will make safe inline later
 			imgSrc: ["'self'", 'data:', 'https:'],
 			connectSrc: ["'self'", 'wss:'],
 			fontSrc: ["'self'", 'https:'],
@@ -986,6 +990,7 @@ const applyMiddlewares = (app) => {
 		const clientSignature = `${userAgent}_${acceptLang}_${connectionType}_${dnt}`;
 		if (req.session && req.session.cookie) {
 			if (baseDomain === 'stickpm.com' || baseDomain === 'chathobby.com') req.session.cookie.domain = `.${baseDomain}`;
+			else if (req.session.cookie.domain && (hostname === 'localhost' || hostname === '127.0.0.1')) req.session.cookie.domain = `.${baseDomain}`;
 		}
 		let sessionData = sessionMemory.get(clientSignature);
 		if (isBot || isQueryRequest) return next();

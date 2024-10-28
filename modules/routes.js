@@ -177,8 +177,8 @@ router.get('/', indexValidation(), skipSubDomain('index'), (req, res) => {
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.get('/:sortBy?', requireSubdomain('chat'), (req, res, next) => { 
-	let rooms;
+router.get(['/:sortBy?', '/chat/:sortBy?'], requireSubdomain('chat'), (req, res, next) => { 
+    let rooms;
 	if (cache.rooms && (Date.now() - cache.roomsTimestamp < 5 * 60 * 1000))  rooms = cache.rooms;
 	else {
 		rooms = cache.rooms = returnRooms();
@@ -212,8 +212,8 @@ router.get('/:sortBy?', requireSubdomain('chat'), (req, res, next) => {
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.get('/:roomId', requireSubdomain('chat'), async (req, res) => {
-	const { roomId } = req.params;
+router.get(['/:roomId', '/chat/:roomId'], requireSubdomain('chat'), async (req, res) => {
+    const { roomId } = req.params;
 	if (!validateRoomName(roomId)) {
 		return res.status(404).render('error', {
 			errorNum: 404,
@@ -272,13 +272,18 @@ router.get('/:roomId', requireSubdomain('chat'), async (req, res) => {
 	});
 });
 
+
+
+
+
+
 /** POST to lock a room. - Locks a specific room by ID.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.post('/:roomId/lock', isAuthenticated, hasRole('admin'), requireSubdomain('chat'), async (req, res) => {
+router.post(['/:roomId/lock', '/chat/:roomId/lock'], isAuthenticated, hasRole('admin'), requireSubdomain('chat'), async (req, res) => {
     try {
-        const { roomId } = req.params;
+		const { roomId } = req.params;
         if (!validateRoomName(roomId)) {
             return sendJsonResponse(res, 404, 'error', 'Invalid Room ID', {
                 errorDescription: `Room ID ${roomId} must be between 3 and 35 characters long.`
@@ -296,9 +301,9 @@ router.post('/:roomId/lock', isAuthenticated, hasRole('admin'), requireSubdomain
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.post('/:roomId/unlock', isAuthenticated, hasRole('admin'), requireSubdomain('chat'), async (req, res) => {
+router.post(['/:roomId/unlock', '/chat/:roomId/unlock'], isAuthenticated, hasRole('admin'), requireSubdomain('chat'), async (req, res) => {
     try {
-        const { roomId } = req.params;
+		const { roomId } = req.params;
         if (!validateRoomName(roomId)) {
             return sendJsonResponse(res, 404, 'error', 'Invalid Room ID', {
                 errorDescription: `Room ID ${roomId} must be between 3 and 35 characters long.`
@@ -316,7 +321,7 @@ router.post('/:roomId/unlock', isAuthenticated, hasRole('admin'), requireSubdoma
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.post('/:roomId/unlock-with-password', isAuthenticated, hasRole('admin'), requireSubdomain('chat'), async (req, res) => {
+router.post(['/:roomId/unlock-with-password', '/chat/:roomId/unlock-with-password'], isAuthenticated, hasRole('admin'), requireSubdomain('chat'), async (req, res) => {
     const { roomId } = req.params;
     const { password } = req.body;
     if (!validateRoomName(roomId)) {
@@ -589,9 +594,9 @@ router.post('/createRoom', isAuthenticated, hasRole('member'), createRoomValidat
 /** DELETE to delete a room. - Deletes a specific room by ID. -* @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.delete('/deleteRoom/:roomId', isAuthenticated, hasRole('owner'), roomValidation, requireSubdomain('chat'), async (req, res) => {
+router.delete(['/deleteRoom/:roomId', '/chat/deleteRoom/:roomId'], isAuthenticated, hasRole('owner'), roomValidation, requireSubdomain('chat'), async (req, res) => {
     try {
-        const { roomId } = req.params;
+		const { roomId } = req.params;
         if (!validateRoomName(roomId)) {
             return sendJsonResponse(res, 404, 'error', 'Invalid Room ID', {
                 errorDescription: `Room ID ${roomId} must be between 3 and 35 characters long.`
@@ -612,7 +617,7 @@ router.delete('/deleteRoom/:roomId', isAuthenticated, hasRole('owner'), roomVali
 router.post('/setRoomTopic/:roomId', isAuthenticated, hasRole('admin'), setRoomTopicValidation, requireSubdomain('chat'), async (req, res) => {
     const { topic } = req.body;
     try {
-        const { roomId } = req.params;
+		const { roomId } = req.params;
         if (!validateRoomName(roomId)) {
             return sendJsonResponse(res, 404, 'error', 'Invalid Room ID', {
                 errorDescription: `Room ID ${roomId} must be between 3 and 35 characters long.`
@@ -630,10 +635,10 @@ router.post('/setRoomTopic/:roomId', isAuthenticated, hasRole('admin'), setRoomT
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.post('/shareFile/:roomId', isAuthenticated, shareFileValidation, requireSubdomain('chat'), async (req, res) => {
+router.post(['/shareFile/:roomId', '/chat/shareFile/:roomId'], isAuthenticated, shareFileValidation, requireSubdomain('chat'), async (req, res) => {
     const { file } = req.body;
     try {
-        const { roomId } = req.params;
+		const { roomId } = req.params;
         if (!validateRoomName(roomId)) {
             return sendJsonResponse(res, 404, 'error', 'Invalid Room ID', {
                 errorDescription: `Room ID ${roomId} must be between 3 and 35 characters long.`
@@ -723,7 +728,7 @@ router.post('/disable2FA', isAuthenticated, requireSubdomain('chat'), async (req
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.post('/muteUser/:roomId', isAuthenticated, hasRole('moderator'), requireSubdomain('chat'), async (req, res) => {
+router.post(['/muteUser/:roomId', '/chat/muteUser/:roomId'], isAuthenticated, hasRole('moderator'), requireSubdomain('chat'), async (req, res) => {
 	const { userId } = req.body;
 	try {
 		const { roomId } = req.params;
@@ -746,7 +751,7 @@ router.post('/muteUser/:roomId', isAuthenticated, hasRole('moderator'), requireS
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.post('/unmuteUser/:roomId', isAuthenticated, hasRole('moderator'), requireSubdomain('chat'), async (req, res) => {
+router.post(['/unmuteUser/:roomId', '/chat/unmuteUser/:roomId'], isAuthenticated, hasRole('moderator'), requireSubdomain('chat'), async (req, res) => {
 	const { userId } = req.body;
 	try {
 		const { roomId } = req.params;
@@ -888,7 +893,7 @@ router.post('/createClip', isAuthenticated, requireSubdomain('chat'), async (req
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-router.get('/getClips/:streamId', isAuthenticated, requireSubdomain('chat'), async (req, res) => {
+router.get(['/getClips/:streamId', '/chat/getClips/:streamId'], isAuthenticated, requireSubdomain('chat'), async (req, res) => {
 	try {
 		const clips = await getClipsByStream(req.params.streamId);
 		res.status(200).send(clips);

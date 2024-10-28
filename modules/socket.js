@@ -143,9 +143,9 @@ const setupWebSocket = (io, sharedsession, sessionMiddleware) => {
 				console.error(`Client error on ${socket.id}:`, err);
 				socket.disconnect(true);
 			});
-			const host = socket.handshake.headers.host;
-			const subDomain = getBaseDomain(host, true);
-			if (namespace.name === '/chat' && subDomain.includes('chat')) {
+			//const host = socket.handshake.headers.host;
+			//const subDomain = getBaseDomain(host, true);
+			if (namespace.name === '/chat') {  //removed my best feature  && subDomain.includes('chat') to allow localhost and other without subdomains to connect to namespace
 				setupChatHandlers(socket);
 			} else if (namespace.name === '/games') {
 				setupGameHandlers(socket);

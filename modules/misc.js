@@ -417,7 +417,7 @@ const startWatchingMailbox = () => {
 	});
 	readEmails();
 };
-startWatchingMailbox();
+//startWatchingMailbox();
 
 /** Send an SMS notification to all known carriers.
  * @param {string} phone - The recipient's phone number.
