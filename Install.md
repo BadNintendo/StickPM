@@ -9,7 +9,7 @@ Ensure you have **Node.js** and **npm** installed on your server before proceedi
 ---
 
 ### 1. Update System and Install Node.js and npm (Skip if already installed)
-Update your package list and install Node.js and npm:
+Update your package list and install Node.js and npm: (If issues with ? use Node 18.x to cure it)
 ```bash
 sudo apt update
 sudo apt install nodejs npm -y
