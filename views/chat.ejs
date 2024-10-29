@@ -1134,7 +1134,7 @@
 				elements.userList.innerHTML = '';
 				if (elements.search.classList.contains('hidden') && users.length > 0) elements.search.classList.remove('hidden');
 				users.forEach(user => {
-					const userItem = createUserItem(user);
+					const userItem = userManagement.createUserItem(user);
 					if (userItem) elements.userList.appendChild(userItem);
 				});
 			},
@@ -1158,7 +1158,7 @@
 						break;
 					}
 				}
-				const userItem = createUserItem(user);
+				const userItem = userManagement.createUserItem(user);
 				if (!userItem) return;
 				if (insertIndex === currentUsers.length) elements.userList.appendChild(userItem);
 				else elements.userList.insertBefore(userItem, currentUsers[insertIndex]);
