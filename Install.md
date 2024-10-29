@@ -1,7 +1,3 @@
-Here's a revised, professional setup guide for your StickPM App/Domain:
-
----
-
 # StickPM Chat App Installation Guide
 
 Follow these steps to set up the StickPM Chat application on your server:
