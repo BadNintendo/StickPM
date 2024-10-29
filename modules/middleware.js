@@ -485,7 +485,7 @@ const domainCheckMiddleware = (req, res, next) => {
 
 let foundDomain;
 const enforceHttps = (req, res, next) => {
-	if(req.hostname === 'localhost') next();
+	if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') return next();
 	if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
 		const hostname = getBaseDomain(req.hostname);
         if(allowedDomains.includes(hostname)) foundDomain = hostname;
