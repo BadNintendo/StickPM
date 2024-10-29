@@ -1,3 +1,6 @@
+
+![Screenshot 2024-10-28 232228](https://github.com/user-attachments/assets/95bbe694-5267-4bfd-9bd4-1fa60fda9237)
+
 # StickPM Chat App Installation Guide
 
 Follow these steps to set up the StickPM Chat application on your server:
